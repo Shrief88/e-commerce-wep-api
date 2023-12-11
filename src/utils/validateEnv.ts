@@ -5,4 +5,5 @@ dotenv.config();
 export default cleanEnv(process.env, {
   PORT: port(),
   NODE_ENV: str({ choices: ["development", "test", "production"] }),
+  MONGO_URI: str(),
 });
