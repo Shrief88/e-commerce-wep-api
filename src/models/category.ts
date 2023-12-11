@@ -3,7 +3,9 @@ import mongoose, { Schema } from "mongoose";
 interface ICategory {
   name: string;
   slug: string;
-  image: string;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const categorySchema = new Schema(
@@ -14,6 +16,7 @@ const categorySchema = new Schema(
       unique: true,
       minLength: 3,
       maxLength: 32,
+      trim: true,
     },
     slug: {
       type: String,
