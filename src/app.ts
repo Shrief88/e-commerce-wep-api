@@ -1,5 +1,5 @@
 import express from "express";
-import env from "./utils/validateEnv";
+import env from "./validators/validateEnv";
 import morgan from "morgan";
 import createHttpError from "http-errors";
 import categoryRouter from "./routes/category";
@@ -24,7 +24,7 @@ app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));
 });
 
-// ERROR HANDLERS
+// ERROR HANDLERS FOR EXPRESS
 app.use(errorMiddleware);
 
 export default app;

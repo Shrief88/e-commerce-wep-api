@@ -1,21 +1,24 @@
+import DBConnection from "./config/dbConnection";
+import env from "./validators/validateEnv";
 import app from "./app";
-import mongoose from "mongoose";
-import env from "./utils/validateEnv";
+
+void DBConnection();
 
 const port = env.PORT;
-const connectionString = env.MONGO_URI;
+const server = app.listen(port, () => {
+  console.log(`Express app is listening on: http://localhost:${port}`);
+});
 
-const main = async (): Promise<void> => {
-  try {
-    await mongoose.connect(connectionString);
-    console.log("MongoDB connected");
-    app.listen(port, () => {
-      console.log(`Server is running at http://localhost:${port}`);
-    });
-  } catch (err) {
-    console.log(`${err}: did not connect`);
+interface Error {
+  name: string;
+  message: string;
+}
+
+// HANDLE REJECTION OUTSIDE EXPRESS
+process.on("unhandledRejection", (err: Error) => {
+  console.log(`unhandledRejection error : ${err.name} : ${err.message}`);
+  server.close(() => {
+    console.log("Shutting down server...");
     process.exit(1);
-  }
-};
-
-void main();
+  });
+});
