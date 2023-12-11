@@ -6,6 +6,7 @@ import express, {
 import env from "./utils/validateEnv";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
+import categoryRouter from "./routes/category";
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+app.use("/api/category", categoryRouter);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));
