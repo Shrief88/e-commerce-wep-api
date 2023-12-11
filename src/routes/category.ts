@@ -1,5 +1,6 @@
 import * as categoryController from "../controllers/category";
 import express from "express";
+import * as categoryValidator from "../validators/categoryValidator";
 
 const categoryRouter = express.Router();
 
@@ -7,15 +8,31 @@ const categoryRouter = express.Router();
 categoryRouter.get("/", categoryController.getCategories);
 
 // @access public
-categoryRouter.get("/:id", categoryController.getCategory);
+categoryRouter.get(
+  "/:id",
+  categoryValidator.getCategoryValidator,
+  categoryController.getCategory,
+);
 
 // @access private
-categoryRouter.post("/", categoryController.createCategory);
+categoryRouter.post(
+  "/",
+  categoryValidator.createCategoryValidator,
+  categoryController.createCategory,
+);
 
 // @access private
-categoryRouter.put("/:id", categoryController.updateCategory);
+categoryRouter.put(
+  "/:id",
+  categoryValidator.updateCategoryValidator,
+  categoryController.updateCategory,
+);
 
 // @access private
-categoryRouter.delete("/:id", categoryController.deleteCategory);
+categoryRouter.delete(
+  "/:id",
+  categoryValidator.deleteCategoryValidator,
+  categoryController.deleteCategory,
+);
 
 export default categoryRouter;

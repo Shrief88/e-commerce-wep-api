@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { isHttpError } from "http-errors";
-import env from "../utils/validateEnv";
+import env from "../validators/validateEnv";
 
 const errorMiddleware = (
   error: unknown,
@@ -8,6 +8,7 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): void => {
+  console.log("hi");
   let errorMessage = "An unknown error occurred";
   let statusCode = 500;
   let stack: string | undefined = "";

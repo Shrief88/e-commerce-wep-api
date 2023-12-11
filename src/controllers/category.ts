@@ -2,7 +2,6 @@ import { type RequestHandler } from "express";
 import CategoryModel from "../models/category";
 import createHttpError from "http-errors";
 import slugify from "slugify";
-import mongoose from "mongoose";
 
 export const getCategories: RequestHandler = async (req, res, next) => {
   try {
@@ -20,13 +19,8 @@ export const getCategories: RequestHandler = async (req, res, next) => {
 
 export const getCategory: RequestHandler = async (req, res, next) => {
   try {
-    const id: string | undefined = req.params.id;
-    if (!mongoose.isValidObjectId(id)) {
-      throw createHttpError(400, "Invalid ID");
-    }
-
+    const id: string = req.params.id;
     const category = await CategoryModel.findById(id).exec();
-
     if (!category) {
       throw createHttpError(404, "category not found");
     }
@@ -38,21 +32,15 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 
 export const createCategory: RequestHandler = async (req, res, next) => {
   try {
-    const name: string | undefined = req.body.name?.trim();
-    if (!name) {
-      throw createHttpError(400, "name is required");
-    }
-
+    const name: string = req.body.name;
     const existingCategory = await CategoryModel.findOne({ name }).exec();
     if (existingCategory) {
       throw createHttpError(409, "category already exists");
     }
-
     const newCategory = await CategoryModel.create({
       name,
       slug: slugify(name),
     });
-
     res.status(201).json({ data: newCategory });
   } catch (err) {
     next(err);
@@ -61,28 +49,16 @@ export const createCategory: RequestHandler = async (req, res, next) => {
 
 export const updateCategory: RequestHandler = async (req, res, next) => {
   try {
-    const id: string | undefined = req.params.id;
-    if (!mongoose.isValidObjectId(id)) {
-      throw createHttpError(400, "Invalid ID");
-    }
-
+    const id: string = req.params.id;
     const category = await CategoryModel.findById(id).exec();
     if (!category) {
       throw createHttpError(404, "category not found");
     }
-
-    const name: string | undefined = req.body.name?.trim();
-    const slug: string | undefined = req.body.slug?.trim();
-
+    const name: string | undefined = req.body.name;
     if (name) {
       category.name = name;
       category.slug = slugify(name);
     }
-
-    if (slug) {
-      category.slug = slugify(slug);
-    }
-
     const updatedCategory = await category.save();
     res.status(200).json({ data: updatedCategory });
   } catch (err) {
@@ -93,17 +69,11 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
 export const deleteCategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    if (!mongoose.isValidObjectId(id)) {
-      throw createHttpError(400, "Invalid ID");
-    }
     const note = await CategoryModel.findById(id).exec();
-
     if (!note) {
       throw createHttpError(404, "Note not found");
     }
-
     await note.deleteOne();
-
     res.sendStatus(204);
   } catch (err) {
     next(err);
