@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint-fix": "eslint 'src/**/*.{ts,js}' --fix",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "start": "NODE_ENV=production nodemon src/index.ts"
   },
   "keywords": [],
   "author": "",

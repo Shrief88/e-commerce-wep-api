@@ -1,12 +1,9 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from "express";
+import express from "express";
 import env from "./utils/validateEnv";
 import morgan from "morgan";
-import createHttpError, { isHttpError } from "http-errors";
+import createHttpError from "http-errors";
 import categoryRouter from "./routes/category";
+import errorMiddleware from "./middlewares/errorMiddleware";
 
 const app = express();
 
@@ -17,25 +14,17 @@ if (env.NODE_ENV === "development") {
 app.use(express.json());
 
 // ROUTES
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
 
 app.use("/api/category", categoryRouter);
 
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));
 });
 
-app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-  console.log(error);
-  let errorMessage = "An unknown error occurred";
-  let statusCode = 500;
-  if (isHttpError(error)) {
-    statusCode = error.status;
-    errorMessage = error.message;
-  }
-  res.status(statusCode).json({ message: errorMessage });
-});
+// ERROR HANDLERS
+app.use(errorMiddleware);
 
 export default app;
