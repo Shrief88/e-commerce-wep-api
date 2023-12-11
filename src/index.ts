@@ -14,6 +14,7 @@ const main = async (): Promise<void> => {
     });
   } catch (err) {
     console.log(`${err}: did not connect`);
+    process.exit(1);
   }
 };
 
