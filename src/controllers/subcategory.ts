@@ -9,7 +9,11 @@ export const getSubcategories: RequestHandler = async (req, res, next) => {
     const page: number = Number(req.query.page) || 1;
     const limit: number = Number(req.query.limit) || 10;
     const skip: number = (page - 1) * limit;
-    const subCategories = await SubcategoryModel.find().skip(skip).limit(limit);
+    const subCategories = await SubcategoryModel.find()
+      .skip(skip)
+      .limit(limit)
+      .populate({ path: "category", select: "name" })
+      .exec();
     res
       .status(200)
       .json({ results: subCategories.length, page, data: subCategories });
@@ -21,7 +25,9 @@ export const getSubcategories: RequestHandler = async (req, res, next) => {
 export const getsubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const subcategory = await SubcategoryModel.findById(id).exec();
+    const subcategory = await SubcategoryModel.findById(id)
+      .populate({ path: "category", select: "name" })
+      .exec();
     if (!subcategory) {
       throw createHttpError(404, "subcategory not found");
     }
