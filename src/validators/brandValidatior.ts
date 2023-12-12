@@ -13,8 +13,8 @@ export const createBrandValidator = [
     .isString()
     .withMessage("name must be a string")
     .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
+    .isLength({ min: 2 })
+    .withMessage("name must be at least 2 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long"),
   validateMiddleware,
@@ -27,8 +27,8 @@ export const updateBrandValidator = [
     .isString()
     .withMessage("name must be a string")
     .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
+    .isLength({ min: 2 })
+    .withMessage("name must be at least 2 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long"),
   validateMiddleware,

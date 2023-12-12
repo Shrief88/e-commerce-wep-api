@@ -78,15 +78,15 @@ fdescribe("Test brand", () => {
         .send({ name: "      " });
       expect(response.status).toBe(400);
       expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
+        "name must be at least 2 characters long",
       );
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
-      const response = await request.post("/api/brand").send({ name: "hd" });
+    it("should return 400 if name less than 2 characters", async () => {
+      const response = await request.post("/api/brand").send({ name: "h" });
       expect(response.status).toBe(400);
       expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
+        "name must be at least 2 characters long",
       );
     });
 
@@ -142,17 +142,17 @@ fdescribe("Test brand", () => {
         .send({ name: "      " });
       expect(response.status).toBe(400);
       expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
+        "name must be at least 2 characters long",
       );
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
+    it("should return 400 if name less than 2 characters", async () => {
       const response = await request
         .put(`/api/brand/${validID}`)
-        .send({ name: "hd" });
+        .send({ name: "h" });
       expect(response.status).toBe(400);
       expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
+        "name must be at least 2 characters long",
       );
     });
 

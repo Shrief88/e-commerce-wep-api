@@ -14,7 +14,7 @@ const brandSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      minLength: 3,
+      minLength: 2,
       maxLength: 32,
       trim: true,
     },
