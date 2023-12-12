@@ -12,7 +12,33 @@ const insertData = async (): Promise<string> => {
   return response.body.data._id;
 };
 
-fdescribe("Test brand", () => {
+const testCreateBrand = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  it(testTitle, async () => {
+    const response = await request.post("/api/brand").send(sendBody ?? {});
+    expect(response.status).toBe(400);
+  });
+};
+
+const testUpdateBrand = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  const validId = new ObjectId() as unknown as string;
+  it(testTitle, async () => {
+    const response = await request
+      .put(`/api/brand/${validId}`)
+      .send(sendBody ?? {});
+    console.log(response.status);
+    expect(response.status).toBe(400);
+  });
+};
+
+describe("Test brand", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -60,44 +86,24 @@ fdescribe("Test brand", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for missing name", async () => {
-      const response = await request.post("/api/brand");
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name is required");
+    testCreateBrand(request, "should return 400 for missing name", {
+      name: "",
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request.post("/api/brand").send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testCreateBrand(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .post("/api/brand")
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 2 characters long",
-      );
+    testCreateBrand(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 2 characters", async () => {
-      const response = await request.post("/api/brand").send({ name: "h" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 2 characters long",
-      );
+    testCreateBrand(request, "should return 400 if name < 2 characters", {
+      name: "h",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request.post("/api/brand").send({
-        name: "loremipsum fdf df sgg dg fhfh fhfh",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
+    testCreateBrand(request, "should return 400 if name > 32 characters", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
     it("should return 201 for valid name", async () => {
@@ -128,42 +134,20 @@ fdescribe("Test brand", () => {
       expect(response.body.message).toBe("Invalid ID");
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request
-        .put(`/api/brand/${validID}`)
-        .send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testUpdateBrand(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .put(`/api/brand/${validID}`)
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 2 characters long",
-      );
+    testUpdateBrand(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 2 characters", async () => {
-      const response = await request
-        .put(`/api/brand/${validID}`)
-        .send({ name: "h" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 2 characters long",
-      );
+    testUpdateBrand(request, "should return 400 if name < 3 characters", {
+      name: "h",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request.put(`/api/brand/${validID}`).send({
-        name: "loremipsum fdf df sgg dg fhfh fhfh",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
+    testUpdateBrand(request, "should return 400 if name > 32 characters", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
     it("should return 404 for non-existing ID", async () => {

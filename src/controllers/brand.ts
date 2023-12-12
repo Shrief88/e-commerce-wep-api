@@ -1,7 +1,8 @@
 import { type RequestHandler } from "express";
-import BrandModel from "../models/brand";
+import BrandModel, { type IBrand } from "../models/brand";
 import createHttpError from "http-errors";
 import slugify from "slugify";
+import { type UpdateQuery } from "mongoose";
 
 export const getBrands: RequestHandler = async (req, res, next) => {
   try {
@@ -48,17 +49,20 @@ export const createBrand: RequestHandler = async (req, res, next) => {
 export const updateBrand: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const brand = await BrandModel.findById(id).exec();
+    if (req.body.name) {
+      req.body.slug = slugify(req.body.name as string);
+    }
+    const brand = await BrandModel.findByIdAndUpdate(
+      id,
+      req.body as UpdateQuery<IBrand>,
+      { new: true },
+    ).exec();
+
     if (!brand) {
       throw createHttpError(404, "brand not found");
     }
-    const name: string | undefined = req.body.name;
-    if (name) {
-      brand.name = name;
-      brand.slug = slugify(name);
-    }
-    const updatedBrand = await brand.save();
-    res.status(200).json({ data: updatedBrand });
+
+    res.status(200).json({ data: brand });
   } catch (err) {
     next(err);
   }
