@@ -3,13 +3,16 @@ import SubcategoryModel from "../models/subcategory";
 import CategoryModel from "../models/category";
 import createHttpError from "http-errors";
 import slugify from "slugify";
+import { type ObjectId } from "mongoose";
 
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
     const page: number = Number(req.query.page) || 1;
     const limit: number = Number(req.query.limit) || 10;
     const skip: number = (page - 1) * limit;
-    const subCategories = await SubcategoryModel.find()
+    const filterObject: Record<string, ObjectId> = req.body.filterObject;
+
+    const subCategories = await SubcategoryModel.find(filterObject)
       .skip(skip)
       .limit(limit)
       .populate({ path: "category", select: "name" })

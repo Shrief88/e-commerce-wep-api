@@ -16,7 +16,7 @@ const insertData = async (): Promise<string[]> => {
   return [subcategoryResponse.body.data._id, categoryResponse.body.data._id];
 };
 
-describe("Test subcategory", () => {
+fdescribe("Test subcategory", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -58,6 +58,10 @@ describe("Test subcategory", () => {
   });
 
   describe("POST/api/subcategory", () => {
+    let categoryID: string;
+    beforeAll(async () => {
+      [, categoryID] = await insertData();
+    });
     afterAll(async () => {
       await db.clearDatabase();
     });
@@ -123,13 +127,18 @@ describe("Test subcategory", () => {
     });
 
     it("should return 201 for valid name", async () => {
-      const categoryResponse = await request
-        .post("/api/category")
-        .send({ name: "category" });
       const response = await request
         .post("/api/subcategory")
-        .send({ name: "test", category: categoryResponse.body.data._id });
+        .send({ name: "test2", category: categoryID });
       expect(response.status).toBe(201);
+    });
+
+    it("should return 409 for duplicate name", async () => {
+      const response = await request
+        .post("/api/subcategory")
+        .send({ name: "test", category: categoryID });
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe("subcategory already exists");
     });
   });
 

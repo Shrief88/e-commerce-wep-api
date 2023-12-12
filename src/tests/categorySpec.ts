@@ -53,6 +53,9 @@ describe("Test category", () => {
   });
 
   describe("POST/api/category", () => {
+    beforeAll(async () => {
+      await insertData();
+    });
     afterAll(async () => {
       await db.clearDatabase();
     });
@@ -100,8 +103,16 @@ describe("Test category", () => {
     it("should return 201 for valid name", async () => {
       const response = await request
         .post("/api/category")
-        .send({ name: "test" });
+        .send({ name: "test2" });
       expect(response.status).toBe(201);
+    });
+
+    it("should return 409 for duplicate name", async () => {
+      const response = await request
+        .post("/api/category")
+        .send({ name: "test" });
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe("category already exists");
     });
   });
 

@@ -1,6 +1,7 @@
 import * as categoryController from "../controllers/category";
 import express from "express";
 import * as categoryValidator from "../validators/categoryValidator";
+import subcategoryRouter from "./subcategory";
 
 const categoryRouter = express.Router();
 
@@ -34,5 +35,7 @@ categoryRouter.delete(
   categoryValidator.deleteCategoryValidator,
   categoryController.deleteCategory,
 );
+
+categoryRouter.use("/:categoryId/subcategories", subcategoryRouter);
 
 export default categoryRouter;

@@ -1,11 +1,21 @@
 import * as subcategoryController from "../controllers/subcategory";
 import express from "express";
 import * as subcategoryValidator from "../validators/subcategoryValidator";
+import {
+  setCategoryIdToBody,
+  setFilterObject,
+} from "../middlewares/subcategoryMiddleware";
 
-const subcategoryRouter = express.Router();
+const subcategoryRouter = express.Router({
+  mergeParams: true,
+});
 
 // @access public
-subcategoryRouter.get("/", subcategoryController.getSubcategories);
+subcategoryRouter.get(
+  "/",
+  setFilterObject,
+  subcategoryController.getSubcategories,
+);
 
 // @access public
 subcategoryRouter.get(
@@ -17,6 +27,7 @@ subcategoryRouter.get(
 // @access private
 subcategoryRouter.post(
   "/",
+  setCategoryIdToBody,
   subcategoryValidator.createSubcategoryValidator,
   subcategoryController.createsubcategory,
 );
