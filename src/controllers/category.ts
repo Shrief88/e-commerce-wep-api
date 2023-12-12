@@ -1,7 +1,8 @@
 import { type RequestHandler } from "express";
-import CategoryModel from "../models/category";
+import CategoryModel, { type ICategory } from "../models/category";
 import createHttpError from "http-errors";
 import slugify from "slugify";
+import { type UpdateQuery } from "mongoose";
 
 export const getCategories: RequestHandler = async (req, res, next) => {
   try {
@@ -50,17 +51,21 @@ export const createCategory: RequestHandler = async (req, res, next) => {
 export const updateCategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const category = await CategoryModel.findById(id).exec();
+    if (req.body.name) {
+      req.body.slug = slugify(req.body.name as string);
+    }
+
+    const category = await CategoryModel.findByIdAndUpdate(
+      id,
+      req.body as UpdateQuery<ICategory>,
+      { new: true },
+    ).exec();
+
     if (!category) {
       throw createHttpError(404, "category not found");
     }
-    const name: string | undefined = req.body.name;
-    if (name) {
-      category.name = name;
-      category.slug = slugify(name);
-    }
-    const updatedCategory = await category.save();
-    res.status(200).json({ data: updatedCategory });
+
+    res.status(200).json({ data: category });
   } catch (err) {
     next(err);
   }

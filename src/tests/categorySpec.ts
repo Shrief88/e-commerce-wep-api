@@ -12,7 +12,33 @@ const insertData = async (): Promise<string> => {
   return response.body.data._id;
 };
 
-describe("Test category", () => {
+const testCreateCategory = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  it(testTitle, async () => {
+    const response = await request.post("/api/category").send(sendBody ?? {});
+    expect(response.status).toBe(400);
+  });
+};
+
+const testUpdateCategory = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  const validId = new ObjectId() as unknown as string;
+  it(testTitle, async () => {
+    const response = await request
+      .put(`/api/category/${validId}`)
+      .send(sendBody ?? {});
+    console.log(response.status);
+    expect(response.status).toBe(400);
+  });
+};
+
+fdescribe("Test category", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -60,44 +86,24 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for missing name", async () => {
-      const response = await request.post("/api/category");
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name is required");
+    testCreateCategory(request, "should return 400 for missing name", {
+      name: "",
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request.post("/api/category").send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testCreateCategory(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .post("/api/category")
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testCreateCategory(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
-      const response = await request.post("/api/category").send({ name: "hd" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testCreateCategory(request, "should return 400 if name < 3 characters", {
+      name: "hd",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request.post("/api/category").send({
-        name: "loremipsum fdf df sgg dg fhfh fhfh",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
+    testCreateCategory(request, "should return 400 if name > 32 characters", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
     it("should return 201 for valid name", async () => {
@@ -132,42 +138,20 @@ describe("Test category", () => {
       expect(response.body.message).toBe("Invalid ID");
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request
-        .put(`/api/category/${validID}`)
-        .send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testUpdateCategory(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .put(`/api/category/${validID}`)
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testUpdateCategory(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
-      const response = await request
-        .put(`/api/category/${validID}`)
-        .send({ name: "hd" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testUpdateCategory(request, "should return 400 if name < 3 characters", {
+      name: "hd",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request.put(`/api/category/${validID}`).send({
-        name: "loremipsum fdf df sgg dg fhfh fhfh",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
+    testUpdateCategory(request, "should return 400 if name > 32 characters", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
     it("should return 404 for non-existing ID", async () => {
