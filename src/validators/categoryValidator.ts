@@ -6,10 +6,8 @@ export const getCategoryValidator = [
   validateMiddleware,
 ];
 
-export const createCategoryValidator = [
+const commonCategoryValidationRules = [
   body("name")
-    .notEmpty()
-    .withMessage("name is required")
     .isString()
     .withMessage("name must be a string")
     .trim()
@@ -17,20 +15,17 @@ export const createCategoryValidator = [
     .withMessage("name must be at least 3 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long"),
+];
+
+export const createCategoryValidator = [
+  body("name").notEmpty().withMessage("name is required"),
+  ...commonCategoryValidationRules,
   validateMiddleware,
 ];
 
 export const updateCategoryValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
-  body("name")
-    .optional()
-    .isString()
-    .withMessage("name must be a string")
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
-    .isLength({ max: 32 })
-    .withMessage("name must be at most 32 characters long"),
+  ...commonCategoryValidationRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
