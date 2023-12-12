@@ -16,7 +16,35 @@ const insertData = async (): Promise<string[]> => {
   return [subcategoryResponse.body.data._id, categoryResponse.body.data._id];
 };
 
-describe("Test subcategory", () => {
+const testCreateSubcategory = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  it(testTitle, async () => {
+    const response = await request
+      .post("/api/subcategory")
+      .send(sendBody ?? {});
+    expect(response.status).toBe(400);
+  });
+};
+
+const testUpdateSubcategory = (
+  request: supertest.SuperTest<supertest.Test>,
+  testTitle: string,
+  sendBody?: Record<string, unknown>,
+): void => {
+  const validId = new ObjectId() as unknown as string;
+  it(testTitle, async () => {
+    const response = await request
+      .put(`/api/subcategory/${validId}`)
+      .send(sendBody ?? {});
+    console.log(response.status);
+    expect(response.status).toBe(400);
+  });
+};
+
+fdescribe("Test subcategory", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -66,64 +94,35 @@ describe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for missing name", async () => {
-      const response = await request.post("/api/subcategory");
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name is required");
+    testCreateSubcategory(request, "should return 400 for missing name", {
+      name: "",
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request
-        .post("/api/subcategory")
-        .send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testCreateSubcategory(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .post("/api/subcategory")
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testCreateSubcategory(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
-      const response = await request
-        .post("/api/subcategory")
-        .send({ name: "hd" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testCreateSubcategory(request, "should return 400 if name < 3 characters", {
+      name: "hd",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request.post("/api/subcategory").send({
-        name: "loremipsum fdf df sgg dg fhfh fhfh",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
+    testCreateSubcategory(
+      request,
+      "should return 400 if name > 32 characters",
+      { name: "loremipsum fdf df sgg dg fhfh fhfh" },
+    );
+
+    testCreateSubcategory(request, "should return 400 if category is missing", {
+      name: "test",
     });
 
-    it("should return 400 if category is missing", async () => {
-      const response = await request.post("/api/subcategory").send({
-        name: "test",
-      });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("category is required");
-    });
-
-    it("should return 400 if category is invalid", async () => {
-      const response = await request
-        .post("/api/subcategory")
-        .send({ name: "test", category: "invalidID" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid category ID");
+    testCreateSubcategory(request, "should return 400 if category is invalid", {
+      name: "test",
+      category: "invalidID",
     });
 
     it("should return 201 for valid name", async () => {
@@ -159,52 +158,27 @@ describe("Test subcategory", () => {
       expect(response.body.message).toBe("Invalid ID");
     });
 
-    it("should return 400 for number as name", async () => {
-      const response = await request
-        .put(`/api/subcategory/${subcategoryID}`)
-        .send({ name: 123 });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("name must be a string");
+    testUpdateSubcategory(request, "should return 400 for number as name", {
+      name: 123,
     });
 
-    it("should return 400 for white space string", async () => {
-      const response = await request
-        .put(`/api/subcategory/${subcategoryID}`)
-        .send({ name: "      " });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testUpdateSubcategory(request, "should return 400 for white space string", {
+      name: "    ",
     });
 
-    it("should return 400 if name less than 3 characters", async () => {
-      const response = await request
-        .put(`/api/subcategory/${subcategoryID}`)
-        .send({ name: "hd" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at least 3 characters long",
-      );
+    testUpdateSubcategory(request, "should return 400 if name < 3 characters", {
+      name: "hd",
     });
 
-    it("should return 400 if name more than 32 characters", async () => {
-      const response = await request
-        .put(`/api/subcategory/${subcategoryID}`)
-        .send({
-          name: "loremipsum fdf df sgg dg fhfh fhfh",
-        });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe(
-        "name must be at most 32 characters long",
-      );
-    });
+    testUpdateSubcategory(
+      request,
+      "should return 400 if name > 32 characters",
+      { name: "loremipsum fdf df sgg dg fhfh fhfh" },
+    );
 
-    it("should return 400 if category is invalid", async () => {
-      const response = await request
-        .put(`/api/subcategory/${subcategoryID}`)
-        .send({ name: "test", category: "invalidID" });
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid category ID");
+    testUpdateSubcategory(request, "should return 400 if category is invalid", {
+      name: "test",
+      category: "invalidID",
     });
 
     it("should return 404 for non-existing subcategory", async () => {

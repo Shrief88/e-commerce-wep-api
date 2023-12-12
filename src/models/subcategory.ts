@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-interface ISubcategory {
+export interface ISubcategory {
   name: string;
   slug: string;
   category: string;

@@ -1,9 +1,9 @@
 import { type RequestHandler } from "express";
-import SubcategoryModel from "../models/subcategory";
+import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
 import CategoryModel from "../models/category";
 import createHttpError from "http-errors";
 import slugify from "slugify";
-import { type ObjectId } from "mongoose";
+import { type UpdateQuery, type ObjectId } from "mongoose";
 
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
@@ -68,23 +68,28 @@ export const createsubcategory: RequestHandler = async (req, res, next) => {
 export const updatesubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const subcategory = await SubcategoryModel.findById(id).exec();
-    if (!subcategory) {
-      throw createHttpError(404, "subcategory not found");
+    if (req.body.name) {
+      req.body.slug = slugify(req.body.name as string);
     }
-    const name: string | undefined = req.body.name;
+
     const category: string | undefined = req.body.category;
-    if (name) {
-      subcategory.name = name;
-      subcategory.slug = slugify(name);
-    }
     if (category) {
       const existingCategory = await CategoryModel.findById(category).exec();
       if (!existingCategory) {
         throw createHttpError(404, "category not found");
       }
-      subcategory.category = category;
     }
+
+    const subcategory = await SubcategoryModel.findByIdAndUpdate(
+      id,
+      req.body as UpdateQuery<ISubcategory>,
+      { new: true },
+    ).exec();
+
+    if (!subcategory) {
+      throw createHttpError(404, "subcategory not found");
+    }
+
     const updatedsubcategory = await subcategory.save();
     res.status(200).json({ data: updatedsubcategory });
   } catch (err) {

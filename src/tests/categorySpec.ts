@@ -38,7 +38,7 @@ const testUpdateCategory = (
   });
 };
 
-fdescribe("Test category", () => {
+describe("Test category", () => {
   beforeAll(async () => {
     await db.connect();
   });

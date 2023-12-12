@@ -6,10 +6,8 @@ export const getSubCategoryValidator = [
   validateMiddleware,
 ];
 
-export const createSubcategoryValidator = [
+const commonSubcategoryValidationRules = [
   body("name")
-    .notEmpty()
-    .withMessage("name is required")
     .isString()
     .withMessage("name must be a string")
     .trim()
@@ -17,26 +15,19 @@ export const createSubcategoryValidator = [
     .withMessage("name must be at least 3 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long"),
-  body("category")
-    .notEmpty()
-    .withMessage("category is required")
-    .isMongoId()
-    .withMessage("Invalid category ID"),
+  body("category").isMongoId().withMessage("Invalid category ID"),
+];
+
+export const createSubcategoryValidator = [
+  body("name").notEmpty().withMessage("name is required"),
+  body("category").notEmpty().withMessage("category is required"),
+  ...commonSubcategoryValidationRules,
   validateMiddleware,
 ];
 
 export const updateSubcategoryValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
-  body("name")
-    .optional()
-    .isString()
-    .withMessage("name must be a string")
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
-    .isLength({ max: 32 })
-    .withMessage("name must be at most 32 characters long"),
-  body("category").optional().isMongoId().withMessage("Invalid category ID"),
+  ...commonSubcategoryValidationRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
