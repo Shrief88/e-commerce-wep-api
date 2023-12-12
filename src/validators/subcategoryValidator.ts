@@ -8,16 +8,20 @@ export const getSubCategoryValidator = [
 
 export const createSubcategoryValidator = [
   body("name")
-    .isString()
-    .withMessage("Name must be a string")
-    .trim()
     .notEmpty()
-    .withMessage("Name is required")
+    .withMessage("name is required")
+    .isString()
+    .withMessage("name must be a string")
+    .trim()
     .isLength({ min: 3 })
-    .withMessage("Name must be at least 3 characters long")
+    .withMessage("name must be at least 3 characters long")
     .isLength({ max: 32 })
-    .withMessage("Name must be at most 32 characters long"),
-  body("category").isMongoId().withMessage("Invalid category ID"),
+    .withMessage("name must be at most 32 characters long"),
+  body("category")
+    .notEmpty()
+    .withMessage("category is required")
+    .isMongoId()
+    .withMessage("Invalid category ID"),
   validateMiddleware,
 ];
 
@@ -26,14 +30,12 @@ export const updateSubcategoryValidator = [
   body("name")
     .optional()
     .isString()
-    .withMessage("Name must be a string")
+    .withMessage("name must be a string")
     .trim()
-    .notEmpty()
-    .withMessage("Name is required")
     .isLength({ min: 3 })
-    .withMessage("Name must be at least 3 characters long")
+    .withMessage("name must be at least 3 characters long")
     .isLength({ max: 32 })
-    .withMessage("Name must be at most 32 characters long"),
+    .withMessage("name must be at most 32 characters long"),
   body("category").optional().isMongoId().withMessage("Invalid category ID"),
   validateMiddleware,
 ];

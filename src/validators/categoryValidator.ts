@@ -24,8 +24,6 @@ export const updateCategoryValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
   body("name")
     .optional()
-    .notEmpty()
-    .withMessage("name is required")
     .isString()
     .withMessage("name must be a string")
     .trim()
