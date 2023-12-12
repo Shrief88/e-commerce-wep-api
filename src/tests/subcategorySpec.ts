@@ -16,7 +16,7 @@ const insertData = async (): Promise<string[]> => {
   return [subcategoryResponse.body.data._id, categoryResponse.body.data._id];
 };
 
-fdescribe("Test subcategory", () => {
+describe("Test subcategory", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -259,7 +259,7 @@ fdescribe("Test subcategory", () => {
 
     it("should return 404 for non-existing ID", async () => {
       const objectId = new ObjectId();
-      const response = await request.get(
+      const response = await request.delete(
         `/api/subcategory/${objectId._id as unknown as string}`,
       );
       expect(response.status).toBe(404);

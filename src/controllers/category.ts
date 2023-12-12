@@ -69,11 +69,11 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
 export const deleteCategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const note = await CategoryModel.findById(id).exec();
-    if (!note) {
-      throw createHttpError(404, "Note not found");
+    const category = await CategoryModel.findById(id).exec();
+    if (!category) {
+      throw createHttpError(404, "category not found");
     }
-    await note.deleteOne();
+    await category.deleteOne();
     res.sendStatus(204);
   } catch (err) {
     next(err);
