@@ -1,25 +1,30 @@
-import { body, param } from "express-validator";
+import { body } from "express-validator";
+import BrandModel from "../models/brand";
+import { bodyBrandRules } from "./rules/bodyRules";
+import { validIdRule, existingIdRule } from "./rules/idRules";
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import { commonBrandValidationRules } from "./utils/commonValidators";
 
 export const getBrandValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(BrandModel, "brand does not exist"),
   validateMiddleware,
 ];
 
 export const createBrandValidator = [
   body("name").notEmpty().withMessage("name is required"),
-  ...commonBrandValidationRules,
+  ...bodyBrandRules,
   validateMiddleware,
 ];
 
 export const updateBrandValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
-  ...commonBrandValidationRules.map((rule) => rule.optional()),
+  ...validIdRule("ID is invalid"),
+  ...bodyBrandRules.map((rule) => rule.optional()),
+  ...existingIdRule(BrandModel, "brand does not exist"),
   validateMiddleware,
 ];
 
 export const deleteBrandValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(BrandModel, "brand does not exist"),
   validateMiddleware,
 ];

@@ -1,6 +1,5 @@
 import { type RequestHandler } from "express";
 import CategoryModel, { type ICategory } from "../models/category";
-import createHttpError from "http-errors";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
 
@@ -22,9 +21,6 @@ export const getCategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
     const category = await CategoryModel.findById(id).exec();
-    if (!category) {
-      throw createHttpError(404, "category not found");
-    }
     res.status(200).json({ data: category });
   } catch (err) {
     next(err);
@@ -34,10 +30,6 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 export const createCategory: RequestHandler = async (req, res, next) => {
   try {
     const name: string = req.body.name;
-    const existingCategory = await CategoryModel.findOne({ name }).exec();
-    if (existingCategory) {
-      throw createHttpError(409, "category already exists");
-    }
     const newCategory = await CategoryModel.create({
       name,
       slug: slugify(name),
@@ -54,17 +46,11 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
     if (req.body.name) {
       req.body.slug = slugify(req.body.name as string);
     }
-
     const category = await CategoryModel.findByIdAndUpdate(
       id,
       req.body as UpdateQuery<ICategory>,
       { new: true },
     ).exec();
-
-    if (!category) {
-      throw createHttpError(404, "category not found");
-    }
-
     res.status(200).json({ data: category });
   } catch (err) {
     next(err);
@@ -74,11 +60,7 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
 export const deleteCategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const category = await CategoryModel.findById(id).exec();
-    if (!category) {
-      throw createHttpError(404, "category not found");
-    }
-    await category.deleteOne();
+    await CategoryModel.findByIdAndDelete(id).exec();
     res.sendStatus(204);
   } catch (err) {
     next(err);

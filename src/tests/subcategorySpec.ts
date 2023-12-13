@@ -18,7 +18,7 @@ const insertData = async (): Promise<string[]> => {
   return [subcategoryResponse.body.data._id, categoryResponse.body.data._id];
 };
 
-fdescribe("Test subcategory", () => {
+describe("Test subcategory", () => {
   beforeAll(async () => {
     await db.connect();
   });
@@ -73,7 +73,7 @@ fdescribe("Test subcategory", () => {
     });
 
     testCreateDocument(request, "category is invalid", "subcategory", {
-      name: "test",
+      name: "test2",
       category: "invalidID",
     });
 
@@ -127,11 +127,11 @@ fdescribe("Test subcategory", () => {
       const response = await request
         .put(`/api/subcategory/${subcategoryID}`)
         .send({
-          name: "test",
+          name: "test222",
           category: objectId._id as unknown as string,
         });
       expect(response.status).toBe(404);
-      expect(response.body.message).toBe("category not found");
+      expect(response.body.message).toBe("category does not exist");
     });
 
     it("should return 200 with valid ID even if body is not provided", async () => {
@@ -142,7 +142,7 @@ fdescribe("Test subcategory", () => {
     it("should return 200 with valid ID and name", async () => {
       const response = await request
         .put(`/api/subcategory/${subcategoryID}`)
-        .send({ name: "test", category: categoryID });
+        .send({ name: "test2", category: categoryID });
       expect(response.status).toBe(200);
     });
   });

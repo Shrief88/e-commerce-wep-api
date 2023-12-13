@@ -2,6 +2,7 @@ import { type NextFunction, type Response, type Request } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
+// TODO : Better handling for different status code
 const validateMiddleware = (
   req: Request,
   _res: Response,
@@ -9,7 +10,14 @@ const validateMiddleware = (
 ): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    next(createHttpError(400, errors.array()[0].msg as string));
+    const message: string = errors.array()[0].msg;
+    if (message.includes("not exist")) {
+      next(createHttpError(404, message));
+    } else if (message.includes("already")) {
+      next(createHttpError(409, message));
+    } else {
+      next(createHttpError(400, message));
+    }
   }
   next();
 };

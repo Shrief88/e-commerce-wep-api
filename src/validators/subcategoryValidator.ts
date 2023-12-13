@@ -1,26 +1,31 @@
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import { body, param } from "express-validator";
-import { commonSubcategoryValidationRules } from "./utils/commonValidators";
+import { body } from "express-validator";
+import { bodySubcategoryRules } from "./rules/bodyRules";
+import { validIdRule, existingIdRule } from "./rules/idRules";
+import SubcategoryModel from "../models/subcategory";
 
 export const getSubCategoryValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(SubcategoryModel, "subcategory does not exist"),
   validateMiddleware,
 ];
 
 export const createSubcategoryValidator = [
   body("name").notEmpty().withMessage("name is required"),
   body("category").notEmpty().withMessage("category is required"),
-  ...commonSubcategoryValidationRules,
+  ...bodySubcategoryRules,
   validateMiddleware,
 ];
 
 export const updateSubcategoryValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
-  ...commonSubcategoryValidationRules.map((rule) => rule.optional()),
+  ...validIdRule("ID is invalid"),
+  ...bodySubcategoryRules.map((rule) => rule.optional()),
+  ...existingIdRule(SubcategoryModel, "subcategory does not exist"),
   validateMiddleware,
 ];
 
 export const deleteSubcategoryValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(SubcategoryModel, "subcategory does not exist"),
   validateMiddleware,
 ];

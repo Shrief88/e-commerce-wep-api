@@ -1,6 +1,27 @@
 import { body } from "express-validator";
+import BrandModel from "../../models/brand";
+import CategoryModel from "../../models/category";
+import SubcategoryModel from "../../models/subcategory";
+import ProductModel from "../../models/product";
 
-export const commonCategoryValidationRules = [
+export const bodyCategoryRules = [
+  body("name")
+    .isString()
+    .withMessage("name must be a string")
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage("name must be at least 3 characters long")
+    .isLength({ max: 32 })
+    .withMessage("name must be at most 32 characters long")
+    .custom(async (name: string) => {
+      if (await CategoryModel.findOne({ name }).exec()) {
+        throw new Error("category already exists");
+      }
+      return true;
+    }),
+];
+
+export const bodySubcategoryRules = [
   body("name")
     .isString()
     .withMessage("name must be a string")
@@ -9,21 +30,22 @@ export const commonCategoryValidationRules = [
     .withMessage("name must be at least 3 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long"),
+  body("category").isMongoId().withMessage("category is invalid"),
+  body("name").custom(async (name: string) => {
+    if (await SubcategoryModel.findOne({ name }).exec()) {
+      throw new Error("subcategory already exists");
+    }
+    return true;
+  }),
+  body("category").custom(async (category: string) => {
+    if (!(await CategoryModel.findById(category).exec())) {
+      throw new Error("category does not exist");
+    }
+    return true;
+  }),
 ];
 
-export const commonSubcategoryValidationRules = [
-  body("name")
-    .isString()
-    .withMessage("name must be a string")
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
-    .isLength({ max: 32 })
-    .withMessage("name must be at most 32 characters long"),
-  body("category").isMongoId().withMessage("Invalid category ID"),
-];
-
-export const commonBrandValidationRules = [
+export const bodyBrandRules = [
   body("name")
     .isString()
     .withMessage("name must be a string")
@@ -31,26 +53,32 @@ export const commonBrandValidationRules = [
     .isLength({ min: 2 })
     .withMessage("name must be at least 2 characters long")
     .isLength({ max: 32 })
-    .withMessage("name must be at most 32 characters long"),
+    .withMessage("name must be at most 32 characters long")
+    .custom(async (name: string) => {
+      if (await BrandModel.findOne({ name }).exec()) {
+        throw new Error("brand already exists");
+      }
+      return true;
+    }),
 ];
 
-export const commonProductValidationRules = [
+export const bodyProductRules = [
   body("name")
     .isString()
     .withMessage("name must be a string")
     .trim()
     .isLength({ min: 3 })
     .withMessage("name must be at least 3 characters long")
-    .isLength({ max: 32 })
-    .withMessage("name must be at most 32 characters long"),
+    .isLength({ max: 50 })
+    .withMessage("name must be at most 50 characters long"),
   body("description")
     .isString()
     .withMessage("description must be a string")
     .trim()
     .isLength({ min: 20 })
     .withMessage("description must be at least 20 characters long")
-    .isLength({ max: 200 })
-    .withMessage("description must be at most 500 characters long"),
+    .isLength({ max: 2000 })
+    .withMessage("description must be at most 2000 characters long"),
   body("sold").isNumeric().withMessage("sold must be a number"),
   body("quantity").isNumeric().withMessage("quantity must be a number"),
   body("price").isNumeric().withMessage("price must be a number"),
@@ -58,8 +86,8 @@ export const commonProductValidationRules = [
     .isNumeric()
     .withMessage("priceAfterDiscount must be a number")
     .custom((value, { req }) => {
-      if (value < req.body.price) {
-        throw new Error("priceAfterDiscount must be greater than price");
+      if (value > req.body.price) {
+        throw new Error("priceAfterDiscount must be lower than price");
       }
       return true;
     }),
@@ -67,6 +95,7 @@ export const commonProductValidationRules = [
   body("imageCover").isString().withMessage("imageCover must be a string"),
   body("images").isArray().withMessage("images must be an array"),
   body("category").isMongoId().withMessage("Invalid category ID"),
+
   body("subcategory")
     .isArray()
     .withMessage("subcategory must be an array")
@@ -85,4 +114,22 @@ export const commonProductValidationRules = [
   body("ratingsQuantity")
     .isNumeric()
     .withMessage("ratingsQuantity must be a number"),
+  body("name").custom(async (name: string) => {
+    if (!(await ProductModel.findOne({ name }).exec())) {
+      throw new Error("category already exists");
+    }
+    return true;
+  }),
+  body("brand").custom(async (id: string) => {
+    if (!(await BrandModel.findById(id).exec())) {
+      throw new Error("Invalid brand ID");
+    }
+    return true;
+  }),
+  body("category").custom(async (id: string) => {
+    if (!(await CategoryModel.findById(id).exec())) {
+      throw new Error("Invalid category ID");
+    }
+    return true;
+  }),
 ];

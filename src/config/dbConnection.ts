@@ -3,7 +3,7 @@ import env from "../validators/validateEnv";
 
 const connectionString = env.MONGO_URI;
 
-const DBConnection = async (): Promise<void> => {
+const dbConnection = async (): Promise<void> => {
   try {
     await mongoose.connect(connectionString);
     console.log("MongoDB connected");
@@ -13,4 +13,4 @@ const DBConnection = async (): Promise<void> => {
   }
 };
 
-export default DBConnection;
+export default dbConnection;

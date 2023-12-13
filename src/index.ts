@@ -1,8 +1,8 @@
-import DBConnection from "./config/dbConnection";
+import dbConnection from "./config/dbConnection";
 import env from "./validators/validateEnv";
 import app from "./app";
 
-void DBConnection();
+void dbConnection();
 
 const port = env.PORT;
 const server = app.listen(port, () => {

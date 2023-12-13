@@ -26,7 +26,6 @@ export const testUpdateDocument = (
     const response = await request
       .put(`/api/${endPoint}/${validId}`)
       .send(sendBody ?? {});
-    console.log(response.status);
     expect(response.status).toBe(400);
   });
 };
