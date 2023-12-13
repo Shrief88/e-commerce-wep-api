@@ -1,9 +1,12 @@
-import { param, body } from "express-validator";
+import { body } from "express-validator";
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import { commonProductValidationRules } from "./utils/commonValidators";
+import { bodyProductRules } from "./rules/bodyRules";
+import { validIdRule, existingIdRule } from "./rules/idRules";
+import ProductModel from "../models/product";
 
 export const getProductValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(ProductModel, "product does not exist"),
   validateMiddleware,
 ];
 
@@ -18,21 +21,23 @@ export const createProductValidator = [
   body("imageCover").notEmpty().withMessage("imageCover is required"),
   body("images").optional(),
   body("category").notEmpty().withMessage("category is required"),
-  body("subcategory").optional(),
+  body("subcategories").optional(),
   body("brand").notEmpty().withMessage("brand is required"),
   body("ratingsAverage").optional(),
   body("ratingsQuantity").optional(),
-  ...commonProductValidationRules,
+  ...bodyProductRules,
   validateMiddleware,
 ];
 
 export const updateProductValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
-  ...commonProductValidationRules.map((rule) => rule.optional()),
+  ...validIdRule("ID is invalid"),
+  ...bodyProductRules.map((rule) => rule.optional()),
+  ...existingIdRule(ProductModel, "product does not exist"),
   validateMiddleware,
 ];
 
 export const deleteProductValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+  ...validIdRule("ID is invalid"),
+  ...existingIdRule(ProductModel, "product does not exist"),
   validateMiddleware,
 ];

@@ -96,9 +96,9 @@ export const bodyProductRules = [
   body("images").isArray().withMessage("images must be an array"),
   body("category").isMongoId().withMessage("Invalid category ID"),
 
-  body("subcategory")
+  body("subcategories")
     .isArray()
-    .withMessage("subcategory must be an array")
+    .withMessage("subcategories must be an array")
     .isMongoId()
     .withMessage("Invalid subcategory ID"),
   body("brand").isMongoId().withMessage("Invalid brand ID"),
@@ -115,7 +115,7 @@ export const bodyProductRules = [
     .isNumeric()
     .withMessage("ratingsQuantity must be a number"),
   body("name").custom(async (name: string) => {
-    if (!(await ProductModel.findOne({ name }).exec())) {
+    if (await ProductModel.findOne({ name }).exec()) {
       throw new Error("category already exists");
     }
     return true;
@@ -132,4 +132,30 @@ export const bodyProductRules = [
     }
     return true;
   }),
+  body("subcategories")
+    .custom(async (subcategoriesID: string[]) => {
+      const subcategories = await SubcategoryModel.find({
+        _id: { $exists: true, $in: subcategoriesID },
+      });
+      if (subcategories.length !== subcategoriesID.length) {
+        throw new Error("Invalid subcategory ID");
+      }
+      return true;
+    })
+    .custom(async (subcategories: string[], { req }) => {
+      const categorySubs = await SubcategoryModel.find({
+        category: req.body.category,
+      }).exec();
+      const categorySubsId: string[] = [];
+      categorySubs.forEach((categorySub) => {
+        categorySubsId.push(categorySub._id.toString());
+      });
+      const checker = subcategories.every((subcategory) => {
+        categorySubsId.includes(subcategory);
+      });
+      if (!checker) {
+        throw new Error("subcategories not belong to category");
+      }
+      return true;
+    }),
 ];

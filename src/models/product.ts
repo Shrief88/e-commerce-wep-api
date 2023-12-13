@@ -12,7 +12,7 @@ export interface IProduct {
   imageCover: string;
   images?: string[];
   category: string;
-  subcategory?: string[];
+  subcategories?: string[];
   brand: string;
   ratingsAverage?: number;
   ratingsQuantity?: number;
@@ -27,7 +27,7 @@ const productSchema = new Schema(
       required: true,
       unique: true,
       minLength: 3,
-      maxLength: 32,
+      maxLength: 50,
       trim: true,
     },
     slug: {
@@ -40,7 +40,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
       minLength: 20,
-      maxLength: 500,
+      maxLength: 2000,
       trim: true,
     },
     sold: {
@@ -69,7 +69,7 @@ const productSchema = new Schema(
       ref: "Category",
       required: true,
     },
-    subcategory: [
+    subcategories: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Subcategory",
