@@ -1,7 +1,8 @@
 import app from "../app";
 import supertest from "supertest";
-import * as db from "./db";
-import { ObjectId } from "mongodb";
+import * as db from "./config/db";
+import { testCreateDocument, testUpdateDocument } from "./utils/bodyTesting";
+import { testInvalidID, testExistingID } from "./utils/idTesting";
 
 const request = supertest(app);
 
@@ -10,32 +11,6 @@ const insertData = async (): Promise<string> => {
     name: "test",
   });
   return response.body.data._id;
-};
-
-const testCreateBrand = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  it(testTitle, async () => {
-    const response = await request.post("/api/brand").send(sendBody ?? {});
-    expect(response.status).toBe(400);
-  });
-};
-
-const testUpdateBrand = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  const validId = new ObjectId() as unknown as string;
-  it(testTitle, async () => {
-    const response = await request
-      .put(`/api/brand/${validId}`)
-      .send(sendBody ?? {});
-    console.log(response.status);
-    expect(response.status).toBe(400);
-  });
 };
 
 describe("Test brand", () => {
@@ -56,21 +31,8 @@ describe("Test brand", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.get(`/api/brand/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.get(
-        `/api/brand/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("brand not found");
-    });
+    testInvalidID(request, "get", "brand");
+    testExistingID(request, "get", "brand");
 
     it("should return 200 for valid ID", async () => {
       const response = await request.get(`/api/brand/${validID}`);
@@ -86,23 +48,15 @@ describe("Test brand", () => {
       await db.clearDatabase();
     });
 
-    testCreateBrand(request, "should return 400 for missing name", {
-      name: "",
+    testCreateDocument(request, "missing name", "brand", { name: "" });
+    testCreateDocument(request, "number as name", "brand", { name: 123 });
+    testCreateDocument(request, "white space string", "brand", {
+      name: "     ",
     });
-
-    testCreateBrand(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testCreateBrand(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testCreateBrand(request, "should return 400 if name < 2 characters", {
+    testCreateDocument(request, "name less than 2 characters", "brand", {
       name: "h",
     });
-
-    testCreateBrand(request, "should return 400 if name > 32 characters", {
+    testCreateDocument(request, "name more than 32 characters", "brand", {
       name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
@@ -127,36 +81,17 @@ describe("Test brand", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.put(`/api/brand/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
+    testInvalidID(request, "put", "brand");
+    testExistingID(request, "put", "brand");
+    testUpdateDocument(request, "number as name", "brand", { name: 123 });
+    testUpdateDocument(request, "white space string", "brand", {
+      name: "     ",
     });
-
-    testUpdateBrand(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testUpdateBrand(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testUpdateBrand(request, "should return 400 if name < 3 characters", {
+    testUpdateDocument(request, "name less than 2 characters", "brand", {
       name: "h",
     });
-
-    testUpdateBrand(request, "should return 400 if name > 32 characters", {
+    testUpdateDocument(request, "name more than 32 characters", "brand", {
       name: "loremipsum fdf df sgg dg fhfh fhfh",
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.put(
-        `/api/brand/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("brand not found");
     });
 
     it("should return 200 with valid ID even if name is not provided", async () => {
@@ -181,21 +116,8 @@ describe("Test brand", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.delete(`/api/brand/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.delete(
-        `/api/brand/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("brand not found");
-    });
+    testInvalidID(request, "delete", "brand");
+    testExistingID(request, "delete", "brand");
 
     it("should return 204 for valid ID", async () => {
       const response = await request.delete(`/api/brand/${validID}`);

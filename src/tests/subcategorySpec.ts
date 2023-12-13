@@ -1,7 +1,9 @@
 import app from "../app";
 import supertest from "supertest";
-import * as db from "./db";
+import * as db from "./config/db";
 import { ObjectId } from "mongodb";
+import { testCreateDocument, testUpdateDocument } from "./utils/bodyTesting";
+import { testInvalidID, testExistingID } from "./utils/idTesting";
 
 const request = supertest(app);
 
@@ -14,34 +16,6 @@ const insertData = async (): Promise<string[]> => {
     category: categoryResponse.body.data._id,
   });
   return [subcategoryResponse.body.data._id, categoryResponse.body.data._id];
-};
-
-const testCreateSubcategory = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  it(testTitle, async () => {
-    const response = await request
-      .post("/api/subcategory")
-      .send(sendBody ?? {});
-    expect(response.status).toBe(400);
-  });
-};
-
-const testUpdateSubcategory = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  const validId = new ObjectId() as unknown as string;
-  it(testTitle, async () => {
-    const response = await request
-      .put(`/api/subcategory/${validId}`)
-      .send(sendBody ?? {});
-    console.log(response.status);
-    expect(response.status).toBe(400);
-  });
 };
 
 fdescribe("Test subcategory", () => {
@@ -63,21 +37,8 @@ fdescribe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.get(`/api/subcategory/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.get(
-        `/api/subcategory/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("subcategory not found");
-    });
+    testInvalidID(request, "get", "subcategory");
+    testExistingID(request, "get", "subcategory");
 
     it("should return 200 for valid ID", async () => {
       const response = await request.get(`/api/subcategory/${subcategoryID}`);
@@ -94,33 +55,24 @@ fdescribe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    testCreateSubcategory(request, "should return 400 for missing name", {
-      name: "",
+    testCreateDocument(request, "missing name", "subcategory", { name: "" });
+    testCreateDocument(request, "number as name", "subcategory", { name: "" });
+    testCreateDocument(request, "white space string", "subcategory", {
+      name: "   ",
     });
-
-    testCreateSubcategory(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testCreateSubcategory(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testCreateSubcategory(request, "should return 400 if name < 3 characters", {
+    testCreateDocument(request, "name less than 3 characters", "subcategory", {
       name: "hd",
     });
 
-    testCreateSubcategory(
-      request,
-      "should return 400 if name > 32 characters",
-      { name: "loremipsum fdf df sgg dg fhfh fhfh" },
-    );
+    testCreateDocument(request, "name more than 32 characters", "subcategory", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
+    });
 
-    testCreateSubcategory(request, "should return 400 if category is missing", {
+    testCreateDocument(request, "category is missing", "subcategory", {
       name: "test",
     });
 
-    testCreateSubcategory(request, "should return 400 if category is invalid", {
+    testCreateDocument(request, "category is invalid", "subcategory", {
       name: "test",
       category: "invalidID",
     });
@@ -151,43 +103,23 @@ fdescribe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.put(`/api/subcategory/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
+    testInvalidID(request, "put", "subcategory");
+    testExistingID(request, "put", "subcategory");
+    testUpdateDocument(request, "number as name", "subcategory", { name: "" });
+    testUpdateDocument(request, "white space string", "subcategory", {
+      name: "   ",
     });
-
-    testUpdateSubcategory(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testUpdateSubcategory(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testUpdateSubcategory(request, "should return 400 if name < 3 characters", {
+    testUpdateDocument(request, "name less than 3 characters", "subcategory", {
       name: "hd",
     });
 
-    testUpdateSubcategory(
-      request,
-      "should return 400 if name > 32 characters",
-      { name: "loremipsum fdf df sgg dg fhfh fhfh" },
-    );
-
-    testUpdateSubcategory(request, "should return 400 if category is invalid", {
-      name: "test",
-      category: "invalidID",
+    testUpdateDocument(request, "name more than 32 characters", "subcategory", {
+      name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
-    it("should return 404 for non-existing subcategory", async () => {
-      const objectId = new ObjectId();
-      const response = await request
-        .put(`/api/subcategory/${objectId._id as unknown as string}`)
-        .send({ name: "test", category: categoryID });
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("subcategory not found");
+    testUpdateDocument(request, "category is invalid", "subcategory", {
+      name: "test",
+      category: "invalidID",
     });
 
     it("should return 404 for non-existing category", async () => {
@@ -224,21 +156,8 @@ fdescribe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.delete(`/api/subcategory/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.delete(
-        `/api/subcategory/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("subcategory not found");
-    });
+    testInvalidID(request, "delete", "subcategory");
+    testExistingID(request, "delete", "subcategory");
 
     it("should return 204 for valid ID", async () => {
       const response = await request.delete(

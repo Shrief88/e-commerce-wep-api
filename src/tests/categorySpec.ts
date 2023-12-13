@@ -1,7 +1,8 @@
 import app from "../app";
 import supertest from "supertest";
-import * as db from "./db";
-import { ObjectId } from "mongodb";
+import * as db from "./config/db";
+import { testCreateDocument, testUpdateDocument } from "./utils/bodyTesting";
+import { testInvalidID, testExistingID } from "./utils/idTesting";
 
 const request = supertest(app);
 
@@ -10,32 +11,6 @@ const insertData = async (): Promise<string> => {
     name: "test",
   });
   return response.body.data._id;
-};
-
-const testCreateCategory = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  it(testTitle, async () => {
-    const response = await request.post("/api/category").send(sendBody ?? {});
-    expect(response.status).toBe(400);
-  });
-};
-
-const testUpdateCategory = (
-  request: supertest.SuperTest<supertest.Test>,
-  testTitle: string,
-  sendBody?: Record<string, unknown>,
-): void => {
-  const validId = new ObjectId() as unknown as string;
-  it(testTitle, async () => {
-    const response = await request
-      .put(`/api/category/${validId}`)
-      .send(sendBody ?? {});
-    console.log(response.status);
-    expect(response.status).toBe(400);
-  });
 };
 
 describe("Test category", () => {
@@ -56,21 +31,8 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.get(`/api/category/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.get(
-        `/api/category/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("category not found");
-    });
+    testInvalidID(request, "get", "category");
+    testExistingID(request, "get", "category");
 
     it("should return 200 for valid ID", async () => {
       const response = await request.get(`/api/category/${validID}`);
@@ -86,23 +48,15 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    testCreateCategory(request, "should return 400 for missing name", {
-      name: "",
+    testCreateDocument(request, "missing name", "category", { name: "" });
+    testCreateDocument(request, "number as name", "category", { name: 123 });
+    testCreateDocument(request, "white space string", "category", {
+      name: "     ",
     });
-
-    testCreateCategory(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testCreateCategory(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testCreateCategory(request, "should return 400 if name < 3 characters", {
+    testCreateDocument(request, "name less than 3 characters", "category", {
       name: "hd",
     });
-
-    testCreateCategory(request, "should return 400 if name > 32 characters", {
+    testCreateDocument(request, "name more than 32 characters", "category", {
       name: "loremipsum fdf df sgg dg fhfh fhfh",
     });
 
@@ -131,36 +85,17 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.put(`/api/category/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
+    testInvalidID(request, "put", "category");
+    testExistingID(request, "put", "category");
+    testUpdateDocument(request, "number as name", "category", { name: 123 });
+    testUpdateDocument(request, "white space string", "category", {
+      name: "     ",
     });
-
-    testUpdateCategory(request, "should return 400 for number as name", {
-      name: 123,
-    });
-
-    testUpdateCategory(request, "should return 400 for white space string", {
-      name: "    ",
-    });
-
-    testUpdateCategory(request, "should return 400 if name < 3 characters", {
+    testUpdateDocument(request, "name less than 3 characters", "category", {
       name: "hd",
     });
-
-    testUpdateCategory(request, "should return 400 if name > 32 characters", {
+    testUpdateDocument(request, "name more than 32 characters", "category", {
       name: "loremipsum fdf df sgg dg fhfh fhfh",
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.put(
-        `/api/category/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("category not found");
     });
 
     it("should return 200 with valid ID even if name is not provided", async () => {
@@ -185,21 +120,8 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    it("should return 400 for invalid ID", async () => {
-      const invalidID = "invalidID";
-      const response = await request.delete(`/api/category/${invalidID}`);
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Invalid ID");
-    });
-
-    it("should return 404 for non-existing ID", async () => {
-      const objectId = new ObjectId();
-      const response = await request.delete(
-        `/api/category/${objectId._id as unknown as string}`,
-      );
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBe("category not found");
-    });
+    testInvalidID(request, "delete", "category");
+    testExistingID(request, "delete", "category");
 
     it("should return 204 for valid ID", async () => {
       const response = await request.delete(`/api/category/${validID}`);
