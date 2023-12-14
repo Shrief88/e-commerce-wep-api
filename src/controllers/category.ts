@@ -2,16 +2,26 @@ import { type RequestHandler } from "express";
 import CategoryModel, { type ICategory } from "../models/category";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
+import ApiFeatures from "../utils/apiFeatures";
 
 export const getCategories: RequestHandler = async (req, res, next) => {
   try {
-    const page: number = Number(req.query.page) || 1;
-    const limit: number = Number(req.query.limit) || 10;
-    const skip: number = (page - 1) * limit;
-    const categories = await CategoryModel.find().skip(skip).limit(limit);
-    res
-      .status(200)
-      .json({ results: categories.length, page, data: categories });
+    const documentCount = await CategoryModel.countDocuments();
+    const apiFeatures = new ApiFeatures(CategoryModel.find(), req.query)
+      .filter()
+      .sort()
+      .fields()
+      .paggination(documentCount)
+      .search();
+
+    const { mongooseQuery, pagginationResult } = apiFeatures;
+    const categories = await mongooseQuery;
+
+    res.status(200).json({
+      result: categories.length,
+      pagginationResult,
+      data: categories,
+    });
   } catch (err) {
     next(err);
   }

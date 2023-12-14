@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface ICategory {
+export interface ICategory extends mongoose.Document {
   name: string;
   slug: string;
   image?: string;

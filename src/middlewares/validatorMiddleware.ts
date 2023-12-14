@@ -2,7 +2,7 @@ import { type NextFunction, type Response, type Request } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
-// TODO : Better handling for different status code
+// TODO: Better handling for different status code
 const validateMiddleware = (
   req: Request,
   _res: Response,

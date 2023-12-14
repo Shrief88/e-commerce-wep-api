@@ -3,14 +3,26 @@ import BrandModel, { type IBrand } from "../models/brand";
 import createHttpError from "http-errors";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
+import ApiFeatures from "../utils/apiFeatures";
 
 export const getBrands: RequestHandler = async (req, res, next) => {
   try {
-    const page: number = Number(req.query.page) || 1;
-    const limit: number = Number(req.query.limit) || 10;
-    const skip: number = (page - 1) * limit;
-    const brands = await BrandModel.find().skip(skip).limit(limit);
-    res.status(200).json({ results: brands.length, page, data: brands });
+    const documentCount = await BrandModel.countDocuments();
+    const apiFeatures = new ApiFeatures(BrandModel.find(), req.query)
+      .filter()
+      .sort()
+      .fields()
+      .paggination(documentCount)
+      .search();
+
+    const { mongooseQuery, pagginationResult } = apiFeatures;
+    const brands = await mongooseQuery;
+
+    res.status(200).json({
+      result: brands.length,
+      pagginationResult,
+      data: brands,
+    });
   } catch (err) {
     next(err);
   }

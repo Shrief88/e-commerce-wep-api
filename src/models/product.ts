@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface IProduct {
+export interface IProduct extends mongoose.Document {
   name: string;
   slug: string;
   description: string;
@@ -27,7 +27,7 @@ const productSchema = new Schema(
       required: true,
       unique: true,
       minLength: 3,
-      maxLength: 50,
+      maxLength: 100,
       trim: true,
     },
     slug: {
@@ -94,5 +94,18 @@ const productSchema = new Schema(
     timestamps: true,
   },
 );
+
+// Mongoose Query Middleware
+productSchema.pre<IProduct>(/^find/, function (next) {
+  void this.populate({
+    path: "category",
+    select: "name",
+  });
+  void this.populate({
+    path: "brand",
+    select: "name",
+  });
+  next();
+});
 
 export default mongoose.model<IProduct>("Product", productSchema);

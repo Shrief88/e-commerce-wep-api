@@ -21,7 +21,7 @@ subcategoryRouter.get(
 subcategoryRouter.get(
   "/:id",
   subcategoryValidator.getSubCategoryValidator,
-  subcategoryController.getsubcategory,
+  subcategoryController.getSubcategory,
 );
 
 // @access private

@@ -1,29 +1,33 @@
 import { type RequestHandler } from "express";
 import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
 import slugify from "slugify";
-import { type UpdateQuery, type ObjectId } from "mongoose";
+import { type UpdateQuery } from "mongoose";
+import ApiFeatures from "../utils/apiFeatures";
 
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
-    const page: number = Number(req.query.page) || 1;
-    const limit: number = Number(req.query.limit) || 10;
-    const skip: number = (page - 1) * limit;
-    const filterObject: Record<string, ObjectId> = req.body.filterObject;
+    const documentCount = await SubcategoryModel.countDocuments();
+    const apiFeatures = new ApiFeatures(SubcategoryModel.find(), req.query)
+      .filter()
+      .sort()
+      .fields()
+      .paggination(documentCount)
+      .search();
 
-    const subCategories = await SubcategoryModel.find(filterObject)
-      .skip(skip)
-      .limit(limit)
-      .populate({ path: "category", select: "name" })
-      .exec();
-    res
-      .status(200)
-      .json({ results: subCategories.length, page, data: subCategories });
+    const { mongooseQuery, pagginationResult } = apiFeatures;
+    const subcategories = await mongooseQuery;
+
+    res.status(200).json({
+      result: subcategories.length,
+      pagginationResult,
+      data: subcategories,
+    });
   } catch (err) {
     next(err);
   }
 };
 
-export const getsubcategory: RequestHandler = async (req, res, next) => {
+export const getSubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
     const subcategory = await SubcategoryModel.findById(id)

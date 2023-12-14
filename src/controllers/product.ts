@@ -2,21 +2,24 @@ import { type RequestHandler } from "express";
 import ProductModel, { type IProduct } from "../models/product";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
+import ApiFeatures from "../utils/apiFeatures";
 
 export const getproducts: RequestHandler = async (req, res, next) => {
   try {
-    const page: number = Number(req.query.page) || 1;
-    const limit: number = Number(req.query.limit) || 10;
-    const skip: number = (page - 1) * limit;
-    const products = await ProductModel.find()
-      .skip(skip)
-      .limit(limit)
-      .populate([
-        { path: "category", select: "name" },
-        { path: "brand", select: "name" },
-      ])
-      .exec();
-    res.status(200).json({ results: products.length, page, data: products });
+    const documentCount = await ProductModel.countDocuments();
+    const apiFeatures = new ApiFeatures(ProductModel.find(), req.query)
+      .filter()
+      .sort()
+      .fields()
+      .paggination(documentCount)
+      .search();
+
+    const { mongooseQuery, pagginationResult } = apiFeatures;
+    const products = await mongooseQuery;
+
+    res
+      .status(200)
+      .json({ result: products.length, pagginationResult, data: products });
   } catch (err) {
     next(err);
   }

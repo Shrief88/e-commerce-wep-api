@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface IBrand {
+export interface IBrand extends mongoose.Document {
   name: string;
   slug: string;
   image?: string;

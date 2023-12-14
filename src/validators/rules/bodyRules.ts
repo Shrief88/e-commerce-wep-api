@@ -69,8 +69,8 @@ export const bodyProductRules = [
     .trim()
     .isLength({ min: 3 })
     .withMessage("name must be at least 3 characters long")
-    .isLength({ max: 50 })
-    .withMessage("name must be at most 50 characters long"),
+    .isLength({ max: 100 })
+    .withMessage("name must be at most 100 characters long"),
   body("description")
     .isString()
     .withMessage("description must be a string")

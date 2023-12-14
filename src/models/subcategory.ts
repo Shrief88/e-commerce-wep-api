@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface ISubcategory {
+export interface ISubcategory extends mongoose.Document {
   name: string;
   slug: string;
   category: string;
@@ -34,5 +34,13 @@ const subcategorySchema = new Schema(
     timestamps: true,
   },
 );
+
+subcategorySchema.pre<ISubcategory>(/^find/, function (next) {
+  void this.populate({
+    path: "category",
+    select: "name",
+  });
+  next();
+});
 
 export default mongoose.model<ISubcategory>("Subcategory", subcategorySchema);
