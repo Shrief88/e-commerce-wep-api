@@ -43,15 +43,8 @@ export const getBrand: RequestHandler = async (req, res, next) => {
 
 export const createBrand: RequestHandler = async (req, res, next) => {
   try {
-    const name: string = req.body.name;
-    const existingBrand = await BrandModel.findOne({ name }).exec();
-    if (existingBrand) {
-      throw createHttpError(409, "brand already exists");
-    }
-    const newBrand = await BrandModel.create({
-      name,
-      slug: slugify(name),
-    });
+    req.body.slug = slugify(req.body.name as string);
+    const newBrand = await BrandModel.create(req.body);
     res.status(201).json({ data: newBrand });
   } catch (err) {
     next(err);
@@ -83,11 +76,10 @@ export const updateBrand: RequestHandler = async (req, res, next) => {
 export const deleteBrand: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const brand = await BrandModel.findById(id).exec();
+    const brand = await BrandModel.findByIdAndDelete(id).exec();
     if (!brand) {
       throw createHttpError(404, "brand not found");
     }
-    await brand.deleteOne();
     res.sendStatus(204);
   } catch (err) {
     next(err);

@@ -3,6 +3,7 @@ import CategoryModel, { type ICategory } from "../models/category";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
 import ApiFeatures from "../utils/apiFeatures";
+import createHttpError from "http-errors";
 
 export const getCategories: RequestHandler = async (req, res, next) => {
   try {
@@ -31,6 +32,9 @@ export const getCategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
     const category = await CategoryModel.findById(id).exec();
+    if (!category) {
+      throw createHttpError(404, "category not found");
+    }
     res.status(200).json({ data: category });
   } catch (err) {
     next(err);
@@ -40,7 +44,6 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 export const createCategory: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
-    console.log(req.body);
     const newCategory = await CategoryModel.create(req.body);
     res.status(201).json({ data: newCategory });
   } catch (err) {
@@ -59,6 +62,10 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
       req.body as UpdateQuery<ICategory>,
       { new: true },
     ).exec();
+
+    if (!category) {
+      throw createHttpError(404, "category not found");
+    }
     res.status(200).json({ data: category });
   } catch (err) {
     next(err);
@@ -68,7 +75,10 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
 export const deleteCategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await CategoryModel.findByIdAndDelete(id).exec();
+    const category = await CategoryModel.findByIdAndDelete(id).exec();
+    if (!category) {
+      throw createHttpError(404, "category not found");
+    }
     res.sendStatus(204);
   } catch (err) {
     next(err);

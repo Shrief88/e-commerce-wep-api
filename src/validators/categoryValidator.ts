@@ -1,12 +1,9 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import CategoryModel from "../models/category";
 import { bodyCategoryRules } from "./rules/bodyRules";
-import { validIdRule, existingIdRule } from "./rules/idRules";
 
 export const getCategoryValidator = [
-  ...validIdRule("ID is invalid"),
-  ...existingIdRule(CategoryModel, "category does not exist"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
@@ -17,14 +14,12 @@ export const createCategoryValidator = [
 ];
 
 export const updateCategoryValidator = [
-  ...validIdRule("ID is invalid"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyCategoryRules.map((rule) => rule.optional()),
-  ...existingIdRule(CategoryModel, "category does not exist"),
   validateMiddleware,
 ];
 
 export const deleteCategoryValidator = [
-  ...validIdRule("ID is invalid"),
-  ...existingIdRule(CategoryModel, "category does not exist"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

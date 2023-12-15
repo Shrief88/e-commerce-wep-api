@@ -3,6 +3,7 @@ import ProductModel, { type IProduct } from "../models/product";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
 import ApiFeatures from "../utils/apiFeatures";
+import createHttpError from "http-errors";
 
 export const getproducts: RequestHandler = async (req, res, next) => {
   try {
@@ -28,12 +29,10 @@ export const getproducts: RequestHandler = async (req, res, next) => {
 export const getProduct: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const product = await ProductModel.findById(id)
-      .populate([
-        { path: "category", select: "name" },
-        { path: "brand", select: "name" },
-      ])
-      .exec();
+    const product = await ProductModel.findById(id).exec();
+    if (!product) {
+      throw createHttpError(404, "product not found");
+    }
     res.status(200).json({ data: product });
   } catch (err) {
     next(err);
@@ -43,7 +42,6 @@ export const getProduct: RequestHandler = async (req, res, next) => {
 export const createProduct: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
-    console.log(req.body);
     const newProduct = await ProductModel.create(req.body);
     res.status(201).json({ data: newProduct });
   } catch (err) {
@@ -63,6 +61,10 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
       { new: true },
     ).exec();
 
+    if (!product) {
+      throw createHttpError(404, "product not found");
+    }
+
     res.status(200).json({ data: product });
   } catch (err) {
     next(err);
@@ -72,7 +74,10 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
 export const deleteProduct: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await ProductModel.findByIdAndDelete(id).exec();
+    const product = await ProductModel.findByIdAndDelete(id).exec();
+    if (!product) {
+      throw createHttpError(404, "product not found");
+    }
     res.sendStatus(204);
   } catch (err) {
     next(err);

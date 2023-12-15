@@ -3,6 +3,7 @@ import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
 import ApiFeatures from "../utils/apiFeatures";
+import createHttpError from "http-errors";
 
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
@@ -30,9 +31,10 @@ export const getSubcategories: RequestHandler = async (req, res, next) => {
 export const getSubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const subcategory = await SubcategoryModel.findById(id)
-      .populate({ path: "category", select: "name" })
-      .exec();
+    const subcategory = await SubcategoryModel.findById(id).exec();
+    if (!subcategory) {
+      throw createHttpError(404, "subcategory not found");
+    }
     res.status(200).json({ data: subcategory });
   } catch (err) {
     next(err);
@@ -41,13 +43,8 @@ export const getSubcategory: RequestHandler = async (req, res, next) => {
 
 export const createsubcategory: RequestHandler = async (req, res, next) => {
   try {
-    const name: string = req.body.name;
-    const category: string = req.body.category;
-    const newsubcategory = await SubcategoryModel.create({
-      name,
-      slug: slugify(name),
-      category,
-    });
+    req.body.slug = slugify(req.body.name as string);
+    const newsubcategory = await SubcategoryModel.create(req.body);
     res.status(201).json({ data: newsubcategory });
   } catch (err) {
     next(err);
@@ -60,12 +57,15 @@ export const updatesubcategory: RequestHandler = async (req, res, next) => {
     if (req.body.name) {
       req.body.slug = slugify(req.body.name as string);
     }
-
     const subcategory = await SubcategoryModel.findByIdAndUpdate(
       id,
       req.body as UpdateQuery<ISubcategory>,
       { new: true },
     ).exec();
+
+    if (!subcategory) {
+      throw createHttpError(404, "subcategory not found");
+    }
     res.status(200).json({ data: subcategory });
   } catch (err) {
     next(err);
@@ -75,7 +75,10 @@ export const updatesubcategory: RequestHandler = async (req, res, next) => {
 export const deletesubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await SubcategoryModel.findByIdAndDelete(id).exec();
+    const subcategory = await SubcategoryModel.findByIdAndDelete(id).exec();
+    if (!subcategory) {
+      throw createHttpError(404, "subcategory not found");
+    }
     res.sendStatus(204);
   } catch (err) {
     next(err);

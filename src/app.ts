@@ -16,7 +16,7 @@ if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, "..", "uploads")));
 
 // ROUTES
 app.get("/", (_req, res) => {

@@ -1,12 +1,9 @@
-import { body } from "express-validator";
-import BrandModel from "../models/brand";
+import { body, param } from "express-validator";
 import { bodyBrandRules } from "./rules/bodyRules";
-import { validIdRule, existingIdRule } from "./rules/idRules";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
 export const getBrandValidator = [
-  ...validIdRule("ID is invalid"),
-  ...existingIdRule(BrandModel, "brand does not exist"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
@@ -17,14 +14,12 @@ export const createBrandValidator = [
 ];
 
 export const updateBrandValidator = [
-  ...validIdRule("ID is invalid"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyBrandRules.map((rule) => rule.optional()),
-  ...existingIdRule(BrandModel, "brand does not exist"),
   validateMiddleware,
 ];
 
 export const deleteBrandValidator = [
-  ...validIdRule("ID is invalid"),
-  ...existingIdRule(BrandModel, "brand does not exist"),
+  param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

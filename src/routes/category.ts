@@ -4,6 +4,7 @@ import * as categoryValidator from "../validators/categoryValidator";
 import subcategoryRouter from "./subcategory";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeImage } from "../middlewares/imageProcessingMiddleware";
+import validateImageExisting from "../middlewares/imageExistingMiddleWare";
 
 const categoryRouter = express.Router();
 
@@ -21,15 +22,18 @@ categoryRouter.get(
 categoryRouter.post(
   "/",
   uploadSingleImage,
+  validateImageExisting,
   categoryValidator.createCategoryValidator,
-  resizeImage,
+  resizeImage("category"),
   categoryController.createCategory,
 );
 
 // @access private
 categoryRouter.put(
   "/:id",
+  uploadSingleImage,
   categoryValidator.updateCategoryValidator,
+  resizeImage("category"),
   categoryController.updateCategory,
 );
 

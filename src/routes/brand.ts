@@ -1,6 +1,9 @@
 import * as brandController from "../controllers/brand";
 import express from "express";
 import * as brandValidator from "../validators/brandValidatior";
+import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
+import { resizeImage } from "../middlewares/imageProcessingMiddleware";
+import validateImageExisting from "../middlewares/imageExistingMiddleWare";
 
 const brandRouter = express.Router();
 
@@ -17,14 +20,19 @@ brandRouter.get(
 // @access private
 brandRouter.post(
   "/",
+  uploadSingleImage,
+  validateImageExisting,
   brandValidator.createBrandValidator,
+  resizeImage("brand"),
   brandController.createBrand,
 );
 
 // @access private
 brandRouter.put(
   "/:id",
+  uploadSingleImage,
   brandValidator.updateBrandValidator,
+  resizeImage("brand"),
   brandController.updateBrand,
 );
 

@@ -26,11 +26,22 @@ const categorySchema = new Schema(
     },
     image: {
       type: String,
+      required: true,
     },
   },
   {
     timestamps: true,
   },
 );
+
+// categorySchema.post("init", function (doc) {
+//   const imageUrl = `${process.env.BASE_URL}/category/${doc.image}/`;
+//   doc.image = imageUrl;
+// });
+
+// categorySchema.post("save", function (doc) {
+//   const imageUrl = `${process.env.BASE_URL}/category/${doc.image}/`;
+//   doc.image = imageUrl;
+// });
 
 export default mongoose.model<ICategory>("Category", categorySchema);

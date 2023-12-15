@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface IBrand extends mongoose.Document {
   name: string;
   slug: string;
-  image?: string;
+  image: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,6 +26,7 @@ const brandSchema = new Schema(
     },
     image: {
       type: String,
+      required: true,
     },
   },
   {

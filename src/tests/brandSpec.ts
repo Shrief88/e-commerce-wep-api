@@ -13,7 +13,7 @@ const insertData = async (): Promise<string> => {
   return response.body.data._id;
 };
 
-describe("Test brand", () => {
+fdescribe("Test brand", () => {
   beforeAll(async () => {
     await db.connect();
   });
