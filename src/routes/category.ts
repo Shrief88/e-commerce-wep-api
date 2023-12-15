@@ -2,6 +2,8 @@ import * as categoryController from "../controllers/category";
 import express from "express";
 import * as categoryValidator from "../validators/categoryValidator";
 import subcategoryRouter from "./subcategory";
+import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
+import { resizeImage } from "../middlewares/imageProcessingMiddleware";
 
 const categoryRouter = express.Router();
 
@@ -18,7 +20,9 @@ categoryRouter.get(
 // @access private
 categoryRouter.post(
   "/",
+  uploadSingleImage,
   categoryValidator.createCategoryValidator,
+  resizeImage,
   categoryController.createCategory,
 );
 

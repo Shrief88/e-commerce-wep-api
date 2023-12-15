@@ -148,7 +148,7 @@ export const bodyProductRules = [
       }).exec();
       const categorySubsId: string[] = [];
       categorySubs.forEach((categorySub) => {
-        categorySubsId.push(categorySub._id.toString());
+        categorySubsId.push(categorySub._id.toString() as string);
       });
       const checker = subcategories.every((subcategory) => {
         categorySubsId.includes(subcategory);

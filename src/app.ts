@@ -7,6 +7,7 @@ import errorMiddleware from "./middlewares/errorMiddleware";
 import subcategoryRouter from "./routes/subcategory";
 import brandRouter from "./routes/brand";
 import productRouter from "./routes/product";
+import path from "path";
 
 const app = express();
 
@@ -15,6 +16,7 @@ if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "uploads")));
 
 // ROUTES
 app.get("/", (_req, res) => {

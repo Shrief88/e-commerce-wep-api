@@ -39,11 +39,9 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 
 export const createCategory: RequestHandler = async (req, res, next) => {
   try {
-    const name: string = req.body.name;
-    const newCategory = await CategoryModel.create({
-      name,
-      slug: slugify(name),
-    });
+    req.body.slug = slugify(req.body.name as string);
+    console.log(req.body);
+    const newCategory = await CategoryModel.create(req.body);
     res.status(201).json({ data: newCategory });
   } catch (err) {
     next(err);

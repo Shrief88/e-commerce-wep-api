@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface ICategory extends mongoose.Document {
   name: string;
   slug: string;
-  image?: string;
+  image: string;
   createdAt: Date;
   updatedAt: Date;
 }
