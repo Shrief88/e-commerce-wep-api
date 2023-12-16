@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import env from "../validators/validateEnv";
+import bycrpt from "bcryptjs";
 
 enum roles {
   admin,
@@ -82,6 +83,13 @@ userSchema.post("save", function (doc) {
     const imageUrl = `${env.BASE_URL}/user/${doc.profileImage}`;
     doc.profileImage = imageUrl;
   }
+});
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bycrpt.hash(this.password, 12);
 });
 
 export default mongoose.model<IUser>("User", userSchema);

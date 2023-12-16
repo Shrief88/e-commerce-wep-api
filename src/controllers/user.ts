@@ -4,6 +4,7 @@ import ApiFeatures from "../utils/apiFeatures";
 import createHttpError from "http-errors";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
+import bycrpt from "bcryptjs";
 
 export const getUsers: RequestHandler = async (req, res, next) => {
   try {
@@ -57,9 +58,11 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     if (req.body.name) {
       req.body.slug = slugify(req.body.name as string);
     }
+
+    const { password, passwordConfirm, ...updatedFields } = req.body;
     const user = await UserModel.findByIdAndUpdate(
       id,
-      req.body as UpdateQuery<IUser>,
+      updatedFields as UpdateQuery<IUser>,
       { new: true },
     ).exec();
 
@@ -70,6 +73,20 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+export const changeUserPassword: RequestHandler = async (req, res, next) => {
+  const id: string = req.params.id;
+  req.body.password = await bycrpt.hash(req.body.password as string, 12);
+  const user = await UserModel.findByIdAndUpdate(
+    id,
+    { password: req.body.password },
+    { new: true },
+  ).exec();
+  if (!user) {
+    throw createHttpError(404, "user not found");
+  }
+  res.status(200).json({ data: user });
 };
 
 export const deleteUser: RequestHandler = async (req, res, next) => {

@@ -1,6 +1,23 @@
 import { body, param } from "express-validator";
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import { bodyCategoryRules } from "./rules/bodyRules";
+import CategoryModel from "../models/category";
+
+const bodyRules = [
+  body("name")
+    .isString()
+    .withMessage("name must be a string")
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage("name must be at least 3 characters long")
+    .isLength({ max: 32 })
+    .withMessage("name must be at most 32 characters long")
+    .custom(async (name: string) => {
+      if (await CategoryModel.findOne({ name }).exec()) {
+        throw new Error("category already exists");
+      }
+      return true;
+    }),
+];
 
 export const getCategoryValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
@@ -9,13 +26,13 @@ export const getCategoryValidator = [
 
 export const createCategoryValidator = [
   body("name").notEmpty().withMessage("name is required"),
-  ...bodyCategoryRules,
+  ...bodyRules,
   validateMiddleware,
 ];
 
 export const updateCategoryValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
-  ...bodyCategoryRules.map((rule) => rule.optional()),
+  ...bodyRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 

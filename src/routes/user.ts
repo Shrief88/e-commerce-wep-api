@@ -12,6 +12,7 @@ userRouter.get("/", userController.getUsers);
 // @access private
 userRouter.get("/:id", userValidator.getUserValidator, userController.getUser);
 
+// @access private
 userRouter.post(
   "/",
   uploadSingleImage("profileImage"),
@@ -20,6 +21,7 @@ userRouter.post(
   userController.createUser,
 );
 
+// @access private
 userRouter.put(
   "/:id",
   uploadSingleImage("profileImage"),
@@ -28,6 +30,13 @@ userRouter.put(
   userController.updateUser,
 );
 
+userRouter.put(
+  "/changePassword/:id",
+  userValidator.updateUserPasswordValidator,
+  userController.changeUserPassword,
+);
+
+// @access private
 userRouter.delete(
   "/:id",
   userValidator.deleteCategoryValidator,
