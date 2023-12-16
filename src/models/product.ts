@@ -110,8 +110,10 @@ productSchema.pre<IProduct>(/^find/, function (next) {
 });
 
 productSchema.post("init", function (doc) {
-  const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
-  doc.imageCover = imageUrl;
+  if (doc.imageCover) {
+    const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
+    doc.imageCover = imageUrl;
+  }
   if (doc.images) {
     const images: string[] = [];
     doc.images.forEach((image) => {
@@ -123,8 +125,10 @@ productSchema.post("init", function (doc) {
 });
 
 productSchema.post("save", function (doc) {
-  const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
-  doc.imageCover = imageUrl;
+  if (doc.imageCover) {
+    const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
+    doc.imageCover = imageUrl;
+  }
   if (doc.images) {
     const images: string[] = [];
     doc.images.forEach((image) => {

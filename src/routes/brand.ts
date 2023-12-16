@@ -1,6 +1,6 @@
 import * as brandController from "../controllers/brand";
 import express from "express";
-import * as brandValidator from "../validators/brandValidatior";
+import * as brandValidator from "../validators/brandValidator";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
@@ -23,7 +23,7 @@ brandRouter.post(
   uploadSingleImage("image"),
   validateImageExisting,
   brandValidator.createBrandValidator,
-  resizeSingleImage("brand"),
+  resizeSingleImage("brand", "image"),
   brandController.createBrand,
 );
 
@@ -32,7 +32,7 @@ brandRouter.put(
   "/:id",
   uploadSingleImage("image"),
   brandValidator.updateBrandValidator,
-  resizeSingleImage("brand"),
+  resizeSingleImage("brand", "image"),
   brandController.updateBrand,
 );
 

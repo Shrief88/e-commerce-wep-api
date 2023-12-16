@@ -36,13 +36,17 @@ const categorySchema = new Schema(
 );
 
 categorySchema.post("init", function (doc) {
-  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-  doc.image = imageUrl;
+  if (doc.image) {
+    const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+    doc.image = imageUrl;
+  }
 });
 
 categorySchema.post("save", function (doc) {
-  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-  doc.image = imageUrl;
+  if (doc.image) {
+    const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+    doc.image = imageUrl;
+  }
 });
 
 export default mongoose.model<ICategory>("Category", categorySchema);

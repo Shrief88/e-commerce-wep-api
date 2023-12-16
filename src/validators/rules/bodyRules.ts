@@ -3,6 +3,7 @@ import BrandModel from "../../models/brand";
 import CategoryModel from "../../models/category";
 import SubcategoryModel from "../../models/subcategory";
 import ProductModel from "../../models/product";
+import UserModel from "../../models/user";
 
 export const bodyCategoryRules = [
   body("name")
@@ -155,4 +156,36 @@ export const bodyProductRules = [
       }
       return true;
     }),
+];
+
+export const bodyUserRules = [
+  body("name")
+    .isString()
+    .withMessage("name must be a string")
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage("name must be at least 3 characters long")
+    .isLength({ max: 32 })
+    .withMessage("name must be at most 32 characters long"),
+  body("email").trim().isEmail().withMessage("Invalid email"),
+  body("phone").trim().isMobilePhone("ar-EG").withMessage("Invalid phone"),
+  body("password")
+    .isString()
+    .withMessage("Must Contain letters")
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage("Too short password"),
+  body("address").isString().withMessage("address must be a string"),
+  body("email").custom(async (email: string) => {
+    if (await UserModel.findOne({ email }).exec()) {
+      throw new Error("user email already exists");
+    }
+    return true;
+  }),
+  body("phone").custom(async (phone: string) => {
+    if (await UserModel.findOne({ phone }).exec()) {
+      throw new Error("user phone already exists");
+    }
+    return true;
+  }),
 ];

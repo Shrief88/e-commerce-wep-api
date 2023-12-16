@@ -2,17 +2,20 @@ import { type RequestHandler } from "express";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 
-export const resizeSingleImage = (modelName: string): RequestHandler => {
+export const resizeSingleImage = (
+  modelName: string,
+  path: string,
+): RequestHandler => {
   return async (req, res, next) => {
-    const filename = `${modelName}-${uuidv4()}-${Date.now()}.jpeg`;
     if (req.file) {
+      const filename = `${modelName}-${uuidv4()}-${Date.now()}.jpeg`;
       try {
         await sharp(req.file?.buffer)
           .resize(600, 600)
           .toFormat("jpeg")
           .toFile(`uploads/${modelName}/${filename}`);
 
-        req.body.image = filename;
+        req.body[path] = filename;
       } catch (err) {
         next(err);
       }

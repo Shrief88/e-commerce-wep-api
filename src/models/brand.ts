@@ -36,13 +36,17 @@ const brandSchema = new Schema(
 );
 
 brandSchema.post("init", function (doc) {
-  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-  doc.image = imageUrl;
+  if (doc.image) {
+    const imageUrl = `${env.BASE_URL}/brand/${doc.image}`;
+    doc.image = imageUrl;
+  }
 });
 
 brandSchema.post("save", function (doc) {
-  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-  doc.image = imageUrl;
+  if (doc.image) {
+    const imageUrl = `${env.BASE_URL}/brand/${doc.image}`;
+    doc.image = imageUrl;
+  }
 });
 
 export default mongoose.model<IBrand>("Brand", brandSchema);

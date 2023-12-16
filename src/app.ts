@@ -7,6 +7,7 @@ import errorMiddleware from "./middlewares/errorMiddleware";
 import subcategoryRouter from "./routes/subcategory";
 import brandRouter from "./routes/brand";
 import productRouter from "./routes/product";
+import userRouter from "./routes/user";
 import path from "path";
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/subcategory", subcategoryRouter);
 app.use("/api/brand", brandRouter);
 app.use("/api/product", productRouter);
+app.use("/api/user", userRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));

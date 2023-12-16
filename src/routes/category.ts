@@ -24,7 +24,7 @@ categoryRouter.post(
   uploadSingleImage("image"),
   validateImageExisting,
   categoryValidator.createCategoryValidator,
-  resizeSingleImage("category"),
+  resizeSingleImage("category", "image"),
   categoryController.createCategory,
 );
 
@@ -33,7 +33,7 @@ categoryRouter.put(
   "/:id",
   uploadSingleImage("image"),
   categoryValidator.updateCategoryValidator,
-  resizeSingleImage("category"),
+  resizeSingleImage("category", "image"),
   categoryController.updateCategory,
 );
 
