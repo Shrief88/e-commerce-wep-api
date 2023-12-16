@@ -1,21 +1,29 @@
-import multer, { type FileFilterCallback } from "multer";
+import multer, { type Field, type FileFilterCallback } from "multer";
 import createHttpError from "http-errors";
-import { type Request } from "express";
+import { type RequestHandler, type Request } from "express";
 
-const storage = multer.memoryStorage();
+const multerConfig = (): multer.Multer => {
+  const storage = multer.memoryStorage();
+  const multerFilter = (
+    req: Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback,
+  ): void => {
+    if (file.mimetype.startsWith("image")) {
+      cb(null, true);
+    } else {
+      cb(createHttpError(400, "Only image files are allowed!"));
+    }
+  };
 
-const multerFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  cb: FileFilterCallback,
-): void => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(createHttpError(400, "Only image files are allowed!"));
-  }
+  const upload = multer({ storage, fileFilter: multerFilter });
+  return upload;
 };
 
-const upload = multer({ storage, fileFilter: multerFilter });
+export const uploadSingleImage = (filename: string): RequestHandler => {
+  return multerConfig().single(filename);
+};
 
-export const uploadSingleImage = upload.single("image");
+export const uploadMixImages = (fields: Field[]): RequestHandler => {
+  return multerConfig().fields(fields);
+};

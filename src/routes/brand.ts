@@ -2,7 +2,7 @@ import * as brandController from "../controllers/brand";
 import express from "express";
 import * as brandValidator from "../validators/brandValidatior";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
-import { resizeImage } from "../middlewares/imageProcessingMiddleware";
+import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
 
 const brandRouter = express.Router();
@@ -20,19 +20,19 @@ brandRouter.get(
 // @access private
 brandRouter.post(
   "/",
-  uploadSingleImage,
+  uploadSingleImage("image"),
   validateImageExisting,
   brandValidator.createBrandValidator,
-  resizeImage("brand"),
+  resizeSingleImage("brand"),
   brandController.createBrand,
 );
 
 // @access private
 brandRouter.put(
   "/:id",
-  uploadSingleImage,
+  uploadSingleImage("image"),
   brandValidator.updateBrandValidator,
-  resizeImage("brand"),
+  resizeSingleImage("brand"),
   brandController.updateBrand,
 );
 

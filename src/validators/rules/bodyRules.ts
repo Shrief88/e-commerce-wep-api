@@ -92,10 +92,7 @@ export const bodyProductRules = [
       return true;
     }),
   body("colors").isArray().withMessage("colors must be an array"),
-  body("imageCover").isString().withMessage("imageCover must be a string"),
-  body("images").isArray().withMessage("images must be an array"),
   body("category").isMongoId().withMessage("Invalid category ID"),
-
   body("subcategories")
     .isArray()
     .withMessage("subcategories must be an array")

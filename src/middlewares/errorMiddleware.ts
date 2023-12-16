@@ -8,7 +8,8 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): void => {
-  let errorMessage = "An unknown error occurred";
+  console.log(error);
+  let errorMessage = "Something went wrong!";
   let statusCode = 500;
   let stack: string | undefined = "";
   if (isHttpError(error)) {

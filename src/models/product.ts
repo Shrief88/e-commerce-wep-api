@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import env from "../validators/validateEnv";
 
 export interface IProduct extends mongoose.Document {
   name: string;
@@ -106,6 +107,32 @@ productSchema.pre<IProduct>(/^find/, function (next) {
     select: "name",
   });
   next();
+});
+
+productSchema.post("init", function (doc) {
+  const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
+  doc.imageCover = imageUrl;
+  if (doc.images) {
+    const images: string[] = [];
+    doc.images.forEach((image) => {
+      const imageUrl = `${env.BASE_URL}/product/${image}`;
+      images.push(imageUrl);
+    });
+    doc.images = images;
+  }
+});
+
+productSchema.post("save", function (doc) {
+  const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
+  doc.imageCover = imageUrl;
+  if (doc.images) {
+    const images: string[] = [];
+    doc.images.forEach((image) => {
+      const imageUrl = `${env.BASE_URL}/product/${image}`;
+      images.push(imageUrl);
+    });
+    doc.images = images;
+  }
 });
 
 export default mongoose.model<IProduct>("Product", productSchema);

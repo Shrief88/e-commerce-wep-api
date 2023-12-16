@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import env from "../validators/validateEnv";
 
 export interface ICategory extends mongoose.Document {
   name: string;
@@ -34,14 +35,14 @@ const categorySchema = new Schema(
   },
 );
 
-// categorySchema.post("init", function (doc) {
-//   const imageUrl = `${process.env.BASE_URL}/category/${doc.image}/`;
-//   doc.image = imageUrl;
-// });
+categorySchema.post("init", function (doc) {
+  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+  doc.image = imageUrl;
+});
 
-// categorySchema.post("save", function (doc) {
-//   const imageUrl = `${process.env.BASE_URL}/category/${doc.image}/`;
-//   doc.image = imageUrl;
-// });
+categorySchema.post("save", function (doc) {
+  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+  doc.image = imageUrl;
+});
 
 export default mongoose.model<ICategory>("Category", categorySchema);

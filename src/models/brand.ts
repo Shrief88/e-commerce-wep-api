@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import env from "../validators/validateEnv";
 
 export interface IBrand extends mongoose.Document {
   name: string;
@@ -33,5 +34,15 @@ const brandSchema = new Schema(
     timestamps: true,
   },
 );
+
+brandSchema.post("init", function (doc) {
+  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+  doc.image = imageUrl;
+});
+
+brandSchema.post("save", function (doc) {
+  const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
+  doc.image = imageUrl;
+});
 
 export default mongoose.model<IBrand>("Brand", brandSchema);

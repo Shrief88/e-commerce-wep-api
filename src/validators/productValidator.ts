@@ -15,8 +15,6 @@ export const createProductValidator = [
   body("price").notEmpty().withMessage("price is required"),
   body("priceAfterDiscount").optional(),
   body("colors").optional(),
-  body("imageCover").notEmpty().withMessage("imageCover is required"),
-  body("images").optional(),
   body("category").notEmpty().withMessage("category is required"),
   body("subcategories").optional(),
   body("brand").notEmpty().withMessage("brand is required"),
