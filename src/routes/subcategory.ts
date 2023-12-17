@@ -5,6 +5,7 @@ import {
   setCategoryIdToBody,
   setFilterObject,
 } from "../middlewares/subcategoryMiddleware";
+import * as authController from "../controllers/auth";
 
 const subcategoryRouter = express.Router({
   mergeParams: true,
@@ -24,17 +25,21 @@ subcategoryRouter.get(
   subcategoryController.getSubcategory,
 );
 
-// @access private
+// @access private [admin, manager]
 subcategoryRouter.post(
   "/",
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   setCategoryIdToBody,
   subcategoryValidator.createSubcategoryValidator,
   subcategoryController.createsubcategory,
 );
 
-// @access private
+// @access private [admin, manager]
 subcategoryRouter.put(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   subcategoryValidator.updateSubcategoryValidator,
   subcategoryController.updatesubcategory,
 );
@@ -42,6 +47,8 @@ subcategoryRouter.put(
 // @access private
 subcategoryRouter.delete(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin"),
   subcategoryValidator.deleteSubcategoryValidator,
   subcategoryController.deletesubcategory,
 );

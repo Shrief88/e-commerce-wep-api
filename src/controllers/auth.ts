@@ -92,3 +92,16 @@ export const protectRoute: RequestHandler = async (
     next(err);
   }
 };
+
+export const allowedTo = (...roles: string[]): RequestHandler => {
+  return async (req: CustomRequest, res, next) => {
+    try {
+      if (!roles.includes(req.user.role as unknown as string)) {
+        throw createHttpError(403, "Forbidden");
+      }
+      next();
+    } catch (err) {
+      next(err);
+    }
+  };
+};

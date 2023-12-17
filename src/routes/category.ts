@@ -5,7 +5,7 @@ import subcategoryRouter from "./subcategory";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
-import { protectRoute } from "../controllers/auth";
+import * as authController from "../controllers/auth";
 
 const categoryRouter = express.Router();
 
@@ -19,10 +19,11 @@ categoryRouter.get(
   categoryController.getCategory,
 );
 
-// @access private
+// @access private [admin, manager]
 categoryRouter.post(
   "/",
-  protectRoute,
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
   validateImageExisting,
   categoryValidator.createCategoryValidator,
@@ -30,18 +31,22 @@ categoryRouter.post(
   categoryController.createCategory,
 );
 
-// @access private
+// @access private [admin, manager]
 categoryRouter.put(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
   categoryValidator.updateCategoryValidator,
   resizeSingleImage("category", "image"),
   categoryController.updateCategory,
 );
 
-// @access private
+// @access private [admin]
 categoryRouter.delete(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin"),
   categoryValidator.deleteCategoryValidator,
   categoryController.deleteCategory,
 );

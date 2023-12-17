@@ -4,6 +4,7 @@ import * as productValidator from "../validators/productValidator";
 import { uploadMixImages } from "../middlewares/uploadImageMiddleware";
 import { resizeMixImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
+import * as authController from "../controllers/auth";
 
 const productRouter = express.Router();
 
@@ -17,9 +18,11 @@ productRouter.get(
   productController.getProduct,
 );
 
-// @access private
+// @access private [admin, manager]
 productRouter.post(
   "/",
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   uploadMixImages([
     { name: "imageCover", maxCount: 1 },
     { name: "images", maxCount: 5 },
@@ -30,9 +33,11 @@ productRouter.post(
   productController.createProduct,
 );
 
-// @access private
+// @access private [admin, manager]
 productRouter.put(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin", "manager"),
   uploadMixImages([
     { name: "imageCover", maxCount: 1 },
     { name: "images", maxCount: 5 },
@@ -42,9 +47,11 @@ productRouter.put(
   productController.updateProduct,
 );
 
-// @access private
+// @access private [admin]
 productRouter.delete(
   "/:id",
+  authController.protectRoute,
+  authController.allowedTo("admin"),
   productValidator.deleteProductValidator,
   productController.deleteProduct,
 );

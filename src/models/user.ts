@@ -5,6 +5,7 @@ import bycrpt from "bcryptjs";
 enum roles {
   admin,
   user,
+  manager,
 }
 
 export interface IUser extends mongoose.Document {
@@ -44,8 +45,6 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      unique: true,
-      trim: true,
     },
     password: {
       type: String,

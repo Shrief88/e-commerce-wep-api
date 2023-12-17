@@ -14,6 +14,9 @@ const bodyUserRules = [
     .withMessage("name must be at most 32 characters long"),
   body("email").trim().isEmail().withMessage("Invalid email"),
   body("phone").trim().isMobilePhone("ar-EG").withMessage("Invalid phone"),
+  body("role")
+    .matches(/^(admin|user|manager)$/i)
+    .withMessage("Invalid role"),
   body("address").isString().withMessage("address must be a string"),
   body("email").custom(async (email: string) => {
     if (await UserModel.findOne({ email }).exec()) {
@@ -37,6 +40,7 @@ export const getUserValidator = [
 export const createUserValidator = [
   body("name").notEmpty().withMessage("name is required"),
   body("email").notEmpty().withMessage("email is required"),
+  body("role").notEmpty().withMessage("role is required"),
   body("password")
     .notEmpty()
     .withMessage("password is required")
