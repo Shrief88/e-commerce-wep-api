@@ -1,11 +1,12 @@
 import { type Request, type RequestHandler } from "express";
-import userModel from "../models/user";
 import jwt from "jsonwebtoken";
-import env from "../config/validateEnv";
 import bycrpt from "bcryptjs";
-import createHttpError from "http-errors";
 import slugify from "slugify";
-import { type IUser } from "../models/user";
+import createHttpError from "http-errors";
+
+import env from "../config/validateEnv";
+import userModel, { type IUser } from "../models/user";
+import { sendEmail } from "../utils/sendEmail";
 
 export const signup: RequestHandler = async (req, res, next) => {
   try {
@@ -104,4 +105,95 @@ export const allowedTo = (...roles: string[]): RequestHandler => {
       next(err);
     }
   };
+};
+
+export const forgetPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await userModel.findOne({ email: req.body.email });
+    if (!user) {
+      throw createHttpError(404, "user not found");
+    }
+
+    // Generate code and save it
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const hashCode = await bycrpt.hash(code, 12);
+    user.passwordResetCode = hashCode;
+    user.passwordResetExpires = (Date.now() +
+      10 * 60 * 1000) as unknown as Date;
+    user.passwordResetVerified = false;
+    await user.save();
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "password reset code, valid for 10 minutes",
+        content: `Hi ${user.name},\n Your password reset code is ${code}`,
+      });
+    } catch (err) {
+      user.passwordResetCode = undefined;
+      user.passwordResetExpires = undefined;
+      user.passwordResetVerified = undefined;
+      throw createHttpError(500, "failed to send email");
+    }
+
+    res.status(200).json({ message: "code sent to email" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const verifyResetCode: RequestHandler = async (req, res, next) => {
+  try {
+    const hashCode = await bycrpt.hash(req.body.code as string, 12);
+    const user = await userModel.findOne({
+      passwordResetCode: hashCode,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      throw createHttpError(400, "reset code is invalid or expired");
+    }
+
+    user.passwordResetVerified = true;
+    await user.save();
+    res.status(200).json({ message: "code verified" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await userModel.findOne({
+      email: req.body.email,
+    });
+
+    if (!user) {
+      throw createHttpError(404, "user not found");
+    }
+
+    if (!user.passwordResetVerified) {
+      throw createHttpError(400, "reset code is has not been verified");
+    }
+
+    user.password = req.body.password;
+    user.passwordResetCode = undefined;
+    user.passwordResetExpires = undefined;
+    user.passwordResetVerified = undefined;
+    await user.save();
+
+    const token = jwt.sign({ user_id: user._id }, env.JWT_SECRET, {
+      expiresIn: "90d",
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "password reset successfully",
+      data: {
+        token,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 };

@@ -14,6 +14,24 @@ authRouter.post(
 // @access public
 authRouter.post("/login", authValidator.loginValidator, authController.login);
 
-// @access private
+// @access public
+authRouter.post(
+  "/forgetPassword",
+  authValidator.forgetPasswordValidator,
+  authController.forgetPassword,
+);
+
+// @access public
+authRouter.post(
+  "/verifyResetCode",
+  authValidator.verifyResetCodeValidator,
+  authController.verifyResetCode,
+);
+
+authRouter.put(
+  "/resetPassword",
+  authValidator.resetPasswordValidator,
+  authController.resetPassword,
+);
 
 export default authRouter;

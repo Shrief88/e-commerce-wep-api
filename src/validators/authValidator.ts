@@ -54,3 +54,34 @@ export const loginValidator = [
   body("password").notEmpty().withMessage("password is required"),
   validateMiddleware,
 ];
+
+export const forgetPasswordValidator = [
+  body("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .trim()
+    .isEmail()
+    .withMessage("Invalid email"),
+  validateMiddleware,
+];
+
+export const verifyResetCodeValidator = [
+  body("code").notEmpty().withMessage("code is required"),
+  validateMiddleware,
+];
+
+export const resetPasswordValidator = [
+  body("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .trim()
+    .isEmail()
+    .withMessage("Invalid email"),
+  body("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage("Too short password"),
+  validateMiddleware,
+];
