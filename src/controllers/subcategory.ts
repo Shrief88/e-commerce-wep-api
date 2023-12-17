@@ -1,10 +1,14 @@
 import { type RequestHandler } from "express";
-import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
-import ApiFeatures from "../utils/apiFeatures";
 import createHttpError from "http-errors";
 
+import ApiFeatures from "../utils/apiFeatures";
+import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
+
+// @desc Retrieves a list of subcategories from the database and sends it as a response.
+// @route GET /api/v1/subcategory
+// @access Public
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
     const documentCount = await SubcategoryModel.countDocuments();
@@ -28,6 +32,9 @@ export const getSubcategories: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Retrieves a specific subcategory from the database and sends it as a response.
+// @route GET /api/v1/subcategory/:id
+// @access Public
 export const getSubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -41,6 +48,9 @@ export const getSubcategory: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Creates a new subcategory in the database
+// @route POST /api/v1/subcategory
+// @access Private [admin, manager]
 export const createsubcategory: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
@@ -51,6 +61,9 @@ export const createsubcategory: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Updates a specific subcategory in the database
+// @route PUT /api/v1/subcategory/:id
+// @access Private [admin, manager]
 export const updatesubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -72,6 +85,9 @@ export const updatesubcategory: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Deletes a specific subcategory from the database
+// @route DELETE /api/v1/subcategory/:id
+// @access Private [admin]
 export const deletesubcategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;

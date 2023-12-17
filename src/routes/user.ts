@@ -1,13 +1,30 @@
-import * as userController from "../controllers/user";
 import express from "express";
+
 import * as userValidator from "../validators/userValidator";
+import * as authController from "../controllers/auth";
+import * as userController from "../controllers/user";
+import * as loggedUserController from "../controllers/loggedUser";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
-import * as authController from "../controllers/auth";
 
 const userRouter = express.Router();
 
-// @access private [admin, manager]
+// loggedIn user
+userRouter.get(
+  "/me",
+  authController.protectRoute,
+  loggedUserController.getLoggedUser,
+  userController.getUser,
+);
+
+userRouter.put(
+  "/changeMyPassword",
+  authController.protectRoute,
+  userValidator.updateUserPasswordValidator,
+  loggedUserController.changeLoggedUserPassword,
+);
+
+// Admin and Manager
 userRouter.get(
   "/",
   authController.protectRoute,
@@ -15,7 +32,6 @@ userRouter.get(
   userController.getUsers,
 );
 
-// @access private [admin, manager]
 userRouter.get(
   "/:id",
   authController.protectRoute,
@@ -24,7 +40,7 @@ userRouter.get(
   userController.getUser,
 );
 
-// @access private [admin]
+// Admin Only
 userRouter.post(
   "/",
   authController.protectRoute,
@@ -35,7 +51,6 @@ userRouter.post(
   userController.createUser,
 );
 
-// @access private [admin]
 userRouter.put(
   "/:id",
   authController.protectRoute,
@@ -46,7 +61,6 @@ userRouter.put(
   userController.updateUser,
 );
 
-// @access private [admin]
 userRouter.put(
   "/changePassword/:id",
   authController.protectRoute,
@@ -55,7 +69,6 @@ userRouter.put(
   userController.changeUserPassword,
 );
 
-// @access private
 userRouter.delete(
   "/:id",
   authController.protectRoute,

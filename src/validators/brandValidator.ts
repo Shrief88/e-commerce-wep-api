@@ -1,4 +1,5 @@
 import { body, param } from "express-validator";
+
 import BrandModel from "../models/brand";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 

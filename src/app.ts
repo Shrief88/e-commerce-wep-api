@@ -25,12 +25,12 @@ app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/api/category", categoryRouter);
-app.use("/api/subcategory", subcategoryRouter);
-app.use("/api/brand", brandRouter);
-app.use("/api/product", productRouter);
-app.use("/api/user", userRouter);
-app.use("/api/auth", authRouter);
+app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/subcategory", subcategoryRouter);
+app.use("/api/v1/brand", brandRouter);
+app.use("/api/v1/product", productRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));

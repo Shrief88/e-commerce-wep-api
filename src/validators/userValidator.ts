@@ -1,7 +1,8 @@
 import { body, param } from "express-validator";
-import validateMiddleware from "../middlewares/validatorMiddleware";
 import UserModel from "../models/user";
 import bycrpt from "bcryptjs";
+
+import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyUserRules = [
   body("name")

@@ -1,6 +1,7 @@
 import { body } from "express-validator";
-import validateMiddleware from "../middlewares/validatorMiddleware";
+
 import UserModel from "../models/user";
+import validateMiddleware from "../middlewares/validatorMiddleware";
 
 export const signupValidator = [
   body("name")

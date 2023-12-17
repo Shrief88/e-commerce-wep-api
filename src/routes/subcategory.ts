@@ -1,31 +1,29 @@
-import * as subcategoryController from "../controllers/subcategory";
 import express from "express";
+
+import * as subcategoryController from "../controllers/subcategory";
 import * as subcategoryValidator from "../validators/subcategoryValidator";
+import * as authController from "../controllers/auth";
 import {
   setCategoryIdToBody,
   setFilterObject,
 } from "../middlewares/subcategoryMiddleware";
-import * as authController from "../controllers/auth";
 
 const subcategoryRouter = express.Router({
   mergeParams: true,
 });
 
-// @access public
 subcategoryRouter.get(
   "/",
   setFilterObject,
   subcategoryController.getSubcategories,
 );
 
-// @access public
 subcategoryRouter.get(
   "/:id",
   subcategoryValidator.getSubCategoryValidator,
   subcategoryController.getSubcategory,
 );
 
-// @access private [admin, manager]
 subcategoryRouter.post(
   "/",
   authController.protectRoute,
@@ -35,7 +33,6 @@ subcategoryRouter.post(
   subcategoryController.createsubcategory,
 );
 
-// @access private [admin, manager]
 subcategoryRouter.put(
   "/:id",
   authController.protectRoute,
@@ -44,7 +41,6 @@ subcategoryRouter.put(
   subcategoryController.updatesubcategory,
 );
 
-// @access private
 subcategoryRouter.delete(
   "/:id",
   authController.protectRoute,

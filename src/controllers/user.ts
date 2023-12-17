@@ -1,10 +1,11 @@
-import { type RequestHandler, type Request } from "express";
-import UserModel, { type IUser } from "../models/user";
-import ApiFeatures from "../utils/apiFeatures";
+import { type RequestHandler } from "express";
+import { type UpdateQuery } from "mongoose";
 import createHttpError from "http-errors";
 import slugify from "slugify";
-import { type UpdateQuery } from "mongoose";
 import bycrpt from "bcryptjs";
+
+import ApiFeatures from "../utils/apiFeatures";
+import UserModel, { type IUser } from "../models/user";
 
 export const getUsers: RequestHandler = async (req, res, next) => {
   try {
@@ -37,22 +38,6 @@ export const getUser: RequestHandler = async (req, res, next) => {
       throw createHttpError(404, "user not found");
     }
     res.status(200).json({ data: user });
-  } catch (err) {
-    next(err);
-  }
-};
-
-interface CustomRequest extends Request {
-  user: IUser;
-}
-
-export const getLoggedData: RequestHandler = async (
-  req: CustomRequest,
-  res,
-  next,
-) => {
-  try {
-    req.params.id = req.user._id;
   } catch (err) {
     next(err);
   }
@@ -93,17 +78,21 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 };
 
 export const changeUserPassword: RequestHandler = async (req, res, next) => {
-  const id: string = req.params.id;
-  req.body.password = await bycrpt.hash(req.body.password as string, 12);
-  const user = await UserModel.findByIdAndUpdate(
-    id,
-    { password: req.body.password, passwordChangedAt: Date.now() },
-    { new: true },
-  ).exec();
-  if (!user) {
-    throw createHttpError(404, "user not found");
+  try {
+    const id: string = req.params.id;
+    req.body.password = await bycrpt.hash(req.body.password as string, 12);
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { password: req.body.password, passwordChangedAt: Date.now() },
+      { new: true },
+    ).exec();
+    if (!user) {
+      throw createHttpError(404, "user not found");
+    }
+    res.status(200).json({ data: user });
+  } catch (err) {
+    next(err);
   }
-  res.status(200).json({ data: user });
 };
 
 export const deleteUser: RequestHandler = async (req, res, next) => {

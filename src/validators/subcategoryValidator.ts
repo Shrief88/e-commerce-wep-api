@@ -1,7 +1,8 @@
-import validateMiddleware from "../middlewares/validatorMiddleware";
 import { body, param } from "express-validator";
+
 import SubcategoryModel from "../models/subcategory";
 import CategoryModel from "../models/category";
+import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyRules = [
   body("name")

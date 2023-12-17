@@ -1,24 +1,22 @@
-import * as brandController from "../controllers/brand";
 import express from "express";
+
 import * as brandValidator from "../validators/brandValidator";
+import * as authController from "../controllers/auth";
+import * as brandController from "../controllers/brand";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
-import * as authController from "../controllers/auth";
 
 const brandRouter = express.Router();
 
-// @access public
 brandRouter.get("/", brandController.getBrands);
 
-// @access public
 brandRouter.get(
   "/:id",
   brandValidator.getBrandValidator,
   brandController.getBrand,
 );
 
-// @access private [admin, manager]
 brandRouter.post(
   "/",
   authController.protectRoute,
@@ -30,7 +28,6 @@ brandRouter.post(
   brandController.createBrand,
 );
 
-// @access private [admin, manager]
 brandRouter.put(
   "/:id",
   authController.protectRoute,
@@ -41,7 +38,6 @@ brandRouter.put(
   brandController.updateBrand,
 );
 
-// @access private [admin]
 brandRouter.delete(
   "/:id",
   authController.protectRoute,

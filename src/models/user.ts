@@ -18,6 +18,9 @@ export interface IUser extends mongoose.Document {
   address?: string;
   role: roles;
   passwordChangedAt?: Date;
+  passwordResetCode?: string;
+  passwordResetExpires?: Date;
+  passwordResetVerified?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,8 +46,12 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    // TODO: find way to make phone unique and not required in the same time
     phone: {
       type: String,
+      // unique: true,
+      trim: true,
+      // required: false,
     },
     password: {
       type: String,
@@ -53,6 +60,15 @@ const userSchema = new Schema(
     },
     passwordChangedAt: {
       type: Date,
+    },
+    passwordResetCode: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: Date,
+    },
+    passwordResetVerified: {
+      type: Boolean,
     },
     profileImage: {
       type: String,

@@ -1,9 +1,10 @@
 import { body, param } from "express-validator";
-import validateMiddleware from "../middlewares/validatorMiddleware";
+
 import ProductModel from "../models/product";
 import CategoryModel from "../models/category";
 import BrandModel from "../models/brand";
 import SubcategoryModel from "../models/subcategory";
+import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyRules = [
   body("name")

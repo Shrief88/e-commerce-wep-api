@@ -15,7 +15,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     secure: true,
     auth: {
       user: env.EMAIL_USER,
-      pass: env.APP_PASSWORD,
+      pass: env.EMAIL_PASSWORD,
     },
   });
 

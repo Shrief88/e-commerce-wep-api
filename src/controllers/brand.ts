@@ -1,10 +1,14 @@
 import { type RequestHandler } from "express";
-import BrandModel, { type IBrand } from "../models/brand";
 import createHttpError from "http-errors";
 import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
-import ApiFeatures from "../utils/apiFeatures";
 
+import ApiFeatures from "../utils/apiFeatures";
+import BrandModel, { type IBrand } from "../models/brand";
+
+// @desc Retrieves a list of brands from the database and sends it as a response.
+// @route GET /api/v1/brand
+// @access Public
 export const getBrands: RequestHandler = async (req, res, next) => {
   try {
     const documentCount = await BrandModel.countDocuments();
@@ -28,6 +32,9 @@ export const getBrands: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Retrieves a specific brand from the database and sends it as a response.
+// @route GET /api/v1/brand/:id
+// @access Public
 export const getBrand: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -41,6 +48,9 @@ export const getBrand: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Creates a new brand in the database
+// @route POST /api/v1/brand
+// @access Private [admin, manager]
 export const createBrand: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
@@ -51,6 +61,9 @@ export const createBrand: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Updates a specific brand in the database
+// @route PUT /api/v1/brand/:id
+// @access Private [admin, manager]
 export const updateBrand: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -73,6 +86,9 @@ export const updateBrand: RequestHandler = async (req, res, next) => {
   }
 };
 
+// @desc Deletes a specific brand from the database
+// @route DELETE /api/v1/brand/:id
+// @access Private [admin]
 export const deleteBrand: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;

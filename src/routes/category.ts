@@ -1,25 +1,23 @@
-import * as categoryController from "../controllers/category";
 import express from "express";
+
+import * as categoryController from "../controllers/category";
 import * as categoryValidator from "../validators/categoryValidator";
+import * as authController from "../controllers/auth";
 import subcategoryRouter from "./subcategory";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
-import * as authController from "../controllers/auth";
 
 const categoryRouter = express.Router();
 
-// @access public
 categoryRouter.get("/", categoryController.getCategories);
 
-// @access public
 categoryRouter.get(
   "/:id",
   categoryValidator.getCategoryValidator,
   categoryController.getCategory,
 );
 
-// @access private [admin, manager]
 categoryRouter.post(
   "/",
   authController.protectRoute,
@@ -31,7 +29,6 @@ categoryRouter.post(
   categoryController.createCategory,
 );
 
-// @access private [admin, manager]
 categoryRouter.put(
   "/:id",
   authController.protectRoute,
@@ -42,7 +39,6 @@ categoryRouter.put(
   categoryController.updateCategory,
 );
 
-// @access private [admin]
 categoryRouter.delete(
   "/:id",
   authController.protectRoute,

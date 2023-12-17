@@ -1,24 +1,22 @@
-import * as productController from "../controllers/product";
 import express from "express";
+
 import * as productValidator from "../validators/productValidator";
+import * as productController from "../controllers/product";
+import * as authController from "../controllers/auth";
 import { uploadMixImages } from "../middlewares/uploadImageMiddleware";
 import { resizeMixImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
-import * as authController from "../controllers/auth";
 
 const productRouter = express.Router();
 
-// @access public
 productRouter.get("/", productController.getproducts);
 
-// @access public
 productRouter.get(
   "/:id",
   productValidator.getProductValidator,
   productController.getProduct,
 );
 
-// @access private [admin, manager]
 productRouter.post(
   "/",
   authController.protectRoute,
@@ -33,7 +31,6 @@ productRouter.post(
   productController.createProduct,
 );
 
-// @access private [admin, manager]
 productRouter.put(
   "/:id",
   authController.protectRoute,
@@ -47,7 +44,6 @@ productRouter.put(
   productController.updateProduct,
 );
 
-// @access private [admin]
 productRouter.delete(
   "/:id",
   authController.protectRoute,
