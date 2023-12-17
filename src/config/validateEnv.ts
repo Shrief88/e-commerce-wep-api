@@ -7,4 +7,5 @@ export default cleanEnv(process.env, {
   NODE_ENV: str({ choices: ["development", "test", "production"] }),
   MONGO_URI: str(),
   BASE_URL: str(),
+  JWT_SECRET: str(),
 });

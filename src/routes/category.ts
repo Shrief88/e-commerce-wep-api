@@ -5,6 +5,7 @@ import subcategoryRouter from "./subcategory";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
+import { protectRoute } from "../controllers/auth";
 
 const categoryRouter = express.Router();
 
@@ -21,6 +22,7 @@ categoryRouter.get(
 // @access private
 categoryRouter.post(
   "/",
+  protectRoute,
   uploadSingleImage("image"),
   validateImageExisting,
   categoryValidator.createCategoryValidator,

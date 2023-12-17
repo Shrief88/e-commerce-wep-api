@@ -37,7 +37,6 @@ export const getUserValidator = [
 export const createUserValidator = [
   body("name").notEmpty().withMessage("name is required"),
   body("email").notEmpty().withMessage("email is required"),
-  body("phone").notEmpty().withMessage("phone is required"),
   body("password")
     .notEmpty()
     .withMessage("password is required")
@@ -50,7 +49,6 @@ export const createUserValidator = [
       }
       return true;
     }),
-  body("address").notEmpty().withMessage("address is required"),
   body("passwordConfirm")
     .notEmpty()
     .withMessage("password Confirmation is required"),
@@ -89,7 +87,7 @@ export const updateUserPasswordValidator = [
       if (!user) {
         throw new Error("user not found");
       }
-      if (!bycrpt.compareSync(currentPassword as string, user.password)) {
+      if (!(await bycrpt.compare(currentPassword as string, user.password))) {
         throw new Error("current password is incorrect");
       }
       return true;

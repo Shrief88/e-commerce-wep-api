@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import env from "../validators/validateEnv";
+import env from "./validateEnv";
 
 const connectionString = env.MONGO_URI;
 

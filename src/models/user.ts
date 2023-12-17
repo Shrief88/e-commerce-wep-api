@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import env from "../validators/validateEnv";
+import env from "../config/validateEnv";
 import bycrpt from "bcryptjs";
 
 enum roles {
@@ -11,11 +11,12 @@ export interface IUser extends mongoose.Document {
   name: string;
   slug: string;
   email: string;
-  phone: string;
+  phone?: string;
   password: string;
   profileImage?: string;
-  address: string;
+  address?: string;
   role: roles;
+  passwordChangedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,7 +44,6 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
     },
@@ -52,12 +52,14 @@ const userSchema = new Schema(
       required: true,
       minlength: 6,
     },
+    passwordChangedAt: {
+      type: Date,
+    },
     profileImage: {
       type: String,
     },
     address: {
       type: String,
-      required: true,
       trim: true,
     },
     role: {

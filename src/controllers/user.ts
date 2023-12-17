@@ -45,6 +45,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 export const createUser: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
+    req.body.role = "admin";
     const newUser = await UserModel.create(req.body);
     res.status(201).json({ data: newUser });
   } catch (err) {
@@ -80,7 +81,7 @@ export const changeUserPassword: RequestHandler = async (req, res, next) => {
   req.body.password = await bycrpt.hash(req.body.password as string, 12);
   const user = await UserModel.findByIdAndUpdate(
     id,
-    { password: req.body.password },
+    { password: req.body.password, passwordChangedAt: Date.now() },
     { new: true },
   ).exec();
   if (!user) {

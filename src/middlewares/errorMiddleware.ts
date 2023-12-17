@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { isHttpError } from "http-errors";
-import env from "../validators/validateEnv";
+import env from "../config/validateEnv";
 
 const errorMiddleware = (
   error: unknown,
@@ -8,14 +8,15 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): void => {
-  console.log(error);
-  let errorMessage = "Something went wrong!";
+  let errorMessage = "";
   let statusCode = 500;
   let stack: string | undefined = "";
   if (isHttpError(error)) {
     statusCode = error.status;
     errorMessage = error.message;
     stack = error.stack;
+  } else {
+    errorMessage = error as string;
   }
 
   if (env.NODE_ENV === "production") {

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import env from "../validators/validateEnv";
+import env from "../config/validateEnv";
 
 export interface IProduct extends mongoose.Document {
   name: string;

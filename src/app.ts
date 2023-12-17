@@ -1,5 +1,5 @@
 import express from "express";
-import env from "./validators/validateEnv";
+import env from "./config/validateEnv";
 import morgan from "morgan";
 import createHttpError from "http-errors";
 import categoryRouter from "./routes/category";
@@ -9,6 +9,7 @@ import brandRouter from "./routes/brand";
 import productRouter from "./routes/product";
 import userRouter from "./routes/user";
 import path from "path";
+import authRouter from "./routes/auth";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/subcategory", subcategoryRouter);
 app.use("/api/brand", brandRouter);
 app.use("/api/product", productRouter);
 app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));
