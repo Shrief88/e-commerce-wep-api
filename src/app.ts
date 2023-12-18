@@ -1,14 +1,18 @@
+import path from "path";
+
 import express from "express";
-import env from "./config/validateEnv";
 import morgan from "morgan";
 import createHttpError from "http-errors";
+
+import env from "./config/validateEnv";
 import categoryRouter from "./routes/category";
-import errorMiddleware from "./middlewares/errorMiddleware";
 import subcategoryRouter from "./routes/subcategory";
-import brandRouter from "./routes/brand";
 import productRouter from "./routes/product";
 import userRouter from "./routes/user";
-import path from "path";
+import brandRouter from "./routes/brand";
+import reviewRouter from "./routes/review";
+import errorMiddleware from "./middlewares/errorMiddleware";
+
 import authRouter from "./routes/auth";
 
 const app = express();
@@ -31,6 +35,7 @@ app.use("/api/v1/brand", brandRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/review", reviewRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));

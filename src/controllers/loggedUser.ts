@@ -92,9 +92,9 @@ export const updateLoggedUser: RequestHandler = async (
     next(err);
   }
 };
-
+// TODO: test activate and deactivate logic
 // @desc deactivate the logged in user
-// @route DELETE /api/v1/user/deactivateMe
+// @route DELETE /api/v1/user/deleteMe
 // @access Private
 export const deleteLoggedUser: RequestHandler = async (
   req: CustomRequest,
@@ -115,6 +115,9 @@ export const deleteLoggedUser: RequestHandler = async (
   }
 };
 
+// @desc activate the user
+// @route put /api/v1/user/activeMe
+// @access public
 export const activeLoggedUser: RequestHandler = async (
   req: CustomRequest,
   res,
