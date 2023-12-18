@@ -93,10 +93,19 @@ const productSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
 
-// Mongoose Query Middleware
+// Virtual Populate
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
+
+// A query middleware that populates the category and brand fields of the product when it is queried by /^find/
 productSchema.pre<IProduct>(/^find/, function (next) {
   void this.populate({
     path: "category",
@@ -109,34 +118,29 @@ productSchema.pre<IProduct>(/^find/, function (next) {
   next();
 });
 
-productSchema.post("init", function (doc) {
-  if (doc.imageCover) {
-    const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
-    doc.imageCover = imageUrl;
+// Return image url in the response
+const returnImageUrl = function (doc: mongoose.Document): void {
+  const product = doc as IProduct;
+  if (product.imageCover) {
+    const imageUrl = `${env.BASE_URL}/product/${product.imageCover}`;
+    product.imageCover = imageUrl;
   }
-  if (doc.images) {
+  if (product.images) {
     const images: string[] = [];
-    doc.images.forEach((image) => {
+    product.images.forEach((image) => {
       const imageUrl = `${env.BASE_URL}/product/${image}`;
       images.push(imageUrl);
     });
-    doc.images = images;
+    product.images = images;
   }
+};
+
+productSchema.post("init", function (doc) {
+  returnImageUrl(doc);
 });
 
 productSchema.post("save", function (doc) {
-  if (doc.imageCover) {
-    const imageUrl = `${env.BASE_URL}/product/${doc.imageCover}`;
-    doc.imageCover = imageUrl;
-  }
-  if (doc.images) {
-    const images: string[] = [];
-    doc.images.forEach((image) => {
-      const imageUrl = `${env.BASE_URL}/product/${image}`;
-      images.push(imageUrl);
-    });
-    doc.images = images;
-  }
+  returnImageUrl(doc);
 });
 
 export default mongoose.model<IProduct>("Product", productSchema);

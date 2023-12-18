@@ -36,7 +36,7 @@ export const getproducts: RequestHandler = async (req, res, next) => {
 export const getProduct: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const product = await ProductModel.findById(id).exec();
+    const product = await ProductModel.findById(id).populate("reviews");
     if (!product) {
       throw createHttpError(404, "product not found");
     }

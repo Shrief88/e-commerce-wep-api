@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface IReview extends mongoose.Document {
-  title: string;
+  title?: string;
   rating: number;
   user: string;
   product: string;
@@ -9,12 +9,10 @@ export interface IReview extends mongoose.Document {
   updatedAt: Date;
 }
 
-const categorySchema = new Schema(
+const reviewSchema = new Schema(
   {
     title: {
       type: String,
-      minLength: 20,
-      trim: true,
     },
     rating: {
       type: Number,
@@ -38,4 +36,13 @@ const categorySchema = new Schema(
   },
 );
 
-export default mongoose.model<IReview>("Review", categorySchema);
+// Middleware to get all reviews of a product
+reviewSchema.pre<IReview>(/^find/, function (next) {
+  void this.populate({
+    path: "user",
+    select: "name",
+  });
+  next();
+});
+
+export default mongoose.model<IReview>("Review", reviewSchema);

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import env from "../config/validateEnv";
+
+import returnImageUrl from "../utils/returnImageUrl";
 
 export interface IBrand extends mongoose.Document {
   name: string;
@@ -35,18 +36,13 @@ const brandSchema = new Schema(
   },
 );
 
+// Schema Middlewares
 brandSchema.post("init", function (doc) {
-  if (doc.image) {
-    const imageUrl = `${env.BASE_URL}/brand/${doc.image}`;
-    doc.image = imageUrl;
-  }
+  returnImageUrl<IBrand>(doc, "brand");
 });
 
 brandSchema.post("save", function (doc) {
-  if (doc.image) {
-    const imageUrl = `${env.BASE_URL}/brand/${doc.image}`;
-    doc.image = imageUrl;
-  }
+  returnImageUrl<IBrand>(doc, "brand");
 });
 
 export default mongoose.model<IBrand>("Brand", brandSchema);

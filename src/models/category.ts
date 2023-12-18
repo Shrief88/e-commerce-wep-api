@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import env from "../config/validateEnv";
+
+import returnImageUrl from "../utils/returnImageUrl";
 
 export interface ICategory extends mongoose.Document {
   name: string;
@@ -35,18 +36,13 @@ const categorySchema = new Schema(
   },
 );
 
+// Schema Middlewares
 categorySchema.post("init", function (doc) {
-  if (doc.image) {
-    const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-    doc.image = imageUrl;
-  }
+  returnImageUrl<ICategory>(doc, "category");
 });
 
 categorySchema.post("save", function (doc) {
-  if (doc.image) {
-    const imageUrl = `${env.BASE_URL}/category/${doc.image}`;
-    doc.image = imageUrl;
-  }
+  returnImageUrl<ICategory>(doc, "category");
 });
 
 export default mongoose.model<ICategory>("Category", categorySchema);

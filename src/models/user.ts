@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import env from "../config/validateEnv";
 import bycrpt from "bcryptjs";
+
+import returnImageUrl from "../utils/returnImageUrl";
 
 enum roles {
   admin,
@@ -94,17 +95,11 @@ const userSchema = new Schema(
 );
 
 userSchema.post("init", function (doc) {
-  if (doc.profileImage) {
-    const imageUrl = `${env.BASE_URL}/user/${doc.profileImage}`;
-    doc.profileImage = imageUrl;
-  }
+  returnImageUrl<IUser>(doc, "user");
 });
 
 userSchema.post("save", function (doc) {
-  if (doc.profileImage) {
-    const imageUrl = `${env.BASE_URL}/user/${doc.profileImage}`;
-    doc.profileImage = imageUrl;
-  }
+  returnImageUrl<IUser>(doc, "user");
 });
 
 userSchema.pre("save", async function (next) {

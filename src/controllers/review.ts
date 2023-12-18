@@ -66,7 +66,7 @@ export const updateReview: RequestHandler = async (req, res, next) => {
     const id: string = req.params.id;
     const review = await ReviewModel.findByIdAndUpdate(
       id,
-      { titel: req.body.titel, rating: req.body.rating },
+      { title: req.body.title, rating: req.body.rating },
       { new: true },
     ).exec();
 

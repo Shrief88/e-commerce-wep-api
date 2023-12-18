@@ -35,6 +35,7 @@ const subcategorySchema = new Schema(
   },
 );
 
+// Return Category name in the response
 subcategorySchema.pre<ISubcategory>(/^find/, function (next) {
   void this.populate({
     path: "category",

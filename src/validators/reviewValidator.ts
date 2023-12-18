@@ -11,11 +11,6 @@ export const getReviewValidator = [
 ];
 
 export const createReviewValidator = [
-  body("title")
-    .trim()
-    .isLength({ min: 20 })
-    .withMessage("name must be minimum 20 characters long")
-    .optional(),
   body("rating")
     .notEmpty()
     .withMessage("rating is required")
@@ -63,11 +58,6 @@ export const createReviewValidator = [
 ];
 
 export const updateReviewValidator = [
-  body("title")
-    .trim()
-    .isLength({ min: 20 })
-    .withMessage("name must be minimum 20 characters long")
-    .optional(),
   body("rating")
     .notEmpty()
     .withMessage("rating is required")
@@ -82,7 +72,10 @@ export const updateReviewValidator = [
       if (!review) {
         throw new Error("Review not found");
       }
-      if (review.user !== req.user._id) {
+
+      // getting userId from review because we applied populate in review model to return an object with user_id
+      const { _id } = review.user as unknown as { _id: string };
+      if (_id.toString() !== req.user._id.toString()) {
         throw new Error("This review is not belong to this user");
       }
       return true;
