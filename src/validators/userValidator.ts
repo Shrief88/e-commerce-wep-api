@@ -61,14 +61,18 @@ export const createUserValidator = [
   validateMiddleware,
 ];
 
-export const updateCategoryValidator = [
+export const updateUserValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyUserRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
-export const updateUserPasswordValidator = [
-  param("id").isMongoId().withMessage("Invalid ID"),
+export const updateLoggedUserValidator = [
+  ...bodyUserRules.map((rule) => rule.optional()),
+  validateMiddleware,
+];
+
+const updateUserBodyRules = [
   body("passwordConfirm")
     .notEmpty()
     .withMessage("password Confirmation is required"),
@@ -84,6 +88,11 @@ export const updateUserPasswordValidator = [
       }
       return true;
     }),
+];
+
+export const updateUserPasswordValidator = [
+  param("id").isMongoId().withMessage("Invalid ID"),
+  ...updateUserBodyRules,
   body("currentPassword")
     .notEmpty()
     .withMessage("current password is required")
@@ -100,7 +109,25 @@ export const updateUserPasswordValidator = [
   validateMiddleware,
 ];
 
-export const deleteCategoryValidator = [
+export const updateLoggedUserPasswordValidator = [
+  ...updateUserBodyRules,
+  body("currentPassword")
+    .notEmpty()
+    .withMessage("current password is required")
+    .custom(async (currentPassword, { req }) => {
+      const user = await UserModel.findById(req.user._id).exec();
+      if (!user) {
+        throw new Error("user not found");
+      }
+      if (!(await bycrpt.compare(currentPassword as string, user.password))) {
+        throw new Error("current password is incorrect");
+      }
+      return true;
+    }),
+  validateMiddleware,
+];
+
+export const deleteUserValidator = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

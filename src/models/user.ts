@@ -21,6 +21,7 @@ export interface IUser extends mongoose.Document {
   passwordResetCode?: string;
   passwordResetExpires?: Date;
   passwordResetVerified?: boolean;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -81,6 +82,10 @@ const userSchema = new Schema(
       type: String,
       enum: roles,
       default: "user",
+    },
+    active: {
+      type: Boolean,
+      default: true,
     },
   },
   {

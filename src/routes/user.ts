@@ -4,6 +4,7 @@ import * as userValidator from "../validators/userValidator";
 import * as authController from "../controllers/auth";
 import * as userController from "../controllers/user";
 import * as loggedUserController from "../controllers/loggedUser";
+import { loginValidator } from "../validators/authValidator";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 
@@ -20,8 +21,29 @@ userRouter.get(
 userRouter.put(
   "/changeMyPassword",
   authController.protectRoute,
-  userValidator.updateUserPasswordValidator,
+  userValidator.updateLoggedUserPasswordValidator,
   loggedUserController.changeLoggedUserPassword,
+);
+
+userRouter.put(
+  "/updateMe",
+  authController.protectRoute,
+  uploadSingleImage("profileImage"),
+  userValidator.updateLoggedUserValidator,
+  resizeSingleImage("user", "profileImage"),
+  loggedUserController.updateLoggedUser,
+);
+
+userRouter.delete(
+  "/deleteMe",
+  authController.protectRoute,
+  loggedUserController.deleteLoggedUser,
+);
+
+userRouter.put(
+  "/activeMe",
+  loginValidator,
+  loggedUserController.activeLoggedUser,
 );
 
 // Admin and Manager
@@ -56,7 +78,7 @@ userRouter.put(
   authController.protectRoute,
   authController.allowedTo("admin"),
   uploadSingleImage("profileImage"),
-  userValidator.updateCategoryValidator,
+  userValidator.updateUserValidator,
   resizeSingleImage("user", "profileImage"),
   userController.updateUser,
 );
@@ -73,7 +95,7 @@ userRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  userValidator.deleteCategoryValidator,
+  userValidator.deleteUserValidator,
   userController.deleteUser,
 );
 

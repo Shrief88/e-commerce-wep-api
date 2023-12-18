@@ -5,7 +5,7 @@ import slugify from "slugify";
 import createHttpError from "http-errors";
 
 import env from "../config/validateEnv";
-import userModel, { type IUser } from "../models/user";
+import UserModel, { type IUser } from "../models/user";
 import { sendEmail } from "../utils/sendEmail";
 import createToken from "../utils/createToken";
 
@@ -25,7 +25,7 @@ export interface CustomRequest extends Request {
 export const signup: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
-    const user = await userModel.create(req.body);
+    const user = await UserModel.create(req.body);
     const token = createToken({ user_id: user._id });
 
     res.status(201).json({ data: user, token });
@@ -39,7 +39,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 // @access Public
 export const login: RequestHandler = async (req, res, next) => {
   try {
-    const user = await userModel.findOne({ email: req.body.email });
+    const user = await UserModel.findOne({ email: req.body.email });
     if (
       !user ||
       !(await bycrpt.compare(req.body.password as string, user.password))
@@ -66,12 +66,18 @@ export const protectRoute: RequestHandler = async (
       token = req.headers.authorization.split(" ")[1];
       if (token) {
         const decoded = jwt.verify(token, env.JWT_SECRET);
-        const user = await userModel.findById((decoded as jwtObject).user_id);
+        const user = await UserModel.findById((decoded as jwtObject).user_id);
 
         // verify if user still exists
         if (!user) {
           throw createHttpError(401, "this user no longer exists");
         }
+
+        // check if user delete his account
+        if (!user.active) {
+          throw createHttpError(401, "user is not active");
+        }
+
         // verify if password has been changed after token was issued
         if (user.passwordChangedAt) {
           const changedTimestamp = Math.floor(
@@ -115,7 +121,7 @@ export const allowedTo = (...roles: string[]): RequestHandler => {
 // @access Public
 export const forgetPassword: RequestHandler = async (req, res, next) => {
   try {
-    const user = await userModel.findOne({ email: req.body.email });
+    const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
       throw createHttpError(404, "user not found");
     }
@@ -154,7 +160,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 export const verifyResetCode: RequestHandler = async (req, res, next) => {
   try {
     const hashCode = await bycrpt.hash(req.body.code as string, 12);
-    const user = await userModel.findOne({
+    const user = await UserModel.findOne({
       passwordResetCode: hashCode,
       passwordResetExpires: { $gt: Date.now() },
     });
@@ -176,7 +182,7 @@ export const verifyResetCode: RequestHandler = async (req, res, next) => {
 // @access Public
 export const resetPassword: RequestHandler = async (req, res, next) => {
   try {
-    const user = await userModel.findOne({
+    const user = await UserModel.findOne({
       email: req.body.email,
     });
 
