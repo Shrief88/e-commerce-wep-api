@@ -47,6 +47,7 @@ categoryRouter.delete(
   categoryController.deleteCategory,
 );
 
+// Move all requests to api/v1/category/:categoryId/subcategories to subcategoryRouter
 categoryRouter.use("/:categoryId/subcategories", subcategoryRouter);
 
 export default categoryRouter;

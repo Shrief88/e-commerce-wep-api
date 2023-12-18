@@ -3,10 +3,14 @@ import express from "express";
 import * as reviewController from "../controllers/review";
 import * as reviewValidator from "../validators/reviewValidator";
 import * as authController from "../controllers/auth";
+import {
+  setProductIdToBody,
+  setFilterObject,
+} from "../middlewares/productToReview";
 
-const reviewRouter = express.Router();
+const reviewRouter = express.Router({ mergeParams: true });
 
-reviewRouter.get("/", reviewController.getReviews);
+reviewRouter.get("/", setFilterObject, reviewController.getReviews);
 
 reviewRouter.get(
   "/:id",
@@ -18,6 +22,7 @@ reviewRouter.post(
   "/",
   authController.protectRoute,
   authController.allowedTo("user"),
+  setProductIdToBody,
   reviewValidator.createReviewValidator,
   reviewController.createReview,
 );

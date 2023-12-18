@@ -3,6 +3,7 @@ import express from "express";
 import * as productValidator from "../validators/productValidator";
 import * as productController from "../controllers/product";
 import * as authController from "../controllers/auth";
+import reviewRouter from "./review";
 import { uploadMixImages } from "../middlewares/uploadImageMiddleware";
 import { resizeMixImage } from "../middlewares/imageProcessingMiddleware";
 import validateImageExisting from "../middlewares/imageExistingMiddleWare";
@@ -51,5 +52,8 @@ productRouter.delete(
   productValidator.deleteProductValidator,
   productController.deleteProduct,
 );
+
+// Move all requests to api/v1/product/:productId/reviews to reviewRouter
+productRouter.use("/:productId/reviews", reviewRouter);
 
 export default productRouter;

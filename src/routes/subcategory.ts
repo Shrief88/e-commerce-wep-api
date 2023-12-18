@@ -6,7 +6,7 @@ import * as authController from "../controllers/auth";
 import {
   setCategoryIdToBody,
   setFilterObject,
-} from "../middlewares/subcategoryMiddleware";
+} from "../middlewares/categoryToSubcategory";
 
 const subcategoryRouter = express.Router({
   mergeParams: true,
