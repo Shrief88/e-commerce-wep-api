@@ -25,6 +25,7 @@ export interface CustomRequest extends Request {
 export const signup: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
+    req.body.role = "user";
     const user = await UserModel.create(req.body);
     const token = createToken({ user_id: user._id });
 

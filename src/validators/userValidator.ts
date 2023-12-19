@@ -49,7 +49,7 @@ export const createUserValidator = [
     .isLength({ min: 6 })
     .withMessage("Too short password")
     .custom((password, { req }) => {
-      if (password !== req.body.passwordConfirm) {
+      if (password !== String(req.body.passwordConfirm)) {
         throw new Error("passwords don't match");
       }
       return true;

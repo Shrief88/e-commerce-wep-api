@@ -24,7 +24,7 @@ const errorMiddleware = (
     res.status(statusCode).json({ message: errorMessage });
   }
 
-  if (env.NODE_ENV === "development") {
+  if (env.NODE_ENV === "development" || env.NODE_ENV === "test") {
     res.status(statusCode).json({ message: errorMessage, stack });
   }
 };

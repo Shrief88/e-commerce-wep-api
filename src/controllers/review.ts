@@ -85,10 +85,12 @@ export const updateReview: RequestHandler = async (req, res, next) => {
 export const deleteReview: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const review = await ReviewModel.findByIdAndDelete(id).exec();
+    const review = await ReviewModel.findById(id);
     if (!review) {
       throw createHttpError(404, "review not found");
     }
+    await review.deleteOne();
+    await ReviewModel.calcAverageRatingAndQuality(review.product);
     res.sendStatus(204);
   } catch (err) {
     next(err);

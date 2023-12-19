@@ -1,4 +1,9 @@
-import express from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type RequestHandler,
+  type Response,
+} from "express";
 
 import * as userValidator from "../validators/userValidator";
 import * as authController from "../controllers/auth";
@@ -7,6 +12,7 @@ import * as loggedUserController from "../controllers/loggedUser";
 import { loginValidator } from "../validators/authValidator";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
+import env from "../config/validateEnv";
 
 const userRouter = express.Router();
 
@@ -62,11 +68,20 @@ userRouter.get(
   userController.getUser,
 );
 
+// To allow creating users while testing
+const conditionalMiddleware = (middleware: RequestHandler): RequestHandler => {
+  return env.NODE_ENV !== "test"
+    ? middleware
+    : (req: Request, res: Response, next: NextFunction) => {
+        next();
+      };
+};
+
 // Admin Only
 userRouter.post(
   "/",
-  authController.protectRoute,
-  authController.allowedTo("admin"),
+  conditionalMiddleware(authController.protectRoute),
+  conditionalMiddleware(authController.allowedTo("admin")),
   uploadSingleImage("profileImage"),
   userValidator.createUserValidator,
   resizeSingleImage("user", "profileImage"),

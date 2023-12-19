@@ -92,7 +92,11 @@ export const deleteReviewValidator = [
       if (!review) {
         throw new Error("Review not found");
       }
-      if (req.user.role === "user" && review.user !== req.user._id) {
+      const { _id } = review.user as unknown as { _id: string };
+      if (
+        req.user.role === "user" &&
+        _id.toString() !== req.user._id.toString()
+      ) {
         throw new Error("This review is not belong to this user");
       }
       return true;

@@ -19,6 +19,7 @@ brandRouter.get(
 
 brandRouter.post(
   "/",
+
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),

@@ -90,7 +90,7 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
 export const deleteProduct: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const product = await ProductModel.findByIdAndDelete(id).exec();
+    const product = await ProductModel.findByIdAndDelete(id);
     if (!product) {
       throw createHttpError(404, "product not found");
     }

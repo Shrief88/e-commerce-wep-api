@@ -6,6 +6,7 @@ import bycrpt from "bcryptjs";
 
 import ApiFeatures from "../utils/apiFeatures";
 import UserModel, { type IUser } from "../models/user";
+import createToken from "../utils/createToken";
 
 // @desc Retrieves a list of users from the database and sends it as a response.
 // @route GET /api/v1/user
@@ -55,9 +56,9 @@ export const getUser: RequestHandler = async (req, res, next) => {
 export const createUser: RequestHandler = async (req, res, next) => {
   try {
     req.body.slug = slugify(req.body.name as string);
-    req.body.role = "admin";
     const newUser = await UserModel.create(req.body);
-    res.status(201).json({ data: newUser });
+    const token = createToken({ user_id: newUser._id });
+    res.status(201).json({ data: newUser, token });
   } catch (err) {
     next(err);
   }
