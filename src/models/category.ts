@@ -10,7 +10,7 @@ export interface ICategory extends mongoose.Document {
   updatedAt: Date;
 }
 
-const categorySchema = new Schema(
+const categorySchema = new Schema<ICategory>(
   {
     name: {
       type: String,

@@ -3,12 +3,12 @@ import mongoose, { Schema } from "mongoose";
 export interface ISubcategory extends mongoose.Document {
   name: string;
   slug: string;
-  category: string;
+  category: Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const subcategorySchema = new Schema(
+const subcategorySchema = new Schema<ISubcategory>(
   {
     name: {
       type: String,

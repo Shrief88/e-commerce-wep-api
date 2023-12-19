@@ -3,10 +3,10 @@ import bycrpt from "bcryptjs";
 
 import returnImageUrl from "../utils/returnImageUrl";
 
-enum roles {
-  admin,
-  user,
-  manager,
+enum Roles {
+  ADMIN = "admin",
+  USER = "user",
+  MANAGER = "manager",
 }
 
 export interface IUser extends mongoose.Document {
@@ -17,7 +17,7 @@ export interface IUser extends mongoose.Document {
   password: string;
   profileImage?: string;
   address?: string;
-  role: roles;
+  role: Roles;
   passwordChangedAt?: Date;
   passwordResetCode?: string;
   passwordResetExpires?: Date;
@@ -27,7 +27,7 @@ export interface IUser extends mongoose.Document {
   updatedAt: Date;
 }
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -80,9 +80,10 @@ const userSchema = new Schema(
       trim: true,
     },
     role: {
+      required: true,
       type: String,
-      enum: roles,
-      default: "user",
+      enum: Object.values(Roles),
+      default: Roles.USER,
     },
     active: {
       type: Boolean,
@@ -94,15 +95,15 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.post("init", function (doc) {
+userSchema.post<IUser>("init", function (doc) {
   returnImageUrl<IUser>(doc, "user");
 });
 
-userSchema.post("save", function (doc) {
+userSchema.post<IUser>("save", function (doc) {
   returnImageUrl<IUser>(doc, "user");
 });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre<IUser>("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }

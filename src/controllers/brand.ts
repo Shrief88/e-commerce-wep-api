@@ -85,7 +85,6 @@ export const updateBrand: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-
 // @desc Deletes a specific brand from the database
 // @route DELETE /api/v1/brand/:id
 // @access Private [admin]

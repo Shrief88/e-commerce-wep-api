@@ -12,16 +12,16 @@ export interface IProduct extends mongoose.Document {
   colors?: string[];
   imageCover: string;
   images?: string[];
-  category: string;
-  subcategories?: string[];
-  brand: string;
+  category: Schema.Types.ObjectId;
+  subcategories?: Schema.Types.ObjectId[];
+  brand: Schema.Types.ObjectId;
   ratingsAverage?: number;
   ratingsQuantity?: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const productSchema = new Schema(
+const productSchema = new Schema<IProduct>(
   {
     name: {
       type: String,

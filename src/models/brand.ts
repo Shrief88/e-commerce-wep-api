@@ -10,7 +10,7 @@ export interface IBrand extends mongoose.Document {
   updatedAt: Date;
 }
 
-const brandSchema = new Schema(
+const brandSchema = new Schema<IBrand>(
   {
     name: {
       type: String,
