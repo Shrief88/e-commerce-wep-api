@@ -2,7 +2,7 @@ import express from "express";
 
 import * as wishlistController from "../controllers/wishlist";
 import * as authController from "../controllers/auth";
-import * as wishlistValidator from "../validators/wishlistValidator";
+import * as wishlistValidator from "../validators/wishlist";
 
 const wishlistRouter = express.Router();
 
@@ -13,13 +13,13 @@ wishlistRouter.use(
 
 wishlistRouter.post(
   "/add",
-  wishlistValidator.addToWishlistValidator,
+  wishlistValidator.addToWishlist,
   wishlistController.addToWishlist,
 );
 
 wishlistRouter.delete(
   "/remove/:product",
-  wishlistValidator.removeFromWishlistValidator,
+  wishlistValidator.removeFromWishlist,
   wishlistController.removeFromWishlist,
 );
 

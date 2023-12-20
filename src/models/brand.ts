@@ -45,4 +45,4 @@ brandSchema.post("save", function (doc) {
   returnImageUrl<IBrand>(doc, "brand");
 });
 
-export default mongoose.model<IBrand>("Brand", brandSchema);
+export const BrandModel = mongoose.model<IBrand>("Brand", brandSchema);

@@ -11,6 +11,15 @@ export const closeDatabase = async (): Promise<void> => {
   await (await mongod).stop();
 };
 
+export const clearDatabaseExpectUsers = async (): Promise<void> => {
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    const collection = collections[key];
+    if (collection.name === "users") continue;
+    await collection.deleteMany({});
+  }
+};
+
 export const clearDatabase = async (): Promise<void> => {
   const collections = mongoose.connection.collections;
   for (const key in collections) {

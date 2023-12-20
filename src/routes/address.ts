@@ -2,7 +2,7 @@ import express from "express";
 
 import * as addressController from "../controllers/address";
 import * as authController from "../controllers/auth";
-import * as addressValidator from "../validators/addressValidator";
+import * as addressValidator from "../validators/address";
 
 const addressRouter = express.Router();
 
@@ -11,24 +11,24 @@ addressRouter.use(
   authController.allowedTo("user"),
 );
 
+addressRouter.get("/", addressController.getUserAddresses);
+
 addressRouter.post(
   "/",
-  addressValidator.addAddressValidator,
+  addressValidator.addAddress,
   addressController.addAddress,
 );
 
 addressRouter.delete(
   "/:address",
-  addressValidator.removeAddressValidator,
+  addressValidator.removeAddress,
   addressController.removeAddress,
 );
 
-addressRouter.put(
-  "/:address",
-  addressValidator.updateAddressValidator,
-  addressController.updateAddress,
-);
-
-addressRouter.get("/", addressController.getUserAddresses);
+// addressRouter.put(
+//   "/:address",
+//   addressValidator.updateAddress,
+//   addressController.updateAddress,
+// );
 
 export default addressRouter;

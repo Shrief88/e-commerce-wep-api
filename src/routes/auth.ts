@@ -1,33 +1,29 @@
 import express from "express";
 
-import * as authValidator from "../validators/authValidator";
+import * as authValidator from "../validators/auth";
 import * as authController from "../controllers/auth";
 
 const authRouter = express.Router();
 
-authRouter.post(
-  "/signup",
-  authValidator.signupValidator,
-  authController.signup,
-);
+authRouter.post("/signup", authValidator.signup, authController.signup);
 
-authRouter.post("/login", authValidator.loginValidator, authController.login);
+authRouter.post("/login", authValidator.login, authController.login);
 
 authRouter.post(
   "/forgetPassword",
-  authValidator.forgetPasswordValidator,
+  authValidator.forgetPassword,
   authController.forgetPassword,
 );
 
 authRouter.post(
   "/verifyResetCode",
-  authValidator.verifyResetCodeValidator,
+  authValidator.verifyResetCode,
   authController.verifyResetCode,
 );
 
 authRouter.put(
   "/resetPassword",
-  authValidator.resetPasswordValidator,
+  authValidator.resetPassword,
   authController.resetPassword,
 );
 

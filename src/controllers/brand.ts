@@ -4,7 +4,7 @@ import slugify from "slugify";
 import { type UpdateQuery } from "mongoose";
 
 import ApiFeatures from "../utils/apiFeatures";
-import BrandModel, { type IBrand } from "../models/brand";
+import { BrandModel, type IBrand } from "../models/brand";
 
 // @desc Retrieves a list of brands from the database and sends it as a response.
 // @route GET /api/v1/brand

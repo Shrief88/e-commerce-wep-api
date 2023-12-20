@@ -9,8 +9,9 @@ export const testInvalidID = (
   it("should return 400 for invalid id", async () => {
     const invalidID = "invalidID";
     const response = await (request as any)[method](
-      `/api/${endPoint}/${invalidID}`,
+      `/api/v1/${endPoint}/${invalidID}`,
     );
+
     expect(response.status).toBe(400);
   });
 };
@@ -23,9 +24,8 @@ export const testExistingID = (
   it("should return 404 for not existing id", async () => {
     const validId = new ObjectId() as unknown as string;
     const response = await (request as any)[method](
-      `/api/${endPoint}/${validId}`,
+      `/api/v1/${endPoint}/${validId}`,
     );
-    console.log(response.status);
     expect(response.status).toBe(404);
   });
 };

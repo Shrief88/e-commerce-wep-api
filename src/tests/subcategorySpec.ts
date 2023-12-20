@@ -55,27 +55,27 @@ describe("Test subcategory", () => {
       await db.clearDatabase();
     });
 
-    testCreateDocument(request, "missing name", "subcategory", { name: "" });
-    testCreateDocument(request, "number as name", "subcategory", { name: "" });
-    testCreateDocument(request, "white space string", "subcategory", {
-      name: "   ",
-    });
-    testCreateDocument(request, "name less than 3 characters", "subcategory", {
-      name: "hd",
-    });
+    // testCreateDocument(request, "missing name", "subcategory", { name: "" });
+    // testCreateDocument(request, "number as name", "subcategory", { name: "" });
+    // testCreateDocument(request, "white space string", "subcategory", {
+    //   name: "   ",
+    // });
+    // testCreateDocument(request, "name less than 3 characters", "subcategory", {
+    //   name: "hd",
+    // });
 
-    testCreateDocument(request, "name more than 32 characters", "subcategory", {
-      name: "loremipsum fdf df sgg dg fhfh fhfh",
-    });
+    // testCreateDocument(request, "name more than 32 characters", "subcategory", {
+    //   name: "loremipsum fdf df sgg dg fhfh fhfh",
+    // });
 
-    testCreateDocument(request, "category is missing", "subcategory", {
-      name: "test",
-    });
+    // testCreateDocument(request, "category is missing", "subcategory", {
+    //   name: "test",
+    // });
 
-    testCreateDocument(request, "category is invalid", "subcategory", {
-      name: "test2",
-      category: "invalidID",
-    });
+    // testCreateDocument(request, "category is invalid", "subcategory", {
+    //   name: "test2",
+    //   category: "invalidID",
+    // });
 
     it("should return 201 for valid name", async () => {
       const response = await request

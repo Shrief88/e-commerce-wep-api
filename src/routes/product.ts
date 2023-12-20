@@ -1,6 +1,6 @@
 import express from "express";
 
-import * as productValidator from "../validators/productValidator";
+import * as productValidator from "../validators/product";
 import * as productController from "../controllers/product";
 import * as authController from "../controllers/auth";
 import reviewRouter from "./review";
@@ -14,7 +14,7 @@ productRouter.get("/", productController.getproducts);
 
 productRouter.get(
   "/:id",
-  productValidator.getProductValidator,
+  productValidator.getProduct,
   productController.getProduct,
 );
 
@@ -27,7 +27,7 @@ productRouter.post(
     { name: "images", maxCount: 5 },
   ]),
   validateImageExisting,
-  productValidator.createProductValidator,
+  productValidator.createProduct,
   resizeMixImage("product"),
   productController.createProduct,
 );
@@ -40,7 +40,7 @@ productRouter.put(
     { name: "imageCover", maxCount: 1 },
     { name: "images", maxCount: 5 },
   ]),
-  productValidator.updateProductValidator,
+  productValidator.updateProduct,
   resizeMixImage("product"),
   productController.updateProduct,
 );
@@ -49,7 +49,7 @@ productRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  productValidator.deleteProductValidator,
+  productValidator.deleteProduct,
   productController.deleteProduct,
 );
 

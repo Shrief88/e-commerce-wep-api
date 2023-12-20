@@ -1,7 +1,7 @@
 import { body, param } from "express-validator";
 
-import SubcategoryModel from "../models/subcategory";
-import CategoryModel from "../models/category";
+import { SubcategoryModel } from "../models/subcategory";
+import { CategoryModel } from "../models/category";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyRules = [
@@ -28,25 +28,25 @@ const bodyRules = [
   }),
 ];
 
-export const getSubCategoryValidator = [
+export const getSubCategory = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
-export const createSubcategoryValidator = [
+export const createSubcategory = [
   body("name").notEmpty().withMessage("name is required"),
   body("category").notEmpty().withMessage("category is required"),
   ...bodyRules,
   validateMiddleware,
 ];
 
-export const updateSubcategoryValidator = [
+export const updateSubcategory = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
-export const deleteSubcategoryValidator = [
+export const deleteSubcategory = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

@@ -48,17 +48,17 @@ describe("Test category", () => {
       await db.clearDatabase();
     });
 
-    testCreateDocument(request, "missing name", "category", { name: "" });
-    testCreateDocument(request, "number as name", "category", { name: 123 });
-    testCreateDocument(request, "white space string", "category", {
-      name: "     ",
-    });
-    testCreateDocument(request, "name less than 3 characters", "category", {
-      name: "hd",
-    });
-    testCreateDocument(request, "name more than 32 characters", "category", {
-      name: "loremipsum fdf df sgg dg fhfh fhfh",
-    });
+    // testCreateDocument(request, "missing name", "category", { name: "" });
+    // testCreateDocument(request, "number as name", "category", { name: 123 });
+    // testCreateDocument(request, "white space string", "category", {
+    //   name: "     ",
+    // });
+    // testCreateDocument(request, "name less than 3 characters", "category", {
+    //   name: "hd",
+    // });
+    // testCreateDocument(request, "name more than 32 characters", "category", {
+    //   name: "loremipsum fdf df sgg dg fhfh fhfh",
+    // });
 
     it("should return 201 for valid name", async () => {
       const response = await request

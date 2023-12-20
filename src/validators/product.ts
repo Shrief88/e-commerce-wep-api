@@ -1,9 +1,9 @@
 import { body, param } from "express-validator";
 
-import ProductModel from "../models/product";
-import CategoryModel from "../models/category";
-import BrandModel from "../models/brand";
-import SubcategoryModel from "../models/subcategory";
+import { ProductModel } from "../models/product";
+import { CategoryModel } from "../models/category";
+import { BrandModel } from "../models/brand";
+import { SubcategoryModel } from "../models/subcategory";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyRules = [
@@ -56,19 +56,19 @@ const bodyRules = [
     .isNumeric()
     .withMessage("ratingsQuantity must be a number"),
   body("name").custom(async (name: string) => {
-    if (await ProductModel.findOne({ name }).exec()) {
+    if (await ProductModel.findOne({ name })) {
       throw new Error("category already exists");
     }
     return true;
   }),
   body("brand").custom(async (id: string) => {
-    if (!(await BrandModel.findById(id).exec())) {
+    if (!(await BrandModel.findById(id))) {
       throw new Error("Invalid brand ID");
     }
     return true;
   }),
   body("category").custom(async (id: string) => {
-    if (!(await CategoryModel.findById(id).exec())) {
+    if (!(await CategoryModel.findById(id))) {
       throw new Error("Invalid category ID");
     }
     return true;
@@ -101,12 +101,12 @@ const bodyRules = [
     }),
 ];
 
-export const getProductValidator = [
+export const getProduct = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
-export const createProductValidator = [
+export const createProduct = [
   body("name").notEmpty().withMessage("name is required"),
   body("description").notEmpty().withMessage("description is required"),
   body("sold").optional(),
@@ -123,13 +123,13 @@ export const createProductValidator = [
   validateMiddleware,
 ];
 
-export const updateProductValidator = [
+export const updateProduct = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
-export const deleteProductValidator = [
+export const deleteProduct = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

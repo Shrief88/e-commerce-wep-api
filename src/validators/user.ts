@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import UserModel from "../models/user";
+import { UserModel } from "../models/user";
 import bycrpt from "bcryptjs";
 
 import validateMiddleware from "../middlewares/validatorMiddleware";
@@ -33,12 +33,12 @@ const bodyUserRules = [
   }),
 ];
 
-export const getUserValidator = [
+export const getUser = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
-export const createUserValidator = [
+export const createUser = [
   body("name").notEmpty().withMessage("name is required"),
   body("email").notEmpty().withMessage("email is required"),
   body("role").notEmpty().withMessage("role is required"),
@@ -65,13 +65,13 @@ export const createUserValidator = [
   validateMiddleware,
 ];
 
-export const updateUserValidator = [
+export const updateUser = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyUserRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
-export const updateLoggedUserValidator = [
+export const updateLoggedUser = [
   ...bodyUserRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
@@ -94,7 +94,7 @@ const updateUserBodyRules = [
     }),
 ];
 
-export const updateUserPasswordValidator = [
+export const updateUserPassword = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...updateUserBodyRules,
   body("currentPassword")
@@ -113,7 +113,7 @@ export const updateUserPasswordValidator = [
   validateMiddleware,
 ];
 
-export const updateLoggedUserPasswordValidator = [
+export const updateLoggedUserPassword = [
   ...updateUserBodyRules,
   body("currentPassword")
     .notEmpty()
@@ -131,7 +131,7 @@ export const updateLoggedUserPasswordValidator = [
   validateMiddleware,
 ];
 
-export const deleteUserValidator = [
+export const deleteUser = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

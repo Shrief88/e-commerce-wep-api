@@ -2,7 +2,7 @@ import { type RequestHandler } from "express";
 import createHttpError from "http-errors";
 
 import ApiFeatures from "../utils/apiFeatures";
-import ReviewModel from "../models/review";
+import { ReviewModel } from "../models/review";
 import { type CustomRequest } from "./auth";
 
 // @desc Retrieves a list of reviews from the database and sends it as a response.
@@ -75,6 +75,9 @@ export const updateReview: RequestHandler = async (req, res, next) => {
       { title: req.body.title, rating: req.body.rating },
       { new: true },
     );
+    if (!review) {
+      throw createHttpError(404, "review not found");
+    }
     res.status(200).json({ data: review });
   } catch (err) {
     next(err);

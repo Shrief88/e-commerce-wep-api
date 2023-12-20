@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 
-import CategoryModel from "../models/category";
+import { BrandModel } from "../models/brand";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
 const bodyRules = [
@@ -8,36 +8,36 @@ const bodyRules = [
     .isString()
     .withMessage("name must be a string")
     .trim()
-    .isLength({ min: 3 })
-    .withMessage("name must be at least 3 characters long")
+    .isLength({ min: 2 })
+    .withMessage("name must be at least 2 characters long")
     .isLength({ max: 32 })
     .withMessage("name must be at most 32 characters long")
     .custom(async (name: string) => {
-      if (await CategoryModel.findOne({ name }).exec()) {
-        throw new Error("category already exists");
+      if (await BrandModel.findOne({ name }).exec()) {
+        throw new Error("brand already exists");
       }
       return true;
     }),
 ];
 
-export const getCategoryValidator = [
+export const getBrand = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
-export const createCategoryValidator = [
+export const createBrand = [
   body("name").notEmpty().withMessage("name is required"),
   ...bodyRules,
   validateMiddleware,
 ];
 
-export const updateCategoryValidator = [
+export const updateBrand = [
   param("id").isMongoId().withMessage("Invalid ID"),
   ...bodyRules.map((rule) => rule.optional()),
   validateMiddleware,
 ];
 
-export const deleteCategoryValidator = [
+export const deleteBrand = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];

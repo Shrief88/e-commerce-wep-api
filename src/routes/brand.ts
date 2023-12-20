@@ -1,6 +1,6 @@
 import express from "express";
 
-import * as brandValidator from "../validators/brandValidator";
+import * as brandValidator from "../validators/brand";
 import * as authController from "../controllers/auth";
 import * as brandController from "../controllers/brand";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
@@ -11,20 +11,15 @@ const brandRouter = express.Router();
 
 brandRouter.get("/", brandController.getBrands);
 
-brandRouter.get(
-  "/:id",
-  brandValidator.getBrandValidator,
-  brandController.getBrand,
-);
+brandRouter.get("/:id", brandValidator.getBrand, brandController.getBrand);
 
 brandRouter.post(
   "/",
-
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
   validateImageExisting,
-  brandValidator.createBrandValidator,
+  brandValidator.createBrand,
   resizeSingleImage("brand", "image"),
   brandController.createBrand,
 );
@@ -34,7 +29,7 @@ brandRouter.put(
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
-  brandValidator.updateBrandValidator,
+  brandValidator.updateBrand,
   resizeSingleImage("brand", "image"),
   brandController.updateBrand,
 );
@@ -43,7 +38,7 @@ brandRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  brandValidator.deleteBrandValidator,
+  brandValidator.deleteBrand,
   brandController.deleteBrand,
 );
 

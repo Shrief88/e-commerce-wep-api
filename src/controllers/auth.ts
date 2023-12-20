@@ -5,7 +5,7 @@ import slugify from "slugify";
 import createHttpError from "http-errors";
 
 import env from "../config/validateEnv";
-import UserModel, { type IUser } from "../models/user";
+import { UserModel, type IUser } from "../models/user";
 import { sendEmail } from "../utils/sendEmail";
 import createToken from "../utils/createToken";
 

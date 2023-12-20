@@ -1,22 +1,26 @@
 import { type RequestHandler } from "express";
 
 import { type CustomRequest } from "./auth";
-import UserModel from "../models/user";
+import { UserModel } from "../models/user";
 
 export const addToWishlist: RequestHandler = async (
   req: CustomRequest,
   res,
   next,
 ) => {
-  const user = await UserModel.findByIdAndUpdate(
-    req.user._id,
-    {
-      $addToSet: { wishlist: req.body.product },
-    },
-    { new: true },
-  );
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { wishlist: req.body.product },
+      },
+      { new: true },
+    );
 
-  res.status(200).json({ data: user });
+    res.status(200).json({ data: user });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const removeFromWishlist: RequestHandler = async (
@@ -24,11 +28,14 @@ export const removeFromWishlist: RequestHandler = async (
   res,
   next,
 ) => {
-  await UserModel.findByIdAndUpdate(req.user._id, {
-    $pull: { wishlist: req.params.product },
-  });
-
-  res.sendStatus(204);
+  try {
+    await UserModel.findByIdAndUpdate(req.user._id, {
+      $pull: { wishlist: req.params.product },
+    });
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getUserWishlist: RequestHandler = async (
@@ -36,9 +43,13 @@ export const getUserWishlist: RequestHandler = async (
   res,
   next,
 ) => {
-  const userWishlist = await UserModel.findById(req.user._id).populate({
-    path: "wishlist",
-    select: "name",
-  });
-  res.status(200).json({ data: userWishlist?.wishlist });
+  try {
+    const userWishlist = await UserModel.findById(req.user._id).populate({
+      path: "wishlist",
+      select: "name",
+    });
+    res.status(200).json({ data: userWishlist?.wishlist });
+  } catch (err) {
+    next(err);
+  }
 };

@@ -44,4 +44,7 @@ subcategorySchema.pre<ISubcategory>(/^find/, function (next) {
   next();
 });
 
-export default mongoose.model<ISubcategory>("Subcategory", subcategorySchema);
+export const SubcategoryModel = mongoose.model<ISubcategory>(
+  "Subcategory",
+  subcategorySchema,
+);

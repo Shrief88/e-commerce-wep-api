@@ -1,9 +1,9 @@
 import { body } from "express-validator";
 
-import UserModel from "../models/user";
+import { UserModel } from "../models/user";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
-export const signupValidator = [
+export const signup = [
   body("name")
     .notEmpty()
     .withMessage("name is required")
@@ -49,7 +49,7 @@ export const signupValidator = [
   validateMiddleware,
 ];
 
-export const loginValidator = [
+export const login = [
   body("email")
     .notEmpty()
     .withMessage("email is required")
@@ -60,7 +60,7 @@ export const loginValidator = [
   validateMiddleware,
 ];
 
-export const forgetPasswordValidator = [
+export const forgetPassword = [
   body("email")
     .notEmpty()
     .withMessage("email is required")
@@ -70,12 +70,12 @@ export const forgetPasswordValidator = [
   validateMiddleware,
 ];
 
-export const verifyResetCodeValidator = [
+export const verifyResetCode = [
   body("code").notEmpty().withMessage("code is required"),
   validateMiddleware,
 ];
 
-export const resetPasswordValidator = [
+export const resetPassword = [
   body("email")
     .notEmpty()
     .withMessage("email is required")

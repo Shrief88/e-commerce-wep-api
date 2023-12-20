@@ -1,9 +1,9 @@
 import { body, param } from "express-validator";
 
 import validateMiddleware from "../middlewares/validatorMiddleware";
-import ProductModel from "../models/product";
+import { ProductModel } from "../models/product";
 
-export const addToWishlistValidator = [
+export const addToWishlist = [
   body("product")
     .notEmpty()
     .withMessage("product ID is required")
@@ -18,7 +18,7 @@ export const addToWishlistValidator = [
   validateMiddleware,
 ];
 
-export const removeFromWishlistValidator = [
+export const removeFromWishlist = [
   param("product")
     .isMongoId()
     .withMessage("Invalid product ID")

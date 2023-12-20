@@ -45,4 +45,7 @@ categorySchema.post("save", function (doc) {
   returnImageUrl<ICategory>(doc, "category");
 });
 
-export default mongoose.model<ICategory>("Category", categorySchema);
+export const CategoryModel = mongoose.model<ICategory>(
+  "Category",
+  categorySchema,
+);

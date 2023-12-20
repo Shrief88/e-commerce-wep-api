@@ -1,7 +1,7 @@
 import express from "express";
 
 import * as subcategoryController from "../controllers/subcategory";
-import * as subcategoryValidator from "../validators/subcategoryValidator";
+import * as subcategoryValidator from "../validators/subcategory";
 import * as authController from "../controllers/auth";
 import {
   setCategoryIdToBody,
@@ -20,7 +20,7 @@ subcategoryRouter.get(
 
 subcategoryRouter.get(
   "/:id",
-  subcategoryValidator.getSubCategoryValidator,
+  subcategoryValidator.getSubCategory,
   subcategoryController.getSubcategory,
 );
 
@@ -29,7 +29,7 @@ subcategoryRouter.post(
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
   setCategoryIdToBody,
-  subcategoryValidator.createSubcategoryValidator,
+  subcategoryValidator.createSubcategory,
   subcategoryController.createsubcategory,
 );
 
@@ -37,7 +37,7 @@ subcategoryRouter.put(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
-  subcategoryValidator.updateSubcategoryValidator,
+  subcategoryValidator.updateSubcategory,
   subcategoryController.updatesubcategory,
 );
 
@@ -45,7 +45,7 @@ subcategoryRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  subcategoryValidator.deleteSubcategoryValidator,
+  subcategoryValidator.deleteSubcategory,
   subcategoryController.deletesubcategory,
 );
 

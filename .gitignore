@@ -2,4 +2,3 @@ node_modules
 .env
 dist
 uploads
-src/tests

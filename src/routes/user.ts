@@ -5,11 +5,11 @@ import express, {
   type Response,
 } from "express";
 
-import * as userValidator from "../validators/userValidator";
+import * as userValidator from "../validators/user";
 import * as authController from "../controllers/auth";
 import * as userController from "../controllers/user";
 import * as loggedUserController from "../controllers/loggedUser";
-import { loginValidator } from "../validators/authValidator";
+import { login as loginValidator } from "../validators/auth";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
 import { resizeSingleImage } from "../middlewares/imageProcessingMiddleware";
 import env from "../config/validateEnv";
@@ -27,7 +27,7 @@ userRouter.get(
 userRouter.put(
   "/changeMyPassword",
   authController.protectRoute,
-  userValidator.updateLoggedUserPasswordValidator,
+  userValidator.updateLoggedUserPassword,
   loggedUserController.changeLoggedUserPassword,
 );
 
@@ -35,7 +35,7 @@ userRouter.put(
   "/updateMe",
   authController.protectRoute,
   uploadSingleImage("profileImage"),
-  userValidator.updateLoggedUserValidator,
+  userValidator.updateLoggedUser,
   resizeSingleImage("user", "profileImage"),
   loggedUserController.updateLoggedUser,
 );
@@ -64,7 +64,7 @@ userRouter.get(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
-  userValidator.getUserValidator,
+  userValidator.getUser,
   userController.getUser,
 );
 
@@ -83,7 +83,7 @@ userRouter.post(
   conditionalMiddleware(authController.protectRoute),
   conditionalMiddleware(authController.allowedTo("admin")),
   uploadSingleImage("profileImage"),
-  userValidator.createUserValidator,
+  userValidator.createUser,
   resizeSingleImage("user", "profileImage"),
   userController.createUser,
 );
@@ -93,7 +93,7 @@ userRouter.put(
   authController.protectRoute,
   authController.allowedTo("admin"),
   uploadSingleImage("profileImage"),
-  userValidator.updateUserValidator,
+  userValidator.updateUser,
   resizeSingleImage("user", "profileImage"),
   userController.updateUser,
 );
@@ -102,7 +102,7 @@ userRouter.put(
   "/changePassword/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  userValidator.updateUserPasswordValidator,
+  userValidator.updateUserPassword,
   userController.changeUserPassword,
 );
 
@@ -110,7 +110,7 @@ userRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  userValidator.deleteUserValidator,
+  userValidator.deleteUser,
   userController.deleteUser,
 );
 

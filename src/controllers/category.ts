@@ -4,7 +4,7 @@ import { type UpdateQuery } from "mongoose";
 import createHttpError from "http-errors";
 
 import ApiFeatures from "../utils/apiFeatures";
-import CategoryModel, { type ICategory } from "../models/category";
+import { CategoryModel, type ICategory } from "../models/category";
 
 // @desc Retrieves a list of categories from the database and sends it as a response.
 // @route GET /api/v1/category
@@ -38,7 +38,7 @@ export const getCategories: RequestHandler = async (req, res, next) => {
 export const getCategory: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const category = await CategoryModel.findById(id).exec();
+    const category = await CategoryModel.findById(id);
     if (!category) {
       throw createHttpError(404, "category not found");
     }
@@ -74,7 +74,7 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
       id,
       req.body as UpdateQuery<ICategory>,
       { new: true },
-    ).exec();
+    );
 
     if (!category) {
       throw createHttpError(404, "category not found");
@@ -91,7 +91,7 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
 export const deleteCategory: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const category = await CategoryModel.findByIdAndDelete(id).exec();
+    const category = await CategoryModel.findByIdAndDelete(id);
     if (!category) {
       throw createHttpError(404, "category not found");
     }

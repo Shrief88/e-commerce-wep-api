@@ -4,7 +4,7 @@ import { type UpdateQuery } from "mongoose";
 import createHttpError from "http-errors";
 
 import ApiFeatures from "../utils/apiFeatures";
-import SubcategoryModel, { type ISubcategory } from "../models/subcategory";
+import { SubcategoryModel, type ISubcategory } from "../models/subcategory";
 
 // @desc Retrieves a list of subcategories from the database and sends it as a response.
 // @route GET /api/v1/subcategory

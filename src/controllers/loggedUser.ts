@@ -6,7 +6,7 @@ import { type UpdateQuery } from "mongoose";
 import slugify from "slugify";
 
 import { type CustomRequest } from "./auth";
-import UserModel, { type IUser } from "../models/user";
+import { UserModel, type IUser } from "../models/user";
 import env from "../config/validateEnv";
 import createToken from "../utils/createToken";
 
@@ -41,7 +41,7 @@ export const changeLoggedUserPassword: RequestHandler = async (
       id,
       { password: req.body.password, passwordChangedAt: Date.now() },
       { new: true },
-    ).exec();
+    );
 
     if (!user) {
       throw createHttpError(404, "user not found");
@@ -81,7 +81,7 @@ export const updateLoggedUser: RequestHandler = async (
       id,
       updatedFields as UpdateQuery<IUser>,
       { new: true },
-    ).exec();
+    );
 
     if (!user) {
       throw createHttpError(404, "user not found");
@@ -102,11 +102,7 @@ export const deleteLoggedUser: RequestHandler = async (
 ) => {
   try {
     const id = req.user._id;
-    await UserModel.findByIdAndUpdate(
-      id,
-      { active: false },
-      { new: true },
-    ).exec();
+    await UserModel.findByIdAndUpdate(id, { active: false }, { new: true });
 
     res.sendStatus(204);
   } catch (err) {
@@ -137,7 +133,7 @@ export const activeLoggedUser: RequestHandler = async (
       user._id,
       { active: true },
       { new: true },
-    ).exec();
+    );
 
     res.status(200).json({ data: user, token });
   } catch (err) {

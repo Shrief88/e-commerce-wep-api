@@ -5,7 +5,7 @@ import slugify from "slugify";
 import bycrpt from "bcryptjs";
 
 import ApiFeatures from "../utils/apiFeatures";
-import UserModel, { type IUser } from "../models/user";
+import { UserModel, type IUser } from "../models/user";
 import createToken from "../utils/createToken";
 
 // @desc Retrieves a list of users from the database and sends it as a response.

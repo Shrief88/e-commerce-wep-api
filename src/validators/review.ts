@@ -1,15 +1,15 @@
 import { body, param } from "express-validator";
 
-import ProductModel from "../models/product";
-import ReviewModel from "../models/review";
+import { ProductModel } from "../models/product";
+import { ReviewModel } from "../models/review";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
-export const getReviewValidator = [
+export const getReview = [
   param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
 
-export const createReviewValidator = [
+export const createReview = [
   body("rating")
     .notEmpty()
     .withMessage("rating is required")
@@ -40,7 +40,7 @@ export const createReviewValidator = [
   validateMiddleware,
 ];
 
-export const updateReviewValidator = [
+export const updateReview = [
   body("rating")
     .notEmpty()
     .withMessage("rating is required")
@@ -66,7 +66,7 @@ export const updateReviewValidator = [
   validateMiddleware,
 ];
 
-export const deleteReviewValidator = [
+export const deleteReview = [
   param("id")
     .isMongoId()
     .withMessage("Invalid ID")

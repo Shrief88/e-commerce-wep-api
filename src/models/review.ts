@@ -1,6 +1,6 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
 
-import ProductModel from "./product";
+import { ProductModel } from "./product";
 
 export interface IReview extends mongoose.Document {
   title?: string;
@@ -11,13 +11,13 @@ export interface IReview extends mongoose.Document {
   updatedAt: Date;
 }
 
-export interface ReviewModel extends mongoose.Model<IReview> {
+export interface ReviewMethods extends mongoose.Model<IReview> {
   calcAverageRatingAndQuality: (
     productId: Schema.Types.ObjectId,
   ) => Promise<any>;
 }
 
-const reviewSchema = new Schema<IReview, ReviewModel>(
+const reviewSchema = new Schema<IReview, ReviewMethods>(
   {
     title: {
       type: String,
@@ -77,8 +77,11 @@ reviewSchema.pre<IReview>(/^find/, function (next) {
 });
 
 reviewSchema.post<IReview>("save", async function () {
-  const Review = this.constructor as ReviewModel;
+  const Review = this.constructor as ReviewMethods;
   await Review.calcAverageRatingAndQuality(this.product);
 });
 
-export default mongoose.model<IReview, ReviewModel>("Review", reviewSchema);
+export const ReviewModel = mongoose.model<IReview, ReviewMethods>(
+  "Review",
+  reviewSchema,
+);

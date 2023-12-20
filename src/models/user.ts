@@ -132,4 +132,4 @@ userSchema.pre<IUser>("save", async function (next) {
   this.password = await bycrpt.hash(this.password, 12);
 });
 
-export default mongoose.model<IUser>("User", userSchema);
+export const UserModel = mongoose.model<IUser>("User", userSchema);

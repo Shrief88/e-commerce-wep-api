@@ -1,9 +1,9 @@
 import { body, param } from "express-validator";
 
-import UserModel from "../models/user";
+import { UserModel } from "../models/user";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
-export const addAddressValidator = [
+export const addAddress = [
   body("alias")
     .notEmpty()
     .withMessage("alias is required")
@@ -42,7 +42,8 @@ export const addAddressValidator = [
   validateMiddleware,
 ];
 
-export const updateAddressValidator = [
+export const updateAddress = [
+  param("address").isMongoId().withMessage("Invalid address ID"),
   body("alias").optional().isString().withMessage("alias must be a string"),
   body("details").optional().isString().withMessage("details must be a string"),
   body("phone")
@@ -58,7 +59,7 @@ export const updateAddressValidator = [
   validateMiddleware,
 ];
 
-export const removeAddressValidator = [
+export const removeAddress = [
   param("address").isMongoId().withMessage("Invalid address ID"),
   validateMiddleware,
 ];

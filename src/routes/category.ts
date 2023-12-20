@@ -1,7 +1,7 @@
 import express from "express";
 
 import * as categoryController from "../controllers/category";
-import * as categoryValidator from "../validators/categoryValidator";
+import * as categoryValidator from "../validators/category";
 import * as authController from "../controllers/auth";
 import subcategoryRouter from "./subcategory";
 import { uploadSingleImage } from "../middlewares/uploadImageMiddleware";
@@ -14,7 +14,7 @@ categoryRouter.get("/", categoryController.getCategories);
 
 categoryRouter.get(
   "/:id",
-  categoryValidator.getCategoryValidator,
+  categoryValidator.getCategory,
   categoryController.getCategory,
 );
 
@@ -24,7 +24,7 @@ categoryRouter.post(
   authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
   validateImageExisting,
-  categoryValidator.createCategoryValidator,
+  categoryValidator.createCategory,
   resizeSingleImage("category", "image"),
   categoryController.createCategory,
 );
@@ -34,7 +34,7 @@ categoryRouter.put(
   authController.protectRoute,
   authController.allowedTo("admin", "manager"),
   uploadSingleImage("image"),
-  categoryValidator.updateCategoryValidator,
+  categoryValidator.updateCategory,
   resizeSingleImage("category", "image"),
   categoryController.updateCategory,
 );
@@ -43,7 +43,7 @@ categoryRouter.delete(
   "/:id",
   authController.protectRoute,
   authController.allowedTo("admin"),
-  categoryValidator.deleteCategoryValidator,
+  categoryValidator.deleteCategory,
   categoryController.deleteCategory,
 );
 
