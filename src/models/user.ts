@@ -23,6 +23,7 @@ export interface IUser extends mongoose.Document {
   passwordResetExpires?: Date;
   passwordResetVerified?: boolean;
   active: boolean;
+  wishlist?: Schema.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -89,6 +90,12 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
+    wishlist: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   {
     timestamps: true,

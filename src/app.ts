@@ -11,6 +11,7 @@ import productRouter from "./routes/product";
 import userRouter from "./routes/user";
 import brandRouter from "./routes/brand";
 import reviewRouter from "./routes/review";
+import wishlistRouter from "./routes/wishlist";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
 import authRouter from "./routes/auth";
@@ -36,6 +37,7 @@ app.use("/api/v1/product", productRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/review", reviewRouter);
+app.use("/api/v1/wishlist", wishlistRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));

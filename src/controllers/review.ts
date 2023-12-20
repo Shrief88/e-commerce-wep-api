@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 
 import ApiFeatures from "../utils/apiFeatures";
 import ReviewModel from "../models/review";
+import { type CustomRequest } from "./auth";
 
 // @desc Retrieves a list of reviews from the database and sends it as a response.
 // @route GET /api/v1/review
@@ -49,8 +50,13 @@ export const getReview: RequestHandler = async (req, res, next) => {
 // @desc Creates a new category in the database
 // @route POST /api/v1/review
 // @access Private
-export const createReview: RequestHandler = async (req, res, next) => {
+export const createReview: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
   try {
+    req.body.user = req.user._id;
     const newReview = await ReviewModel.create(req.body);
     res.status(201).json({ data: newReview });
   } catch (err) {
@@ -68,11 +74,7 @@ export const updateReview: RequestHandler = async (req, res, next) => {
       id,
       { title: req.body.title, rating: req.body.rating },
       { new: true },
-    ).exec();
-
-    if (!review) {
-      throw createHttpError(404, "Review not found");
-    }
+    );
     res.status(200).json({ data: review });
   } catch (err) {
     next(err);
