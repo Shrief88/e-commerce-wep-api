@@ -45,6 +45,8 @@ export const createUserValidator = [
   body("password")
     .notEmpty()
     .withMessage("password is required")
+    .isString()
+    .withMessage("password must be a string")
     .trim()
     .isLength({ min: 6 })
     .withMessage("Too short password")
@@ -56,7 +58,9 @@ export const createUserValidator = [
     }),
   body("passwordConfirm")
     .notEmpty()
-    .withMessage("password Confirmation is required"),
+    .withMessage("password Confirmation is required")
+    .isString()
+    .withMessage("password must be a string"),
   ...bodyUserRules,
   validateMiddleware,
 ];

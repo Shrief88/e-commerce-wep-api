@@ -74,7 +74,6 @@ export const updateLoggedUser: RequestHandler = async (
       slug: req.body.slug,
       email: req.body.email,
       phone: req.body.phone,
-      address: req.body.address,
       profileImage: req.body.profileImage,
     };
     console.log(updatedFields);

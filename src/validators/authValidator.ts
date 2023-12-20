@@ -16,10 +16,14 @@ export const signupValidator = [
     .withMessage("name must be at most 32 characters long"),
   body("passwordConfirm")
     .notEmpty()
-    .withMessage("password Confirmation is required"),
+    .withMessage("password Confirmation is required")
+    .isString()
+    .withMessage("password must be a string"),
   body("password")
     .notEmpty()
     .withMessage("password is required")
+    .isString()
+    .withMessage("password must be a string")
     .trim()
     .isLength({ min: 6 })
     .withMessage("Too short password")

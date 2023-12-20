@@ -9,6 +9,14 @@ enum Roles {
   MANAGER = "manager",
 }
 
+export interface Address {
+  alias?: string;
+  details?: string;
+  phone?: string;
+  city?: string;
+  postcode?: string;
+}
+
 export interface IUser extends mongoose.Document {
   name: string;
   slug: string;
@@ -16,7 +24,7 @@ export interface IUser extends mongoose.Document {
   phone?: string;
   password: string;
   profileImage?: string;
-  address?: string;
+  addresses?: Address[];
   role: Roles;
   passwordChangedAt?: Date;
   passwordResetCode?: string;
@@ -76,10 +84,17 @@ const userSchema = new Schema<IUser>(
     profileImage: {
       type: String,
     },
-    address: {
-      type: String,
-      trim: true,
-    },
+    // Embedded document
+    addresses: [
+      {
+        id: { type: Schema.Types.ObjectId },
+        alias: { type: String, required: true },
+        details: { type: String, required: true },
+        phone: { type: String, required: true },
+        city: { type: String, required: true },
+        postcode: { type: String, required: true },
+      },
+    ],
     role: {
       required: true,
       type: String,
