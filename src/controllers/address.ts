@@ -3,6 +3,8 @@ import { type RequestHandler } from "express";
 import { type CustomRequest } from "./auth";
 import { UserModel, type Address } from "../models/user";
 
+// @route GET /api/v1/address/
+// @access Private
 export const getUserAddresses: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -16,6 +18,8 @@ export const getUserAddresses: RequestHandler = async (
   }
 };
 
+// @route POST /api/v1/address/
+// @access Private
 export const addAddress: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -56,6 +60,8 @@ export const addAddress: RequestHandler = async (
 //   res.status(200).json({ data: user?.addresses });
 // };
 
+// @route DELETE /api/v1/address/:id
+// @access Private
 export const removeAddress: RequestHandler = async (
   req: CustomRequest,
   res,

@@ -19,7 +19,6 @@ export interface CustomRequest extends Request {
   user: IUser;
 }
 
-// @desc Handles the signup process.
 // @route POST /api/v1/auth/signup
 // @access Public
 export const signup: RequestHandler = async (req, res, next) => {
@@ -35,7 +34,6 @@ export const signup: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Handles the login process.
 // @route POST /api/v1/auth/login
 // @access Public
 export const login: RequestHandler = async (req, res, next) => {
@@ -117,7 +115,6 @@ export const allowedTo = (...roles: string[]): RequestHandler => {
   };
 };
 
-// @desc Sends a password reset code to the user's email.
 // @route POST /api/v1/auth/forgetPassword
 // @access Public
 export const forgetPassword: RequestHandler = async (req, res, next) => {
@@ -155,7 +152,6 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Verifies the reset code sent to the user's email.
 // @route POST /api/v1/auth/verifyResetCode
 // @access Public
 export const verifyResetCode: RequestHandler = async (req, res, next) => {
@@ -178,7 +174,6 @@ export const verifyResetCode: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Resets the user's password.
 // @route PUT /api/v1/auth/resetPassword
 // @access Public
 export const resetPassword: RequestHandler = async (req, res, next) => {

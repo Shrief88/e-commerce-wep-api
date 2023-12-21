@@ -8,7 +8,6 @@ import ApiFeatures from "../utils/apiFeatures";
 import { UserModel, type IUser } from "../models/user";
 import createToken from "../utils/createToken";
 
-// @desc Retrieves a list of users from the database and sends it as a response.
 // @route GET /api/v1/user
 // @access Private [admin, manager]
 export const getUsers: RequestHandler = async (req, res, next) => {
@@ -34,7 +33,6 @@ export const getUsers: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Retrieves a specific user from the database and sends it as a response.
 // @route GET /api/v1/user/:id
 // @access Private [admin, manager]
 export const getUser: RequestHandler = async (req, res, next) => {
@@ -50,7 +48,6 @@ export const getUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Creates a new user in the database
 // @route POST /api/v1/user
 // @access Private [admin]
 export const createUser: RequestHandler = async (req, res, next) => {
@@ -64,7 +61,6 @@ export const createUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc update a specific user data except password in the database
 // @route PUT /api/v1/user/:id
 // @access Private [admin]
 export const updateUser: RequestHandler = async (req, res, next) => {
@@ -90,7 +86,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc update a specific user password in the database
 // @route PUT /api/v1/user/changePassword/:id
 // @access Private [admin]
 export const changeUserPassword: RequestHandler = async (req, res, next) => {
@@ -111,7 +106,6 @@ export const changeUserPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc delete a specific user password in the database
 // @route DELETE /api/v1/user/:id
 // @access Private [admin]
 export const deleteUser: RequestHandler = async (req, res, next) => {

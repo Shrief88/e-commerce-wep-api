@@ -5,7 +5,6 @@ import ApiFeatures from "../utils/apiFeatures";
 import { ReviewModel } from "../models/review";
 import { type CustomRequest } from "./auth";
 
-// @desc Retrieves a list of reviews from the database and sends it as a response.
 // @route GET /api/v1/review
 // @access Public
 export const getReviews: RequestHandler = async (req, res, next) => {
@@ -31,7 +30,6 @@ export const getReviews: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Retrieves a specific review from the database and sends it as a response.
 // @route GET /api/v1/review/:id
 // @access Public
 export const getReview: RequestHandler = async (req, res, next) => {
@@ -47,9 +45,8 @@ export const getReview: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Creates a new category in the database
 // @route POST /api/v1/review
-// @access Private
+// @access Private [user]
 export const createReview: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -64,9 +61,8 @@ export const createReview: RequestHandler = async (
   }
 };
 
-// @desc Updates a specific category in the database
 // @route PUT /api/v1/review/:id
-// @access Private
+// @access Private [user]
 export const updateReview: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -84,7 +80,6 @@ export const updateReview: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Deletes a specific category from the database
 // @route DELETE /api/v1/review/:id
 // @access Private
 export const deleteReview: RequestHandler = async (req, res, next) => {

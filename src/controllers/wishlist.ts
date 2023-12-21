@@ -3,6 +3,26 @@ import { type RequestHandler } from "express";
 import { type CustomRequest } from "./auth";
 import { UserModel } from "../models/user";
 
+// @route GET /api/v1/wishlist/
+// @access Private [user]
+export const getUserWishlist: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const userWishlist = await UserModel.findById(req.user._id).populate({
+      path: "wishlist",
+      select: "name",
+    });
+    res.status(200).json({ data: userWishlist?.wishlist });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @route POST /api/v1/wishlist/
+// @access Private [user]
 export const addToWishlist: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -23,6 +43,8 @@ export const addToWishlist: RequestHandler = async (
   }
 };
 
+// @route DELETE /api/v1/wishlist/:id
+// @access Private [user]
 export const removeFromWishlist: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -33,22 +55,6 @@ export const removeFromWishlist: RequestHandler = async (
       $pull: { wishlist: req.params.product },
     });
     res.sendStatus(204);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getUserWishlist: RequestHandler = async (
-  req: CustomRequest,
-  res,
-  next,
-) => {
-  try {
-    const userWishlist = await UserModel.findById(req.user._id).populate({
-      path: "wishlist",
-      select: "name",
-    });
-    res.status(200).json({ data: userWishlist?.wishlist });
   } catch (err) {
     next(err);
   }

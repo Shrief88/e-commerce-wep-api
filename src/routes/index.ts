@@ -10,6 +10,7 @@ import wishlistRouter from "./wishlist";
 import addressRouter from "./address";
 import couponRouter from "./coupon";
 import authRouter from "./auth";
+import cartRouter from "./cart";
 
 const mountRoutes = (app: Express): void => {
   app.use("/api/v1/category", categoryRouter);
@@ -22,6 +23,7 @@ const mountRoutes = (app: Express): void => {
   app.use("/api/v1/wishlist", wishlistRouter);
   app.use("/api/v1/address", addressRouter);
   app.use("/api/v1/coupon", couponRouter);
+  app.use("/api/v1/cart", cartRouter);
 };
 
 export default mountRoutes;

@@ -6,7 +6,6 @@ import createHttpError from "http-errors";
 import ApiFeatures from "../utils/apiFeatures";
 import { CategoryModel, type ICategory } from "../models/category";
 
-// @desc Retrieves a list of categories from the database and sends it as a response.
 // @route GET /api/v1/category
 // @access Public
 export const getCategories: RequestHandler = async (req, res, next) => {
@@ -32,7 +31,6 @@ export const getCategories: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Retrieves a specific category from the database and sends it as a response.
 // @route GET /api/v1/category/:id
 // @access Public
 export const getCategory: RequestHandler = async (req, res, next) => {
@@ -48,7 +46,6 @@ export const getCategory: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Creates a new category in the database
 // @route POST /api/v1/category
 // @access Private [admin, manager]
 export const createCategory: RequestHandler = async (req, res, next) => {
@@ -61,7 +58,6 @@ export const createCategory: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Updates a specific category in the database
 // @route PUT /api/v1/category/:id
 // @access Private [admin, manager]
 export const updateCategory: RequestHandler = async (req, res, next) => {
@@ -85,7 +81,6 @@ export const updateCategory: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Deletes a specific category from the database
 // @route DELETE /api/v1/category/:id
 // @access Private [admin]
 export const deleteCategory: RequestHandler = async (req, res, next) => {

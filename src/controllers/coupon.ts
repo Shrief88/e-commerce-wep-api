@@ -5,9 +5,8 @@ import { type UpdateQuery } from "mongoose";
 import ApiFeatures from "../utils/apiFeatures";
 import { CouponModel, type ICoupon } from "../models/coupon";
 
-// @desc Retrieves a list of coupons from the database and sends it as a response.
 // @route GET /api/v1/coupon
-// @access Public
+// @access Private [admin, manager]
 export const getCoupons: RequestHandler = async (req, res, next) => {
   try {
     const documentCount = await CouponModel.countDocuments();
@@ -31,9 +30,8 @@ export const getCoupons: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Retrieves a specific coupon from the database and sends it as a response.
 // @route GET /api/v1/coupon/:id
-// @access Public
+// @access Private [admin, manager]
 export const getCoupon: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
@@ -47,7 +45,6 @@ export const getCoupon: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Creates a new coupon in the database
 // @route POST /api/v1/coupon
 // @access Private [admin, manager]
 export const createCoupon: RequestHandler = async (req, res, next) => {
@@ -59,7 +56,6 @@ export const createCoupon: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Updates a specific coupon in the database
 // @route PUT /api/v1/coupon/:id
 // @access Private [admin, manager]
 export const updateCoupon: RequestHandler = async (req, res, next) => {
@@ -77,9 +73,8 @@ export const updateCoupon: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-// @desc Deletes a specific coupon from the database
 // @route DELETE /api/v1/coupon/:id
-// @access Private [admin]
+// @access Private [admin, manager]
 export const deleteCoupon: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;

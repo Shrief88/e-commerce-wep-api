@@ -11,18 +11,18 @@ wishlistRouter.use(
   authController.allowedTo("user"),
 );
 
+wishlistRouter.get("/", wishlistController.getUserWishlist);
+
 wishlistRouter.post(
-  "/add",
+  "/",
   wishlistValidator.addToWishlist,
   wishlistController.addToWishlist,
 );
 
 wishlistRouter.delete(
-  "/remove/:product",
+  "/:product",
   wishlistValidator.removeFromWishlist,
   wishlistController.removeFromWishlist,
 );
-
-wishlistRouter.get("/", wishlistController.getUserWishlist);
 
 export default wishlistRouter;

@@ -10,7 +10,6 @@ import { UserModel, type IUser } from "../models/user";
 import env from "../config/validateEnv";
 import createToken from "../utils/createToken";
 
-// @desc Retrieves data about the logged in user from the database and sends it as a response.
 // @route GET /api/v1/user/me
 // @access Private
 export const getLoggedUser: RequestHandler = async (
@@ -26,7 +25,6 @@ export const getLoggedUser: RequestHandler = async (
   }
 };
 
-// @desc Change the logged in user password
 // @route PUT /api/v1/user/changeMyPassword
 // @access Private
 export const changeLoggedUserPassword: RequestHandler = async (
@@ -56,7 +54,6 @@ export const changeLoggedUserPassword: RequestHandler = async (
   }
 };
 
-// @desc update a specific user data except password and role in the database
 // @route PUT /api/v1/user/updateMe
 // @access Private
 export const updateLoggedUser: RequestHandler = async (

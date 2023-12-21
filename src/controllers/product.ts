@@ -6,7 +6,6 @@ import createHttpError from "http-errors";
 import ApiFeatures from "../utils/apiFeatures";
 import { ProductModel, type IProduct } from "../models/product";
 
-// @desc Retrieves a list of products from the database and sends it as a response.
 // @route GET /api/v1/product
 // @access Public
 export const getproducts: RequestHandler = async (req, res, next) => {
@@ -30,7 +29,6 @@ export const getproducts: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Retrieves a specific product from the database and sends it as a response.
 // @route GET /api/v1/product/:id
 // @access Public
 export const getProduct: RequestHandler = async (req, res, next) => {
@@ -46,7 +44,6 @@ export const getProduct: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Creates a new product in the database
 // @route POST /api/v1/product
 // @access Private [admin, manager]
 export const createProduct: RequestHandler = async (req, res, next) => {
@@ -59,7 +56,6 @@ export const createProduct: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Updates a specific product in the database
 // @route PUT /api/v1/product/:id
 // @access Private [admin, manager]
 export const updateProduct: RequestHandler = async (req, res, next) => {
@@ -84,7 +80,6 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @desc Deletes a specific product from the database
 // @route DELETE /api/v1/product/:id
 // @access Private [admin]
 export const deleteProduct: RequestHandler = async (req, res, next) => {
