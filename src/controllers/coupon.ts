@@ -65,9 +65,13 @@ export const createCoupon: RequestHandler = async (req, res, next) => {
 export const updateCoupon: RequestHandler = async (req, res, next) => {
   try {
     const id: string = req.params.id;
-    const coupon = await CouponModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const coupon = await CouponModel.findByIdAndUpdate(
+      id,
+      req.body as UpdateQuery<ICoupon>,
+      {
+        new: true,
+      },
+    );
     res.status(200).json({ data: coupon });
   } catch (err) {
     next(err);
@@ -76,10 +80,10 @@ export const updateCoupon: RequestHandler = async (req, res, next) => {
 // @desc Deletes a specific coupon from the database
 // @route DELETE /api/v1/coupon/:id
 // @access Private [admin]
-export const deleteBrand: RequestHandler = async (req, res, next) => {
+export const deleteCoupon: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const coupon = await BrandModel.findByIdAndDelete(id).exec();
+    const coupon = await CouponModel.findByIdAndDelete(id);
     if (!coupon) {
       throw createHttpError(404, "coupon not found");
     }

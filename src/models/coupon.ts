@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface ICoupon extends mongoose.Document {
+export interface ICoupon extends mongoose.Document {
   name: string;
   expire: Date;
   discount: number;
