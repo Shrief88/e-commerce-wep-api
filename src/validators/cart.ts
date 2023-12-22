@@ -28,6 +28,10 @@ export const addToCart = [
     if (product.quantity < 1) {
       throw new Error("Product out of stock");
     }
+
+    if (product.quantity - req.body.quantity < 0) {
+      throw new Error("This product is not available in desired quantity");
+    }
     if (!product.colors?.includes(req.body.color as string)) {
       throw new Error("Product color not available");
     }

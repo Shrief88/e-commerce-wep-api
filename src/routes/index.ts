@@ -11,6 +11,7 @@ import addressRouter from "./address";
 import couponRouter from "./coupon";
 import authRouter from "./auth";
 import cartRouter from "./cart";
+import orderRouter from "./order";
 
 const mountRoutes = (app: Express): void => {
   app.use("/api/v1/category", categoryRouter);
@@ -24,6 +25,7 @@ const mountRoutes = (app: Express): void => {
   app.use("/api/v1/address", addressRouter);
   app.use("/api/v1/coupon", couponRouter);
   app.use("/api/v1/cart", cartRouter);
+  app.use("/api/v1/order", orderRouter);
 };
 
 export default mountRoutes;
