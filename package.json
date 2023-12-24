@@ -7,10 +7,13 @@
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint-fix": "eslint 'src/**/*.{ts,js}' --fix",
     "dev": "nodemon src/index.ts",
-    "start": "cross-env NODE_ENV=production nodemon src/index.ts",
+    "start": "node dist/index.js",
     "buildForTest": "npx tsc && jasmine",
-    "build": "npx tsc",
+    "build": "tsc",
     "test": "cross-env NODE_ENV=test npm run buildForTest"
+  },
+  "engines": {
+    "node": "v18.18.0"
   },
   "keywords": [],
   "author": "",
