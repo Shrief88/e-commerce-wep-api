@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "useUnknownInCatchVariables": false,
     "strictFunctionTypes": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "typeRoots": ["node_modules/@types", "./types"]
   },
   "exclude": ["node_modules"],
   "include": ["src/**/**/*"]
