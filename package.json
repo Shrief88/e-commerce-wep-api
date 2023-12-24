@@ -9,6 +9,7 @@
     "dev": "nodemon src/index.ts",
     "start": "cross-env NODE_ENV=production nodemon src/index.ts",
     "buildForTest": "npx tsc && jasmine",
+    "build": "npx tsc",
     "test": "cross-env NODE_ENV=test npm run buildForTest"
   },
   "keywords": [],
