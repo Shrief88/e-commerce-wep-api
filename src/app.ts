@@ -5,7 +5,7 @@ import morgan from "morgan";
 import createHttpError from "http-errors";
 import cors from "cors";
 import compression from "compression";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 
 import env from "./config/validateEnv";
 import errorMiddleware from "./middlewares/errorMiddleware";
@@ -28,14 +28,14 @@ app.set("trust proxy", true);
 app.use(express.json({ limit: "20kb" }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "uploads")));
-app.use(
-  "/api",
-  rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    message: "Too many requests created , please try again later",
-  }),
-);
+// app.use(
+//   "/api",
+//   rateLimit({
+//     windowMs: 15 * 60 * 1000,
+//     max: 100,
+//     message: "Too many requests created , please try again later",
+//   }),
+// );
 
 // ROUTES
 mountRoutes(app);
