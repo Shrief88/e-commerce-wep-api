@@ -171,3 +171,21 @@ export const checkoutSession: RequestHandler = async (
     next(err);
   }
 };
+
+export const webhookCheckout: RequestHandler = async (req, res, next) => {
+  const sig = req.headers["stripe-signature"] as string;
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      env.STRIPE_WEBHOOK_SECRET,
+    );
+
+    if (event?.type === "checkout.session.completed") {
+      console.log("ceate order here");
+    }
+  } catch (err) {
+    res.status(400).send(`Webhook error : ${err.message}`);
+  }
+};

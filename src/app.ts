@@ -10,6 +10,7 @@ import compression from "compression";
 import env from "./config/validateEnv";
 import errorMiddleware from "./middlewares/errorMiddleware";
 import mountRoutes from "./routes";
+import { webhookCheckout } from "./controllers/order";
 
 const app = express();
 
@@ -38,6 +39,12 @@ app.use(express.static(path.join(__dirname, "..", "uploads")));
 // );
 
 // ROUTES
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  webhookCheckout,
+);
+
 mountRoutes(app);
 app.get("/", (_req, res) => {
   res.send("Hello World!");

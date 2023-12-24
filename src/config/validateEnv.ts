@@ -17,4 +17,5 @@ export default cleanEnv(process.env, {
   EMAIL_PASSWORD: str(),
 
   STRIPE_SECRET_KEY: str(),
+  STRIPE_WEBHOOK_SECRET: str(),
 });
