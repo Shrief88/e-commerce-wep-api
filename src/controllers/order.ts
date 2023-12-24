@@ -172,7 +172,7 @@ export const checkoutSession: RequestHandler = async (
   }
 };
 
-export const webhookCheckout: RequestHandler = (req, res, next) => {
+export const webhookCheckout: RequestHandler = async (req, res, next) => {
   console.log("webhook checkout");
   const sig = req.headers["stripe-signature"] as string;
   let event: Stripe.Event;
@@ -184,7 +184,40 @@ export const webhookCheckout: RequestHandler = (req, res, next) => {
     );
 
     if (event?.type === "checkout.session.completed") {
-      console.log("ceate order here");
+      const seesion = event.data.object;
+      const cartId = seesion.client_reference_id;
+      const price = (seesion.amount_total ?? 100) / 100;
+      const shippingAddress = seesion.metadata;
+
+      const cart = await CartModel.findById(cartId);
+      if (!cart) {
+        throw createHttpError(404, "Cart not found");
+      }
+      const order = await OrderModel.create({
+        user: cart.user,
+        cartItems: cart.cartItems,
+        totalPrice: price,
+        shippingAddress,
+        paymentMethod: "card",
+        isPaid: true,
+        paidAt: Date.now(),
+      });
+
+      if (order) {
+        const bulkOption = cart.cartItems.map((item) => {
+          return {
+            updateOne: {
+              filter: { _id: item.product },
+              update: {
+                $inc: { quantity: -item.quantity, sold: +item.quantity },
+              },
+            },
+          };
+        });
+        await ProductModel.bulkWrite(bulkOption, {});
+      }
+      await cart.deleteOne();
+      res.status(200).json({ success: true });
     }
   } catch (err) {
     res.status(400).send(`Webhook error : ${err.message}`);
