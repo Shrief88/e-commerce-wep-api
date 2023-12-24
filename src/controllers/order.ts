@@ -173,6 +173,7 @@ export const checkoutSession: RequestHandler = async (
 };
 
 export const webhookCheckout: RequestHandler = async (req, res, next) => {
+  console.log("webhook checkout");
   const sig = req.headers["stripe-signature"] as string;
   let event: Stripe.Event;
   try {
