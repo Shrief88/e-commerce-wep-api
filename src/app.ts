@@ -24,6 +24,7 @@ if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+app.set("trust proxy", true);
 app.use(express.json({ limit: "20kb" }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "uploads")));

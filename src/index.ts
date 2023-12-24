@@ -6,7 +6,13 @@ void dbConnection();
 
 const port = env.PORT;
 const server = app.listen(port, () => {
-  console.log(`Express app is listening on: http://localhost:${port}`);
+  if (env.NODE_ENV !== "production") {
+    console.log(`Express app is listening on: http://localhost:${port}`);
+  } else {
+    console.log(
+      "Express app is listening on: https://e-commerce-i2ds.onrender.com/",
+    );
+  }
 });
 
 interface Error {
