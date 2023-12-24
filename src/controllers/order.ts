@@ -179,7 +179,7 @@ export const webhookCheckout: RequestHandler = (req, res, next) => {
   try {
     event = stripe.webhooks.constructEvent(
       req.body as string,
-      sig,  
+      sig,
       env.STRIPE_WEBHOOK_SECRET,
     );
 
