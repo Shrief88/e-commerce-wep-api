@@ -8,6 +8,7 @@ import env from "../config/validateEnv";
 import { UserModel, type IUser } from "../models/user";
 import { sendEmail } from "../utils/sendEmail";
 import createToken from "../utils/createToken";
+import { type SanitizeUser, sanitizeUser } from "../utils/sanitizeDate";
 
 interface jwtObject {
   user_id: string;
@@ -27,8 +28,11 @@ export const signup: RequestHandler = async (req, res, next) => {
     req.body.role = "user";
     const user = await UserModel.create(req.body);
     const token = createToken({ user_id: user._id });
-
-    res.status(201).json({ data: user, token });
+    const sanitizesUser: SanitizeUser = sanitizeUser(user);
+    res
+      .status(201)
+      .cookie("token", token, { httpOnly: true })
+      .json({ data: sanitizesUser, token });
   } catch (err) {
     next(err);
   }
@@ -47,7 +51,11 @@ export const login: RequestHandler = async (req, res, next) => {
     }
 
     const token = createToken({ user_id: user._id });
-    res.status(200).json({ data: user, token });
+    const sanitizesUser: SanitizeUser = sanitizeUser(user);
+    res
+      .status(200)
+      .cookie("token", token, { httpOnly: true })
+      .json({ data: sanitizesUser });
   } catch (err) {
     next(err);
   }

@@ -8,6 +8,7 @@ import compression from "compression";
 import rateLimit from "express-rate-limit";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
+import helmet from "helmet";
 
 import env from "./config/validateEnv";
 import errorMiddleware from "./middlewares/errorMiddleware";
@@ -24,6 +25,7 @@ const corsOptions: RequestHandler = cors();
 app.options("*", corsOptions);
 
 app.use(compression());
+app.use(helmet());
 
 if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
