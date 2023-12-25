@@ -18,7 +18,6 @@ const bodyUserRules = [
   body("role")
     .matches(/^(admin|user|manager)$/i)
     .withMessage("Invalid role"),
-  body("address").isString().withMessage("address must be a string"),
   body("email").custom(async (email: string) => {
     if (await UserModel.findOne({ email }).exec()) {
       throw new Error("user email already exists");

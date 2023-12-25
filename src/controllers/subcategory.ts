@@ -6,12 +6,15 @@ import createHttpError from "http-errors";
 import ApiFeatures from "../utils/apiFeatures";
 import { SubcategoryModel, type ISubcategory } from "../models/subcategory";
 
-// @route GET /api/v1/subcategory
+// @route GET /api/v1/subcategory, GET /api/v1/category/:id/subcategory
 // @access Public
 export const getSubcategories: RequestHandler = async (req, res, next) => {
   try {
     const documentCount = await SubcategoryModel.countDocuments();
-    const apiFeatures = new ApiFeatures(SubcategoryModel.find(), req.query)
+    const apiFeatures = new ApiFeatures(
+      SubcategoryModel.find(req.body.filterObject as object),
+      req.query,
+    )
       .filter()
       .sort()
       .fields()
@@ -46,7 +49,7 @@ export const getSubcategory: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route POST /api/v1/subcategory
+// @route POST /api/v1/subcategory, POST /api/v1/category/:id/subcategory
 // @access Private [admin, manager]
 export const createsubcategory: RequestHandler = async (req, res, next) => {
   try {

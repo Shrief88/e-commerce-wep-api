@@ -36,6 +36,7 @@ const bodyRules = [
       return true;
     }),
   body("colors").isArray().withMessage("colors must be an array"),
+  body("sizes").isArray().withMessage("sizes must be an array"),
   body("category").isMongoId().withMessage("Invalid category ID"),
   body("subcategories")
     .isArray()
@@ -73,32 +74,24 @@ const bodyRules = [
     }
     return true;
   }),
-  body("subcategories")
-    .custom(async (subcategoriesID: string[]) => {
-      const subcategories = await SubcategoryModel.find({
-        _id: { $exists: true, $in: subcategoriesID },
-      });
-      if (subcategories.length !== subcategoriesID.length) {
-        throw new Error("Invalid subcategory ID");
-      }
-      return true;
-    })
-    .custom(async (subcategories: string[], { req }) => {
-      const categorySubs = await SubcategoryModel.find({
-        category: req.body.category,
-      }).exec();
-      const categorySubsId: string[] = [];
-      categorySubs.forEach((categorySub) => {
-        categorySubsId.push(categorySub._id.toString() as string);
-      });
-      const checker = subcategories.every((subcategory) => {
-        categorySubsId.includes(subcategory);
-      });
-      if (!checker) {
-        throw new Error("subcategories not belong to category");
-      }
-      return true;
-    }),
+  body("subcategories").custom(async (subcategoriesID: string[], { req }) => {
+    const subcategories = await SubcategoryModel.find({
+      _id: { $exists: true, $in: subcategoriesID },
+    });
+    if (subcategories.length !== subcategoriesID.length) {
+      throw new Error("Invalid subcategory ID");
+    }
+
+    const checker = subcategories.every((subcategory) => {
+      const { _id } = subcategory.category as unknown as { _id: string };
+      return _id.toString() === req.body.category;
+    });
+
+    if (!checker) {
+      throw new Error("subcategories not belong to category");
+    }
+    return true;
+  }),
 ];
 
 export const getProduct = [
@@ -114,6 +107,7 @@ export const createProduct = [
   body("price").notEmpty().withMessage("price is required"),
   body("priceAfterDiscount").optional(),
   body("colors").optional(),
+  body("sizes").optional(),
   body("category").notEmpty().withMessage("category is required"),
   body("subcategories").optional(),
   body("brand").notEmpty().withMessage("brand is required"),

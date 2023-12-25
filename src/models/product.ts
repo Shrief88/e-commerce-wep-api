@@ -10,8 +10,9 @@ export interface IProduct extends mongoose.Document {
   price: number;
   priceAfterDiscount?: number;
   colors?: string[];
-  imageCover: string;
+  sizes?: string[];
   images?: string[];
+  imageCover: string;
   category: Schema.Types.ObjectId;
   subcategories?: Schema.Types.ObjectId[];
   brand: Schema.Types.ObjectId;
@@ -60,11 +61,12 @@ const productSchema = new Schema<IProduct>(
       type: Number,
     },
     colors: [String],
+    sizes: [String],
+    images: [String],
     imageCover: {
       type: String,
       required: true,
     },
-    images: [String],
     category: {
       type: mongoose.Schema.ObjectId,
       ref: "Category",

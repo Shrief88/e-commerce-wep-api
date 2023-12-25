@@ -12,7 +12,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
   const transporter = nodemailer.createTransport({
     host: env.EMAIL_HOST,
     port: env.EMAIL_PORT,
-    secure: true,
+    secure: false,
     auth: {
       user: env.EMAIL_USER,
       pass: env.EMAIL_PASSWORD,

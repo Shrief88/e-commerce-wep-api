@@ -32,7 +32,7 @@ export const signup: RequestHandler = async (req, res, next) => {
     res
       .status(201)
       .cookie("token", token, { httpOnly: true })
-      .json({ data: sanitizesUser, token });
+      .json({ data: sanitizesUser });
   } catch (err) {
     next(err);
   }
@@ -140,7 +140,6 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
       10 * 60 * 1000) as unknown as Date;
     user.passwordResetVerified = false;
     await user.save();
-
     try {
       await sendEmail({
         email: user.email,
@@ -148,6 +147,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
         content: `Hi ${user.name},\n Your password reset code is ${code}`,
       });
     } catch (err) {
+      console.log(err);
       user.passwordResetCode = undefined;
       user.passwordResetExpires = undefined;
       user.passwordResetVerified = undefined;

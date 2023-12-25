@@ -57,12 +57,9 @@ const userSchema = new Schema<IUser>(
       trim: true,
       lowercase: true,
     },
-    // TODO: find way to make phone unique and not required in the same time
     phone: {
       type: String,
-      // unique: true,
       trim: true,
-      // required: false,
     },
     password: {
       type: String,
