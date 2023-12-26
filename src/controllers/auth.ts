@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import { type Request, type RequestHandler } from "express";
 import bycrpt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -134,7 +136,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 
     // Generate code and save it
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const hashCode = await bycrpt.hash(code, 12);
+    const hashCode = crypto.createHash("sha256").update(code).digest("hex");
     user.passwordResetCode = hashCode;
     user.passwordResetExpires = (Date.now() +
       10 * 60 * 1000) as unknown as Date;
@@ -164,7 +166,11 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 // @access Public
 export const verifyResetCode: RequestHandler = async (req, res, next) => {
   try {
-    const hashCode = await bycrpt.hash(req.body.code as string, 12);
+    const hashCode = crypto
+      .createHash("sha256")
+      .update(req.body.code as string)
+      .digest("hex");
+
     const user = await UserModel.findOne({
       passwordResetCode: hashCode,
       passwordResetExpires: { $gt: Date.now() },
@@ -206,8 +212,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
     const token = createToken({ user_id: user._id });
 
-    res.status(200).json({
-      status: "success",
+    res.status(200).cookie("token", token, { httpOnly: true }).json({
       message: "password reset successfully",
       data: {
         token,
