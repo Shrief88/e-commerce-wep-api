@@ -27,6 +27,8 @@ export interface IOrder extends mongoose.Document {
   paidAt?: Date;
   isDelivered: boolean;
   deliveredAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const orderSchema = new mongoose.Schema<IOrder>(

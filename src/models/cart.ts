@@ -13,6 +13,8 @@ export interface ICart extends mongoose.Document {
   totalPrice: number;
   totalPriceAfterDiscount?: number;
   user: mongoose.Schema.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const cartSchema = new mongoose.Schema<ICart>(

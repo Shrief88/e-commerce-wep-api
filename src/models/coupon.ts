@@ -4,6 +4,8 @@ export interface ICoupon extends mongoose.Document {
   name: string;
   expire: Date;
   discount: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const couponSchema = new mongoose.Schema<ICoupon>(
