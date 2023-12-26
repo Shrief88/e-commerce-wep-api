@@ -1,10 +1,11 @@
 import { type RequestHandler } from "express";
+import createHttpError from "http-errors";
 
 import { type CustomRequest } from "./auth";
-import { UserModel, type Address } from "../models/user";
+import { UserModel } from "../models/user";
 
 // @route GET /api/v1/address/
-// @access Private
+// @access Private [user]
 export const getUserAddresses: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -19,24 +20,17 @@ export const getUserAddresses: RequestHandler = async (
 };
 
 // @route POST /api/v1/address/
-// @access Private
+// @access Private [user]
 export const addAddress: RequestHandler = async (
   req: CustomRequest,
   res,
   next,
 ) => {
   try {
-    const address: Address = {
-      alias: req.body.alias,
-      details: req.body.details,
-      phone: req.body.phone,
-      city: req.body.city,
-      postcode: req.body.postcode,
-    };
     const user = await UserModel.findByIdAndUpdate(
       req.user._id,
       {
-        $addToSet: { addresses: address },
+        $addToSet: { addresses: req.body.address },
       },
       { new: true },
     );
@@ -46,22 +40,44 @@ export const addAddress: RequestHandler = async (
   }
 };
 
-// export const updateAddress: RequestHandler = async (
-//   req: CustomRequest,
-//   res,
-//   next,
-// ) => {
-//   const address: Address = req.body as Address;
-//   console.log(address);
-//   const addressId = req.params.address;
-//   const user = await UserModel.findById(req.user._id);
-//   await user?.updateOne({ $set: { [`addresses.${addressId}`]: address } });
+// @route PUT /api/v1/address/:id
+// @access Private [user]
+export const updateAddress: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const addresId = req.params.id;
+    const user = await UserModel.findById(req.user._id);
+    if (user && user.addresses) {
+      const index = user.addresses.findIndex(
+        (address) => address._id?.toString() === addresId,
+      );
+      if (index === -1) {
+        throw createHttpError(404, "Address not found");
+      }
+      const address = req.body.address;
+      user.addresses[index] = {
+        ...user.addresses[index],
+        alias: address?.alias ?? user.addresses[index].alias,
+        details: address?.details ?? user.addresses[index].details,
+        phone: address?.phone ?? user.addresses[index].phone,
+        city: address?.city ?? user.addresses[index].city,
+        postcode: address?.postcode ?? user.addresses[index].postcode,
+      };
 
-//   res.status(200).json({ data: user?.addresses });
-// };
+      await user.save();
+    }
+
+    res.status(200).json({ data: user?.addresses });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // @route DELETE /api/v1/address/:id
-// @access Private
+// @access Private [user]
 export const removeAddress: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -69,7 +85,7 @@ export const removeAddress: RequestHandler = async (
 ) => {
   try {
     const address = await UserModel.findByIdAndUpdate(req.user._id, {
-      $pull: { addresses: { _id: req.params.address } },
+      $pull: { addresses: { _id: req.params.id } },
     });
     if (!address) {
       return res.status(404).json({ message: "Address not found" });

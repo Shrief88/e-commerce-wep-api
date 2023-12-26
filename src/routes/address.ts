@@ -20,15 +20,15 @@ addressRouter.post(
 );
 
 addressRouter.delete(
-  "/:address",
+  "/:id",
   addressValidator.removeAddress,
   addressController.removeAddress,
 );
 
-// addressRouter.put(
-//   "/:address",
-//   addressValidator.updateAddress,
-//   addressController.updateAddress,
-// );
+addressRouter.put(
+  "/:id",
+  addressValidator.updateAddress,
+  addressController.updateAddress,
+);
 
 export default addressRouter;
