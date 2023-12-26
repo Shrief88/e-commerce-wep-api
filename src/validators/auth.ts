@@ -71,7 +71,11 @@ export const forgetPassword = [
 ];
 
 export const verifyResetCode = [
-  body("code").notEmpty().withMessage("code is required"),
+  body("code")
+    .notEmpty()
+    .withMessage("code is required")
+    .isString()
+    .withMessage("code must be a string"),
   validateMiddleware,
 ];
 

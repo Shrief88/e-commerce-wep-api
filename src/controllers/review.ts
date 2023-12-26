@@ -5,12 +5,15 @@ import ApiFeatures from "../utils/apiFeatures";
 import { ReviewModel } from "../models/review";
 import { type CustomRequest } from "./auth";
 
-// @route GET /api/v1/review
+// @route GET /api/v1/review , GET api/v1/product/:productId/review
 // @access Public
 export const getReviews: RequestHandler = async (req, res, next) => {
   try {
     const documentCount = await ReviewModel.countDocuments();
-    const apiFeatures = new ApiFeatures(ReviewModel.find(), req.query)
+    const apiFeatures = new ApiFeatures(
+      ReviewModel.find(req.body.filterObject as object),
+      req.query,
+    )
       .filter()
       .sort()
       .fields()
@@ -45,7 +48,7 @@ export const getReview: RequestHandler = async (req, res, next) => {
   }
 };
 
-// @route POST /api/v1/review
+// @route POST /api/v1/review, POST /api/v1/product/:productId/review
 // @access Private [user]
 export const createReview: RequestHandler = async (
   req: CustomRequest,

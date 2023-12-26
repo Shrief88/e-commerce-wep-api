@@ -10,6 +10,7 @@ enum Roles {
 }
 
 export interface Address {
+  _id?: string | undefined;
   alias?: string;
   details?: string;
   phone?: string;

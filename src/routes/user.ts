@@ -52,7 +52,7 @@ userRouter.put(
   loggedUserController.activeLoggedUser,
 );
 
-// Admin and Manager
+// Admin and Manager ///////////////////////////////
 userRouter.get(
   "/",
   authController.protectRoute,
@@ -77,7 +77,7 @@ const conditionalMiddleware = (middleware: RequestHandler): RequestHandler => {
       };
 };
 
-// Admin Only
+// Admin Only //////////////////////////////////////
 userRouter.post(
   "/",
   conditionalMiddleware(authController.protectRoute),
@@ -88,10 +88,9 @@ userRouter.post(
   userController.createUser,
 );
 
+userRouter.use(authController.protectRoute, authController.allowedTo("admin"));
 userRouter.put(
   "/:id",
-  authController.protectRoute,
-  authController.allowedTo("admin"),
   uploadSingleImage("profileImage"),
   userValidator.updateUser,
   resizeSingleImage("user", "profileImage"),
@@ -100,18 +99,10 @@ userRouter.put(
 
 userRouter.put(
   "/changePassword/:id",
-  authController.protectRoute,
-  authController.allowedTo("admin"),
   userValidator.updateUserPassword,
   userController.changeUserPassword,
 );
 
-userRouter.delete(
-  "/:id",
-  authController.protectRoute,
-  authController.allowedTo("admin"),
-  userValidator.deleteUser,
-  userController.deleteUser,
-);
+userRouter.delete("/:id", userValidator.deleteUser, userController.deleteUser);
 
 export default userRouter;

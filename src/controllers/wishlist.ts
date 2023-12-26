@@ -37,7 +37,7 @@ export const addToWishlist: RequestHandler = async (
       { new: true },
     );
 
-    res.status(200).json({ data: user });
+    res.status(200).json({ data: user?.wishlist });
   } catch (err) {
     next(err);
   }

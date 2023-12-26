@@ -9,6 +9,7 @@ import { type CustomRequest } from "./auth";
 import { UserModel, type IUser } from "../models/user";
 import env from "../config/validateEnv";
 import createToken from "../utils/createToken";
+import { type SanitizeUser, sanitizeUser } from "../utils/sanitizeDate";
 
 // @route GET /api/v1/user/me
 // @access Private
@@ -88,8 +89,7 @@ export const updateLoggedUser: RequestHandler = async (
     next(err);
   }
 };
-// TODO: test activate and deactivate logic
-// @desc deactivate the logged in user
+
 // @route DELETE /api/v1/user/deleteMe
 // @access Private
 export const deleteLoggedUser: RequestHandler = async (
@@ -100,7 +100,6 @@ export const deleteLoggedUser: RequestHandler = async (
   try {
     const id = req.user._id;
     await UserModel.findByIdAndUpdate(id, { active: false }, { new: true });
-
     res.sendStatus(204);
   } catch (err) {
     next(err);
@@ -132,7 +131,11 @@ export const activeLoggedUser: RequestHandler = async (
       { new: true },
     );
 
-    res.status(200).json({ data: user, token });
+    const sanitizesUser: SanitizeUser = sanitizeUser(user);
+    res
+      .status(200)
+      .cookie("token", token, { httpOnly: true })
+      .json({ data: sanitizesUser });
   } catch (err) {
     next(err);
   }
