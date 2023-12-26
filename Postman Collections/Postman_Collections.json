@@ -1,0 +1,1835 @@
+{
+	"info": {
+		"_postman_id": "4117f4b6-dde1-4963-99bc-007fb0b8f630",
+		"name": "E-commerce api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get all categories",
+					"id": "30be6f79-ed5f-47a9-b3d6-599f9609a08e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/category/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create category",
+					"id": "5f3d1dfa-c55f-4984-a618-37099074cc57",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU3ZTI0YWY3MGQxZjVmNzI1ZDkzMGExIiwiaWF0IjoxNzAyNzY1OTU4LCJleHAiOjE3MTA1NDE5NTh9.Vz704xfhOvssODTy3AUhIF2UJ3oIadugey3ME2NgYGE",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "test category",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/sherif/Pictures/Screenshots/Screenshot from 2023-12-24 21-37-44.png"
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/category"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific category",
+					"id": "47115101-a667-4039-a17c-a269f5ad5241",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/category/657cd59751c0bd490c1a4ec0"
+					},
+					"response": []
+				},
+				{
+					"name": "Update category",
+					"id": "7aa43265-4cdf-4fb3-a235-d80c8c65378f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "new category312",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+									"filesNotInWorkingDirectory": [
+										"/home/sherif/Pictures/Wallpapers/1332015.png"
+									],
+									"src": "/home/sherif/Pictures/Wallpapers/1332015.png",
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/category/657cd59751c0bd490c1a4ec0"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete category",
+					"id": "5df05585-8a31-4d6f-82b4-4fd1ceeb1fbf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/category/6589dd5cd261c9dfc0261f1a"
+					},
+					"response": []
+				}
+			],
+			"id": "a427481a-73a4-4bdc-90ae-658d5f1fe937"
+		},
+		{
+			"name": "Subcategory",
+			"item": [
+				{
+					"name": "Create subcategory",
+					"id": "d54beef9-be94-468e-aa32-60430cf1c0b3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"xiaomi\",\n    \"category\" : \"657722dbab3b5fc071eb80ed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/subcategory/"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete subcategory",
+					"id": "2258cdca-a2af-45a0-b068-e8137c6b6d0e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/subcategory/6589df3bd261c9dfc0261f2a"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all subcategories",
+					"id": "a95da79a-938e-471a-871f-8df6aab52ddf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/subcategory/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific subcategory",
+					"id": "53f7021f-a29e-4043-8853-50c3dacfd24a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/subcategory/657ec080a531002802c125d6"
+					},
+					"response": []
+				},
+				{
+					"name": "update subcategory",
+					"id": "6a5a0df3-4b2a-455f-97f9-72a5b4dd1666",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"Redmi\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/subcategory/6589df3bd261c9dfc0261f2a"
+					},
+					"response": []
+				}
+			],
+			"id": "5682ee6d-ce8c-4d2a-98d4-6a5ab4e7383b"
+		},
+		{
+			"name": "Categories/Subcategory",
+			"item": [
+				{
+					"name": "Get subcategories for specific category",
+					"id": "4d6bfa45-6f26-45eb-88c6-bfd60f2e2af1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/category/657722dbab3b5fc071eb80ed/subcategories"
+					},
+					"response": []
+				},
+				{
+					"name": "Create subcategory on category",
+					"id": "440209ac-d73f-4979-9d9c-3bd9c2a4246f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"xiaomi\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/category/657722dbab3b5fc071eb80ed/subcategories"
+					},
+					"response": []
+				}
+			],
+			"id": "7ee74499-41d0-446c-a57c-4df71bf3a2f6"
+		},
+		{
+			"name": "Brand",
+			"item": [
+				{
+					"name": "Get all brands",
+					"id": "cfbdeecf-6da7-4133-be51-553b332005b1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/brand/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create brand",
+					"id": "fed08dae-5cfc-44ba-a595-0b6c89ed6897",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hd",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+									"filesNotInWorkingDirectory": [
+										"/home/sherif/Pictures/Wallpapers/1332015.png"
+									],
+									"src": "/home/sherif/Pictures/Wallpapers/1332015.png"
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/brand"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific brand",
+					"id": "605c0dd3-3abc-4501-8bed-e734d0dbed37",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/brand/6589e594d3b40bb803430092"
+					},
+					"response": []
+				},
+				{
+					"name": "Update brand",
+					"id": "c8ed8be3-eab3-45d2-bdf2-c3c741882f84",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"hp\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/brand/6589e594d3b40bb803430092"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete brand",
+					"id": "32d3bec3-f65b-4fe0-9933-082be3ae766c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/brand/6589e594d3b40bb803430092"
+					},
+					"response": []
+				}
+			],
+			"id": "230aa7ba-77f2-45c7-b917-07a78f8d9a7c"
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get all product",
+					"id": "23e702f5-5f5f-43cb-a29d-775c1280ccb5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/product/?sort=price&sort=sold",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								""
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "price"
+								},
+								{
+									"key": "sort",
+									"value": "sold"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"id": "de8a65be-ae88-494a-90f8-cb296dd01034",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imageCover",
+									"type": "file",
+									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+									"filesNotInWorkingDirectory": [
+										"/home/sherif/Pictures/Wallpapers/cropped-3840-2160-98696.jpg"
+									],
+									"src": "/home/sherif/Pictures/Wallpapers/cropped-3840-2160-98696.jpg"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+									"filesNotInWorkingDirectory": [
+										"/home/sherif/Pictures/Wallpapers/1332015.png"
+									],
+									"src": "/home/sherif/Pictures/Wallpapers/1332015.png",
+									"disabled": true
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+									"filesNotInWorkingDirectory": [
+										"/home/sherif/Pictures/Wallpapers/1332015.png"
+									],
+									"src": "/home/sherif/Pictures/Wallpapers/1332015.png",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "\"Ashta yaba2\"",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "\"Akdsfjfk vfkdflkjfld  vvdfd f\"",
+									"type": "text"
+								},
+								{
+									"key": "sold",
+									"value": "23",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "quantity",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "120",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "657722dbab3b5fc071eb80ed",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "65799aeeb58ccfbaedf70fc8",
+									"type": "text"
+								},
+								{
+									"key": "subcategories[0]",
+									"value": "6589e40292cdc60bccb56f16",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/product"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific product",
+					"id": "1b53f543-f9b2-4ad2-8f2e-9db958f58ccc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/product/657a2723846a540103c8d7c1"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"id": "3ee7e2ed-e5ee-4fd9-8242-31c1fa0cacfb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"quantity\" : 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/product/657a2723846a540103c8d7c1"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"id": "83653448-c8c4-4b61-9af8-946ba6049f67",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/product/6589ed817561a510d4fc35b8"
+					},
+					"response": []
+				}
+			],
+			"id": "5b7894ff-9733-44a2-83c0-19b6d32ae2e7"
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get all users",
+					"id": "cefa1aeb-6e68-4e5e-9052-27c2164386df",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/user/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"id": "e83f6fff-abd5-4c13-b7d3-175d3533ca25",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"admin\",\n    \"email\": \"shriefessam1999@gmail.com\",\n    \"role\": \"admin\",\n    \"password\":123456,\n    \"passwordConfirm\":123456\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific user",
+					"id": "6b59a1e6-5b2d-455b-828f-1b2ceb30beef",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/user/6589f8ba34032a2db9563a6a"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"id": "267baf6c-0fd2-421f-b785-c2f675bb6872",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "sherif essam",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "Sh1419999",
+									"disabled": true
+								},
+								{
+									"key": "passwordConfirm",
+									"value": "Sh1419993",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/user/657f54ae0e0151379d996e8b"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"id": "06c83a1d-e492-4c1c-8025-bbce0b8dfa9d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/user/6581b6a64a0f1dde560da167"
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"id": "2c97f78d-14ba-4341-bc1b-d24dd8bc5ac8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\":\"Sh000000\",\n    \"password\": \"Sh00000000\",\n    \"passwordConfirm\": \"Sh00000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user/changePassword/657f53dfa04c6d33eab422e5"
+					},
+					"response": []
+				}
+			],
+			"id": "ef5442d3-2152-42e9-8eb6-7615354a41c6"
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7fb2550b-a52e-4f22-aa51-b7effc1025bd",
+								"exec": [
+									"setCookieHeader = pm.response.headers.get('Set-Cookie');",
+									"if(setCookieHeader){",
+									"    const match = setCookieHeader.match(/token=([^; ]+)/);",
+									"    const token = match ? match[1] : null;",
+									"    pm.environment.set(\"JWT\",token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "3223954b-6acd-4110-aab2-faa45160e10e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"user\",\n    \"email\": \"shriefessam52@gmail.com\",\n    \"password\": \"123456\",\n    \"passwordConfirm\": \"123456\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/auth/signup/"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a2d862d-a231-4751-871d-6ef6ecfe650e",
+								"exec": [
+									"setCookieHeader = pm.response.headers.get('Set-Cookie');",
+									"if(setCookieHeader){",
+									"    const match = setCookieHeader.match(/token=([^; ]+)/);",
+									"    const token = match ? match[1] : null;",
+									"    pm.environment.set(\"JWT\",token);",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "56fe471e-7ab0-49f0-a5e5-67d8e7af510c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "JWT"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"shriefessa1998@gmail.com\",\n    \"password\" : \"Sh000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/auth/login/"
+					},
+					"response": []
+				},
+				{
+					"name": "forgetPassword",
+					"id": "ca4ec112-4e2e-4d29-b860-c3bc691c1086",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"shriefessam52@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/auth/forgetPassword"
+					},
+					"response": []
+				},
+				{
+					"name": "verify reset code",
+					"id": "f5f0c882-d5b8-43f4-8b6b-b6e2887b923b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\":\"694919\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/auth/verifyResetCode"
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cc744405-695c-4b46-ab0c-5dc7aef7aded",
+								"exec": [
+									"setCookieHeader = pm.response.headers.get('Set-Cookie');",
+									"if(setCookieHeader){",
+									"    const match = setCookieHeader.match(/token=([^; ]+)/);",
+									"    const token = match ? match[1] : null;",
+									"    pm.environment.set(\"JWT\",token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "823a58be-14b1-4ac3-933b-2c74df2001a5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"shriefessam52@gmail.com\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/auth/resetPassword"
+					},
+					"response": []
+				}
+			],
+			"id": "8c35049e-52ea-4599-8ee6-107b823fb85b"
+		},
+		{
+			"name": "Logged User",
+			"item": [
+				{
+					"name": "get logged user data",
+					"id": "5350449e-5fe8-434f-9502-0d90ae1de777",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user/me"
+					},
+					"response": []
+				},
+				{
+					"name": "update logged user password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "025877e3-4b89-4aa3-8497-a01583b8da00",
+								"exec": [
+									"pm.environment.set(\"JWT\",pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "e0f8e530-d189-4dc0-b6cc-40f83da1b127",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\":\"Sh000000\",\n    \"passwordConfirm\" : \"Sh000000\",\n    \"currentPassword\": \"Sh00000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user/changeMyPassword"
+					},
+					"response": []
+				},
+				{
+					"name": "update logged user data",
+					"id": "66d9ec81-6663-477e-96db-247f80a94390",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\" : \"01099436442\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user/updateMe"
+					},
+					"response": []
+				},
+				{
+					"name": "delete logged User",
+					"id": "d220f046-6ee8-4fd1-8aa2-1624297346e7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/user/deleteMe"
+					},
+					"response": []
+				},
+				{
+					"name": "activate user",
+					"id": "8d2f69b1-c57b-4c27-bb5b-8e7226f81246",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"shriefessa1997@gmail.com\",\n    \"password\":\"Sh00000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/user/activeMe"
+					},
+					"response": []
+				}
+			],
+			"id": "753b4bcf-923f-46ce-8c79-fc1a9a5045cf"
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Get all reviews",
+					"id": "bc9cf01e-45a3-4628-98ab-54fb38d07c4b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/review"
+					},
+					"response": []
+				},
+				{
+					"name": "Get review",
+					"id": "b89ff0fe-7db4-4840-bbf4-ad1a5a149031",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/review/658350a49ea3e09774ddb149"
+					},
+					"response": []
+				},
+				{
+					"name": "Create review",
+					"id": "1f78851d-956c-4f31-9a76-87ccd0e2b05d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\" : 5,\n    \"product\" : \"657a28012ced54e42cd40756\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/review"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"id": "93f40a37-810a-49de-9d32-75a9bfdf6020",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"this is amazing\",\n    \"rating\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/review/658350a49ea3e09774ddb149"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete review",
+					"id": "8f857f00-639c-4073-850a-b41e4c65dd6e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/review/65820fbd7e500855b602d7a6"
+					},
+					"response": []
+				}
+			],
+			"id": "cfc36e7c-4f60-4392-ae99-a627efef8751"
+		},
+		{
+			"name": "Products/Reviews",
+			"item": [
+				{
+					"name": "Get reviews for specific product",
+					"id": "f86c4493-25b2-420b-8927-562be32d6fe2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/product/657d7a1e0c2496eecc0c2fff/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Create review on specific product",
+					"id": "25b5dfd4-450e-4d79-8ded-e28c6b0f5f94",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\" : 2\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/product/657a27d1f2bf05d599c250f5/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific review on specific product",
+					"id": "08eb3fbd-9691-4f83-b7d2-c77f83c4ea5f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/product/657d7a1e0c2496eecc0c2fff/reviews/6580b51f16960ad5889e401a"
+					},
+					"response": []
+				}
+			],
+			"id": "7a0002da-008d-4b30-af96-a855ae577a74"
+		},
+		{
+			"name": "Wishlist",
+			"item": [
+				{
+					"name": "add to wishlist",
+					"id": "e8b33f42-eaa1-4fae-8ab7-25478b1b1b66",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product\": \"657a27d1f2bf05d599c250f5\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/wishlist/"
+					},
+					"response": []
+				},
+				{
+					"name": "remove from wishlist",
+					"id": "2524af02-49a2-495b-b11a-2dde0b085884",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/wishlist/657a27d1f2bf05d599c250f5"
+					},
+					"response": []
+				},
+				{
+					"name": "get user wishlist",
+					"id": "ce923fca-0b01-46e3-b87c-9548c8ba8efd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/wishlist/"
+					},
+					"response": []
+				}
+			],
+			"id": "abd846d9-e927-497f-95be-76fdc817ad66"
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "add address",
+					"id": "507bc3f9-637b-4e4c-b9e8-79d21c2a8105",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\":{\n         \"alias\": \"home\",\n        \"details\":\"9 strest ahmed basha\",\n        \"city\":\"cairo\",\n        \"phone\": \"01099436442\",\n        \"postcode\":\"123\"\n    }\n   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/address/"
+					},
+					"response": []
+				},
+				{
+					"name": "remove address",
+					"id": "ea62df57-0d76-4a01-94d6-de72c6bed600",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/address/658acbb763dc3a62b08b3b6c"
+					},
+					"response": []
+				},
+				{
+					"name": "get user address",
+					"id": "769f5dee-804e-47be-8e40-6d4a1b877117",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/address/"
+					},
+					"response": []
+				},
+				{
+					"name": "update address",
+					"id": "0a51b0c2-bd8a-4c78-af71-c1984eafd071",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\":{\n        \"phone\" : \"01099436444\"\n    }\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/address/658af5b36141abb7431adca6"
+					},
+					"response": []
+				}
+			],
+			"id": "7f6bd0b9-c4b4-4ce2-b6bb-58266e6c67cb"
+		},
+		{
+			"name": "Coupon",
+			"item": [
+				{
+					"name": "Get all coupons",
+					"id": "9741886d-b96b-480e-bb52-2b9475d8e69d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/coupon/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create coupon",
+					"id": "9bbd54a9-9c3f-426d-815b-26b82e20d844",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"HAPPY_NEW_YEAR\",\n    \"expire\": \"2023-12-21\",\n    \"discount\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/coupon"
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific coupon",
+					"id": "5055ebf7-32c2-4126-8312-602d744c5de0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/coupon/658381c2c9666c0e7502be6e"
+					},
+					"response": []
+				},
+				{
+					"name": "Update coupon",
+					"id": "6ae24b57-e136-4b88-ba36-c533acaac3ee",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"discount\":20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/coupon/658381c2c9666c0e7502be6e"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete coupon",
+					"id": "d830c94d-4ac3-4b7d-a61a-935a9dabcc9f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/coupon/658381c2c9666c0e7502be6e"
+					},
+					"response": []
+				}
+			],
+			"id": "d1dc3b3c-9610-487c-b781-63d56cf0fc11"
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "add to cart",
+					"id": "e9a02862-a006-4a3a-8303-3465532e83cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product\": \"657a2723846a540103c8d7c1\",\n    \"quantity\": 2,\n    \"color\": \"blue\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "remove from cart",
+					"id": "38728c41-beb0-4bf2-8ce1-dac72ad941bb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/cart/6584670c3d2c75ec3c3b964d"
+					},
+					"response": []
+				},
+				{
+					"name": "get user cart",
+					"id": "e0f94cbc-c622-4940-a48c-a71773999adf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "clear cart",
+					"id": "a1431c06-6c22-4cc1-bf9a-cb656d03a00e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "update cart",
+					"id": "31435e16-869e-410d-ad6b-d70fab99c07f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\":4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/cart/658afa766511a1369f1a3d7b"
+					},
+					"response": []
+				},
+				{
+					"name": "apply coupon",
+					"id": "c8238c88-188f-453b-819c-ea152cc5fcd0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"coupon\":\"HAPPY_NEW_YEAR\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/cart/coupon"
+					},
+					"response": []
+				}
+			],
+			"id": "8c5b4498-d120-45c3-96f0-7284092af38a"
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "create cash order",
+					"id": "116a70d6-040a-4cdb-a471-3aac9728ab2c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shippingAddress\": {\n        \"details\" : \"address info\",\n        \"phone\" : \"01099436442\",\n        \"city\" : \"cairo\",\n        \"postcode\" : \"123\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/order/658afa766511a1369f1a3d7a"
+					},
+					"response": []
+				},
+				{
+					"name": "get orders",
+					"id": "c704518c-bbc5-4219-a948-35fd2d9c6135",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/order/"
+					},
+					"response": []
+				},
+				{
+					"name": "get specific order",
+					"id": "79de635d-7584-45ee-a757-ebded18d8774",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/order/6584cadd977d9c1011bc84ca"
+					},
+					"response": []
+				},
+				{
+					"name": "update paid status",
+					"id": "e296f8aa-1e48-4cf5-ad17-a47c53063eda",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{URL}}/api/v1/order/6584cadd977d9c1011bc84ca/paid"
+					},
+					"response": []
+				},
+				{
+					"name": "update delivered status",
+					"id": "43871539-4212-4525-b9b3-195932f20be1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{URL}}/api/v1/order/6584cadd977d9c1011bc84ca/delivered"
+					},
+					"response": []
+				},
+				{
+					"name": "get checkout session",
+					"id": "d70eb353-12a3-4110-ba95-26591033d0b7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shippingAddress\": {\n        \"details\" : \"address info\",\n        \"phone\" : \"01099436442\",\n        \"city\" : \"cairo\",\n        \"postcode\" : \"123\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/order/checkout-session/658b22159cf3a2c8b678edb5"
+					},
+					"response": []
+				}
+			],
+			"id": "6517f7e9-78e4-460c-87db-d6abdbbb5672"
+		}
+	]
+}
