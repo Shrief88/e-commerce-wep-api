@@ -11,7 +11,7 @@ orderRouter.use(authController.protectRoute);
 orderRouter.post(
   "/:cartId",
   authController.allowedTo("user"),
-  orderValidator.createCashOrder,
+  orderValidator.createOrder,
   orderController.createCashOrder,
 );
 
@@ -20,6 +20,7 @@ orderRouter.get("/", orderController.getOrders);
 orderRouter.get(
   "/checkout-session/:cartId",
   authController.allowedTo("user"),
+  orderValidator.createOrder,
   orderController.checkoutSession,
 );
 
@@ -33,12 +34,14 @@ orderRouter.get(
 orderRouter.put(
   "/:id/paid",
   authController.allowedTo("admin", "manager"),
+  orderValidator.updatePaidStatus,
   orderController.updatePaidStatus,
 );
 
 orderRouter.put(
   "/:id/delivered",
   authController.allowedTo("admin", "manager"),
+  orderValidator.updateDeliveredStatus,
   orderController.updateDeliveredStatus,
 );
 

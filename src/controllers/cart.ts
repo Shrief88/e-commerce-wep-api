@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-base-to-string */
 import { type RequestHandler } from "express";
 import createHttpError from "http-errors";
 
@@ -7,6 +6,8 @@ import { CartModel, type ICart } from "../models/cart";
 import { ProductModel } from "../models/product";
 import { CouponModel } from "../models/coupon";
 
+// @route GET /api/v1/cart/
+// @access Private[user]
 export const getLoggedUserCart: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -34,6 +35,8 @@ const calulateTotalPrice = (cart: ICart): number => {
   return totalPrice;
 };
 
+// @route POST /api/v1/cart/
+// @access Private[user]
 export const addToCart: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -80,6 +83,8 @@ export const addToCart: RequestHandler = async (
   }
 };
 
+// @route PUT /api/v1/cart/:itemId
+// @access Private[user]
 export const updateCart: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -105,6 +110,8 @@ export const updateCart: RequestHandler = async (
   }
 };
 
+// @route PUT /api/v1/cart/coupon
+// @access Private[user]
 export const applyCoupon: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -134,6 +141,8 @@ export const applyCoupon: RequestHandler = async (
   }
 };
 
+// @route DELETE /api/v1/cart/:itemId
+// @access Private[user]
 export const removeFromCart: RequestHandler = async (
   req: CustomRequest,
   res,
@@ -160,6 +169,8 @@ export const removeFromCart: RequestHandler = async (
   }
 };
 
+// @route DELETE /api/v1/cart/
+// @access Private[user]
 export const clearCart: RequestHandler = async (
   req: CustomRequest,
   res,

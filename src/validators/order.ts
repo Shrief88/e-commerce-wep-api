@@ -3,7 +3,8 @@ import { body, param } from "express-validator";
 import { OrderModel } from "../models/order";
 import validateMiddleware from "../middlewares/validatorMiddleware";
 
-export const createCashOrder = [
+export const createOrder = [
+  param("cartId").isMongoId().withMessage("Invalid cart ID"),
   body("shippingAddress.details")
     .notEmpty()
     .withMessage("details is required")
@@ -44,5 +45,15 @@ export const getOrder = [
         throw new Error("Only admin or manager can see other users orders");
       }
     }),
+  validateMiddleware,
+];
+
+export const updateDeliveredStatus = [
+  param("id").isMongoId().withMessage("Invalid ID"),
+  validateMiddleware,
+];
+
+export const updatePaidStatus = [
+  param("id").isMongoId().withMessage("Invalid ID"),
   validateMiddleware,
 ];
